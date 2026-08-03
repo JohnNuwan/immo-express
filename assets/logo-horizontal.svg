@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="200" viewBox="0 0 600 200">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#2563eb"/>
+      <stop offset="100%" stop-color="#1d4ed8"/>
+    </linearGradient>
+    <linearGradient id="roof" x1="0" y1="0" x2="0.5" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#e0e7ff"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Logo icon (smaller house) -->
+  <g transform="translate(10,20) scale(0.65)">
+    <rect x="44" y="86" width="104" height="74" rx="6" fill="rgba(37,99,235,0.1)" stroke="#2563eb" stroke-width="2.5"/>
+    <polygon points="96,34 30,88 162,88" fill="url(#roof)" stroke="#2563eb" stroke-width="2.5" stroke-linejoin="round"/>
+    <rect x="76" y="130" width="40" height="30" rx="4" fill="rgba(37,99,235,0.2)"/>
+    <circle cx="104" cy="148" r="3" fill="#2563eb" opacity="0.4"/>
+    <rect x="52" y="100" width="22" height="22" rx="3" fill="rgba(37,99,235,0.15)"/>
+    <line x1="63" y1="100" x2="63" y2="122" stroke="#2563eb" stroke-width="1.2"/>
+    <line x1="52" y1="111" x2="74" y2="111" stroke="#2563eb" stroke-width="1.2"/>
+    <rect x="118" y="100" width="22" height="22" rx="3" fill="rgba(37,99,235,0.15)"/>
+    <line x1="129" y1="100" x2="129" y2="122" stroke="#2563eb" stroke-width="1.2"/>
+    <line x1="118" y1="111" x2="140" y2="111" stroke="#2563eb" stroke-width="1.2"/>
+    <text x="96" y="156" text-anchor="middle" font-family="Inter, sans-serif" font-size="20" font-weight="800" fill="#2563eb" letter-spacing="1">iE</text>
+  </g>
+  
+  <!-- Brand name -->
+  <text x="150" y="115" font-family="Inter, -apple-system, sans-serif" font-size="52" font-weight="800" fill="#111827" letter-spacing="-1">Immo</text>
+  <text x="312" y="115" font-family="Inter, -apple-system, sans-serif" font-size="52" font-weight="800" fill="#2563eb" letter-spacing="-0.5">Express</text>
+  
+  <!-- Tagline -->
+  <text x="150" y="142" font-family="Inter, -apple-system, sans-serif" font-size="16" font-weight="500" fill="#9ca3af" letter-spacing="2">PLATEFORME IMMOBILIÈRE INTELLIGENTE</text>
+  
+  <!-- Accent line -->
+  <line x1="150" y1="155" x2="440" y2="155" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round"/>
+</svg>
