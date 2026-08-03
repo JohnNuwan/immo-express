@@ -258,61 +258,80 @@
     </section>
 
     <!-- ===== ABONNEMENTS ===== -->
-    <section class="pro-section" id="sec-abonnements">
-      <div class="section-title">⭐ Choisissez votre formule</div>
-      <div class="plans-grid">
-        <div class="plan-card" id="plan-starter">
-          <h3>Starter</h3>
-          <div class="plan-price">49<span>€/mois</span></div>
-          <div class="plan-desc">Pour les agents indépendants débutant sur la plateforme.</div>
-          <ul>
-            <li><span class="check">✓</span> Jusqu'à 5 annonces</li>
-            <li><span class="check">✓</span> Score de confiance IA</li>
-            <li><span class="check">✓</span> Analyse de prix IA</li>
-            <li><span class="check">✓</span> Statistiques de base</li>
-            <li class="na" style="color:var(--text-tertiary)"><span style="color:var(--red)">✗</span> Notification leads temps réel</li>
-            <li class="na" style="color:var(--text-tertiary)"><span style="color:var(--red)">✗</span> Mise en avant des annonces</li>
-          </ul>
-          <button class="btn-plan" onclick="selectPlan('starter')">Mon forfait actuel</button>
-        </div>
-        <div class="plan-card popular" id="plan-pro">
-          <div class="popular-badge">⭐ Populaire</div>
-          <h3>Pro</h3>
-          <div class="plan-price">99<span>€/mois</span></div>
-          <div class="plan-desc">Pour les agences établies avec un volume modéré.</div>
-          <ul>
-            <li><span class="check">✓</span> Jusqu'à 20 annonces</li>
-            <li><span class="check">✓</span> Score de confiance IA</li>
-            <li><span class="check">✓</span> Analyse de prix IA</li>
-            <li><span class="check">✓</span> Statistiques avancées</li>
-            <li><span class="check">✓</span> Notification leads temps réel</li>
-            <li class="na" style="color:var(--text-tertiary)"><span style="color:var(--red)">✗</span> Mise en avant des annonces</li>
-          </ul>
-          <button class="btn-plan btn-primary" onclick="selectPlan('pro')">Choisir Pro</button>
-        </div>
-        <div class="plan-card" id="plan-premium">
-          <h3>Premium</h3>
-          <div class="plan-price">199<span>€/mois</span></div>
-          <div class="plan-desc">Pour les réseaux et grandes agences.</div>
-          <ul>
-            <li><span class="check">✓</span> Annonces illimitées</li>
-            <li><span class="check">✓</span> Score de confiance IA</li>
-            <li><span class="check">✓</span> Analyse de prix IA</li>
-            <li><span class="check">✓</span> Statistiques premium + export</li>
-            <li><span class="check">✓</span> Notification leads temps réel</li>
-            <li><span class="check">✓</span> Mise en avant des annonces</li>
-            <li><span class="check">✓</span> API d'intégration</li>
-            <li><span class="check">✓</span> Support prioritaire 24/7</li>
-          </ul>
-          <button class="btn-plan btn-outline" onclick="selectPlan('premium')">Choisir Premium</button>
-        </div>
-      </div>
-      <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;font-size:0.85rem;color:var(--text-secondary)">
-        💡 <strong>Vous êtes actuellement :</strong> <span id="currentPlanDisplay">Plan Starter</span> · 
-        Prochain renouvellement le <span id="nextRenewal">01/09/2026</span> · 
-        <a href="#" onclick="alert('Pour résilier, contactez le support à support@immo-express.fr')">Résilier ?</a>
-      </div>
-    </section>
+        <section class="pro-section" id="sec-abonnements">
+
+          <!-- Bannière promo -->
+          <div style="background:linear-gradient(135deg,#1e3a5f,var(--blue));border-radius:var(--radius-lg);padding:24px 28px;margin-bottom:24px;color:white;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px">
+            <div>
+              <div style="font-size:1.1rem;font-weight:700;margin-bottom:4px">🎉 Lancement Immo-Express</div>
+              <div style="font-size:0.85rem;opacity:0.9">Les <strong>5 premiers comptes Pro</strong> sont offerts — 1 mois gratuit sans engagement</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.15);border-radius:var(--radius);padding:10px 20px;text-align:center">
+              <div style="font-size:1.6rem;font-weight:800" id="freeSlots">5</div>
+              <div style="font-size:0.7rem;opacity:0.8;text-transform:uppercase;letter-spacing:0.5px">Places restantes</div>
+            </div>
+          </div>
+
+          <div class="section-title">⭐ Choisissez votre formule</div>
+          <div class="plans-grid">
+            <div class="plan-card" id="plan-starter">
+              <h3>Starter</h3>
+              <div class="plan-price">29<span>€/mois</span></div>
+              <div class="plan-desc">Pour les agents indépendants qui débutent.</div>
+              <ul>
+                <li><span class="check">✓</span> Jusqu'à 5 annonces</li>
+                <li><span class="check">✓</span> Score de confiance IA</li>
+                <li><span class="check">✓</span> Analyse de prix IA</li>
+                <li><span class="check">✓</span> Statistiques de base</li>
+                <li class="na" style="color:var(--text-tertiary)"><span style="color:var(--red)">✗</span> Notification leads temps réel</li>
+                <li class="na" style="color:var(--text-tertiary)"><span style="color:var(--red)">✗</span> Mise en avant des annonces</li>
+              </ul>
+              <button class="btn-plan" onclick="selectPlan('starter')">Mon forfait actuel</button>
+            </div>
+            <div class="plan-card popular" id="plan-pro">
+              <div class="popular-badge">⭐ Le + choisi</div>
+              <h3>Pro</h3>
+              <div class="plan-price" style="display:flex;align-items:baseline;gap:8px">
+                <span style="font-size:1rem;color:var(--text-tertiary);text-decoration:line-through">99€</span>
+                59<span>€/mois</span>
+              </div>
+              <div class="plan-desc">Pour les agences avec un volume modéré. <strong style="color:var(--green)">-40% lancement</strong></div>
+              <ul>
+                <li><span class="check">✓</span> Jusqu'à 20 annonces</li>
+                <li><span class="check">✓</span> Score de confiance IA</li>
+                <li><span class="check">✓</span> Analyse de prix IA</li>
+                <li><span class="check">✓</span> Statistiques avancées</li>
+                <li><span class="check">✓</span> Notification leads temps réel</li>
+                <li style="color:var(--text-tertiary)"><span style="color:var(--orange)">⚠️</span> Mise en avant (supplément 15€/mois)</li>
+              </ul>
+              <button class="btn-plan btn-primary" onclick="selectPlan('pro')">Choisir Pro</button>
+            </div>
+            <div class="plan-card" id="plan-premium">
+              <h3>Premium</h3>
+              <div class="plan-price" style="display:flex;align-items:baseline;gap:8px">
+                <span style="font-size:1rem;color:var(--text-tertiary);text-decoration:line-through">199€</span>
+                119<span>€/mois</span>
+              </div>
+              <div class="plan-desc">Pour les grandes agences. <strong style="color:var(--green)">-40% lancement</strong></div>
+              <ul>
+                <li><span class="check">✓</span> Annonces illimitées</li>
+                <li><span class="check">✓</span> Score de confiance IA</li>
+                <li><span class="check">✓</span> Analyse de prix IA</li>
+                <li><span class="check">✓</span> Statistiques premium + export</li>
+                <li><span class="check">✓</span> Notification leads temps réel</li>
+                <li><span class="check">✓</span> Mise en avant des annonces incluse</li>
+                <li><span class="check">✓</span> API d'intégration</li>
+                <li><span class="check">✓</span> Support prioritaire 24/7</li>
+              </ul>
+              <button class="btn-plan btn-outline" onclick="selectPlan('premium')">Choisir Premium</button>
+            </div>
+          </div>
+          <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;font-size:0.85rem;color:var(--text-secondary)">
+            💡 <strong>Vous êtes actuellement :</strong> <span id="currentPlanDisplay">Plan Starter</span> · 
+            Prochain renouvellement le <span id="nextRenewal">01/09/2026</span> · 
+            <a href="#" onclick="alert('Pour résilier, contactez le support à support@immo-express.fr')">Résilier ?</a>
+          </div>
+        </section>
 
     <!-- ===== PROFIL ===== -->
     <section class="pro-section" id="sec-profil">
@@ -554,6 +573,11 @@ function renderPlans() {
   const current = proData.agency.plan;
   const plans = ['starter','pro','premium'];
   const labels = {starter:'Starter',pro:'Pro',premium:'Premium'};
+  // Compteur de places gratuites (stocké dans localStorage)
+  let freeSlots = parseInt(localStorage.getItem('immo-free-slots') || '5');
+  if(freeSlots < 0) freeSlots = 0;
+  if(freeSlots > 5) freeSlots = 5;
+  document.getElementById('freeSlots').textContent = freeSlots;
   plans.forEach(p => {
     const card = document.getElementById(`plan-${p}`);
     const btn = card.querySelector('.btn-plan');
@@ -578,10 +602,25 @@ function selectPlan(plan) {
     alert('Vous êtes déjà sur ce forfait.');
     return;
   }
-  const labels = {starter:'Starter (49€/mois)',pro:'Pro (99€/mois)',premium:'Premium (199€/mois)'};
-  if(confirm(`Passer au forfait ${labels[plan]} ?`)){
-    savePlan(plan);
-    alert(`✅ Vous êtes maintenant sur le forfait ${labels[plan]} !`);
+  const labels = {starter:'Starter 29€/mois',pro:'Pro 59€/mois',premium:'Premium 119€/mois'};
+  let priceLabel = labels[plan];
+  let freeSlots = parseInt(localStorage.getItem('immo-free-slots') || '5');
+  if(freeSlots > 0) {
+    if(confirm(`🎉 Lancement — plus que ${freeSlots} place${freeSlots>1?'s':''} gratuite${freeSlots>1?'s':''} !\n\nPasser au forfait ${labels[plan]} offert pour 1 mois ?`)){
+      freeSlots--;
+      localStorage.setItem('immo-free-slots', freeSlots);
+      savePlan(plan);
+      if(freeSlots > 0){
+        alert(`✅ Félicitations ! Vous êtes sur ${labels[plan]} — 1er mois offert.\n\nPlus que ${freeSlots} place${freeSlots>1?'s':''} gratuite${freeSlots>1?'s':''} pour d'autres agences !`);
+      } else {
+        alert(`✅ Félicitations ! Vous êtes sur ${labels[plan]} — 1er mois offert.\n\nToutes les places gratuites sont prises !`);
+      }
+    }
+  } else {
+    if(confirm(`Passer au forfait ${priceLabel} ?`)){
+      savePlan(plan);
+      alert(`✅ Vous êtes maintenant sur le forfait ${priceLabel} !`);
+    }
   }
 }
 
