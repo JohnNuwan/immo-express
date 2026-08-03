@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Acheter — Immo-Express</title>
+  <link rel="icon" href="assets/icon-192.svg" type="image/svg+xml">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--white:#fff;--bg:#f3f4f6;--bg-card:#fff;--border:#e5e7eb;--border-hover:#d1d5db;--text:#111827;--text-secondary:#6b7280;--text-tertiary:#9ca3af;--blue:#2563eb;--blue-light:#eff6ff;--blue-dark:#1d4ed8;--green:#059669;--green-light:#ecfdf5;--orange:#d97706;--orange-light:#fef3c7;--red:#dc2626;--red-light:#fef2f2;--purple:#7c3aed;--teal:#0d9488;--shadow-sm:0 1px 2px rgba(0,0,0,0.05);--shadow:0 1px 3px rgba(0,0,0,0.1);--shadow-md:0 4px 12px rgba(0,0,0,0.08);--radius-sm:6px;--radius:8px;--radius-lg:12px;--font:'Inter',-apple-system,sans-serif}
+    body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.5}
+    a{color:var(--blue);text-decoration:none}
+    .header{background:var(--white);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+    .header-inner{max-width:1200px;margin:0 auto;padding:0 20px;height:64px;display:flex;align-items:center;justify-content:space-between}
+    .logo{font-size:1.35rem;font-weight:800;display:flex;align-items:center;gap:8px;cursor:pointer}
+    .logo span{color:var(--blue)}
+    .header-links{display:flex;align-items:center;gap:4px}
+    .header-links a{padding:8px 16px;border-radius:var(--radius);font-size:0.875rem;font-weight:500;color:var(--text-secondary);transition:all 0.15s;text-decoration:none}
+    .header-links a:hover{background:var(--bg);color:var(--text);text-decoration:none}
+    .header-links a.active{color:var(--blue);background:var(--blue-light)}
+    .btn-depot{background:var(--blue)!important;color:white!important;font-weight:600!important;padding:8px 20px!important;border-radius:var(--radius)!important;cursor:pointer}
+    .btn-depot:hover{background:var(--blue-dark)!important}
+    .mobile-toggle{display:none;background:none;border:none;font-size:1.5rem;cursor:pointer;padding:4px;color:var(--text)}
+    @media(max-width:640px){
+      .mobile-toggle{display:block}
+      .header-links{display:none;position:absolute;top:64px;left:0;right:0;background:var(--white);flex-direction:column;padding:12px;box-shadow:var(--shadow-md);border-bottom:1px solid var(--border)}
+      .header-links.open{display:flex}
+      .header-links a{padding:12px 16px;width:100%}
+    }
+    .v-hero{background:linear-gradient(135deg,var(--blue-dark) 0%,var(--blue) 100%);padding:36px 20px;text-align:center;color:white}
+    .v-hero h1{font-size:1.6rem;font-weight:700;margin-bottom:4px}
+    .v-hero p{opacity:.85;font-size:.9rem;margin-bottom:18px}
+    .v-search{max-width:720px;margin:0 auto;background:white;border-radius:var(--radius-lg);padding:6px;display:flex;gap:6px;box-shadow:0 4px 20px rgba(0,0,0,.15);flex-wrap:wrap}
+    .v-search input{flex:1;min-width:160px;border:none;outline:none;padding:12px 16px;font-size:.9rem;font-family:var(--font);border-radius:var(--radius)}
+    .v-search select{border:none;outline:none;padding:12px 16px;font-size:.85rem;font-family:var(--font);background:var(--bg);border-radius:var(--radius);cursor:pointer;color:var(--text-secondary)}
+    .v-search button{padding:12px 28px;background:var(--blue);color:white;border:none;border-radius:var(--radius);font-weight:600;font-size:.9rem;cursor:pointer;font-family:var(--font);transition:background .15s}
+    .v-search button:hover{background:var(--blue-dark)}
+    .v-stats{background:var(--white);border-bottom:1px solid var(--border);padding:12px 20px}
+    .v-stats-inner{max-width:1200px;margin:0 auto;display:flex;gap:24px;justify-content:center;flex-wrap:wrap;font-size:.82rem;color:var(--text-secondary)}
+    .v-stats-inner strong{color:var(--text)}
+    .v-layout{max-width:1200px;margin:0 auto;padding:24px 20px;display:grid;grid-template-columns:260px 1fr;gap:24px}
+    @media(max-width:900px){.v-layout{grid-template-columns:1fr}}
+    .v-sidebar{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;height:fit-content;position:sticky;top:88px}
+    .v-sidebar h3{font-size:.88rem;font-weight:600;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+    .vs-group{margin-bottom:16px}
+    .vs-group label{display:block;font-size:.76rem;font-weight:500;color:var(--text-secondary);margin-bottom:5px;text-transform:uppercase;letter-spacing:.3px}
+    .vs-group select,.vs-group input{width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:.82rem;font-family:var(--font);background:var(--white);color:var(--text);outline:none}
+    .vs-group select:focus,.vs-group input:focus{border-color:var(--blue)}
+    .vs-price{display:flex;gap:8px;align-items:center}
+    .vs-price input{width:100%}.vs-price span{font-size:.76rem;color:var(--text-tertiary)}
+    .vs-btns{display:flex;gap:6px;flex-wrap:wrap}
+    .vs-btns button{padding:6px 14px;border:1px solid var(--border);border-radius:50px;background:var(--white);font-size:.76rem;cursor:pointer;font-family:var(--font);color:var(--text-secondary);transition:all .15s}
+    .vs-btns button:hover{border-color:var(--blue);color:var(--blue)}
+    .vs-btns button.active{background:var(--blue);color:white;border-color:var(--blue)}
+    .vs-reset{width:100%;padding:8px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--white);font-size:.76rem;cursor:pointer;font-family:var(--font);color:var(--text-secondary);margin-top:4px}
+    .vs-reset:hover{background:var(--bg)}
+    .v-results{min-height:400px}
+    .v-rh{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px}
+    .v-rh .count{font-size:.82rem;color:var(--text-secondary)}
+    .v-rh .count strong{color:var(--text)}
+    .v-tabs{display:flex;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;background:var(--white)}
+    .v-tabs button{padding:8px 18px;border:none;font-size:.8rem;font-weight:500;cursor:pointer;font-family:var(--font);color:var(--text-secondary);background:var(--white);transition:all .15s}
+    .v-tabs button:not(:last-child){border-right:1px solid var(--border)}
+    .v-tabs button:hover{background:var(--bg)}.v-tabs button.active{background:var(--blue);color:white}
+    .v-grid{display:grid;grid-template-columns:1fr;gap:14px}
+    .v-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);display:grid;grid-template-columns:260px 1fr;overflow:hidden;cursor:pointer;transition:box-shadow .2s,border-color .2s}
+    .v-card:hover{box-shadow:var(--shadow-md);border-color:var(--border-hover)}
+    .v-img{display:flex;align-items:center;justify-content:center;font-size:2.8rem;min-height:170px;position:relative}
+    .v-img .vb{position:absolute;top:10px;left:10px;font-size:.66rem;font-weight:600;padding:3px 9px;border-radius:4px;text-transform:uppercase;letter-spacing:.3px}
+    .vb-sale{background:var(--blue);color:white}
+    .vb-verified{background:var(--green);color:white;left:auto;right:10px}
+    .vb-reduc{background:var(--red);color:white}
+    .v-info{padding:16px 18px;display:flex;flex-direction:column}
+    .v-price{font-size:1.3rem;font-weight:700;display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:2px}
+    .v-price-sub{font-size:.76rem;color:var(--text-tertiary);margin-bottom:4px}
+    .v-title{font-size:.92rem;font-weight:500;margin-bottom:3px}
+    .v-loc{font-size:.8rem;color:var(--text-secondary);margin-bottom:8px}
+    .v-tags{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:8px}
+    .v-tag{display:flex;align-items:center;gap:4px;font-size:.76rem;color:var(--text-secondary)}
+    .v-tag strong{color:var(--text);font-weight:500}
+    .v-footer{margin-top:auto;display:flex;justify-content:space-between;align-items:center;padding-top:10px;border-top:1px solid var(--border);font-size:.76rem}
+    .v-footer .pub{display:flex;align-items:center;gap:6px}
+    .v-footer .pub .pt{padding:2px 7px;border-radius:4px;font-size:.66rem;font-weight:500}
+    .pt-pro{background:var(--blue-light);color:var(--blue)}
+    .pt-particulier{background:var(--green-light);color:var(--green)}
+    .v-footer .date{color:var(--text-tertiary)}
+    .v-score{display:inline-flex;align-items:center;gap:4px;padding:2px 9px;border-radius:50px;font-size:.66rem;font-weight:600}
+    .sh{background:#ecfdf5;color:#059669}.sm{background:#fef3c7;color:#d97706}.sl{background:#fef2f2;color:#dc2626}
+    .no-res{text-align:center;padding:60px;background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg)}
+    .no-res .big{font-size:3rem;margin-bottom:12px}
+    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}
+    .modal-overlay.open{display:flex}
+    .modal{background:var(--white);border-radius:var(--radius-lg);max-width:760px;width:100%;max-height:90vh;overflow-y:auto;animation:fadeIn .2s}
+    @keyframes fadeIn{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:scale(1)}}
+    .modal-header{display:flex;justify-content:space-between;align-items:center;padding:18px 22px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--white);z-index:2}
+    .modal-header h2{font-size:1.1rem;font-weight:600}
+    .modal-close{width:32px;height:32px;border-radius:50%;border:none;background:var(--bg);font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text-secondary)}
+    .modal-body{padding:22px}
+    .m-img{width:100%;height:260px;border-radius:var(--radius);display:flex;align-items:center;justify-content:center;font-size:4.5rem;margin-bottom:16px}
+    .m-price{font-size:1.6rem;font-weight:700;margin-bottom:2px}
+    .m-sub{font-size:.82rem;color:var(--text-secondary);margin-bottom:10px}
+    .m-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
+    .m-gi{display:flex;align-items:center;gap:7px;padding:9px 13px;background:var(--bg);border-radius:var(--radius-sm);font-size:.8rem}
+    .m-desc{color:var(--text-secondary);line-height:1.7;margin:14px 0;font-size:.82rem}
+    .m-contact{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+    .m-contact button{flex:1;padding:11px 22px;border-radius:var(--radius);font-weight:600;font-size:.82rem;cursor:pointer;font-family:var(--font);border:none;transition:all .15s}
+    .m-contact .btn-p{background:var(--blue);color:white}.m-contact .btn-p:hover{background:var(--blue-dark)}
+    .m-contact .btn-s{background:var(--white);color:var(--text);border:1px solid var(--border)}.m-contact .btn-s:hover{background:var(--bg)}
+    .tools-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;margin-top:16px}
+    .t-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px}
+    .t-card .tc-i{width:44px;height:44px;border-radius:var(--radius);display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin-bottom:10px}
+    .t-card h3{font-size:.95rem;font-weight:600;margin-bottom:4px}
+    .t-card p{font-size:.8rem;color:var(--text-secondary);line-height:1.5}
+    .t-card .btn-t{padding:8px 18px;border:1px solid var(--border);border-radius:var(--radius);background:var(--white);font-size:.8rem;font-weight:500;cursor:pointer;font-family:var(--font);color:var(--text);transition:all .15s;margin-top:10px}
+    .t-card .btn-t:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-light)}
+    .tool-panel{display:none;background:var(--white);border:1px solid var(--blue);border-radius:var(--radius-lg);padding:24px;margin-bottom:24px}
+    .tool-panel.open{display:block}
+    .tool-panel h3{font-size:.95rem;font-weight:600;margin-bottom:14px}
+    .tp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px;margin-bottom:14px}
+    .tp-g{display:flex;flex-direction:column;gap:4px}
+    .tp-g label{font-size:.74rem;font-weight:500;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.3px}
+    .tp-g input,.tp-g select{padding:9px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:.82rem;font-family:var(--font);outline:none}
+    .tp-g input:focus,.tp-g select:focus{border-color:var(--blue)}
+    .tp-g .res{font-size:1.3rem;font-weight:700;color:var(--blue);padding:6px 0}
+    .tp-g .res-sub{font-size:.76rem;color:var(--text-secondary)}
+    .tp-actions{display:flex;gap:10px;justify-content:flex-end;padding-top:12px;border-top:1px solid var(--border)}
+    .tp-actions button{padding:10px 24px;border-radius:var(--radius);font-weight:600;font-size:.82rem;cursor:pointer;font-family:var(--font);border:none;transition:all .15s}
+    .tp-actions .btn-calc{background:var(--blue);color:white}.tp-actions .btn-calc:hover{background:var(--blue-dark)}
+    .tp-actions .btn-close{background:var(--white);color:var(--text-secondary);border:1px solid var(--border)}
+    footer{background:var(--white);border-top:1px solid var(--border);padding:36px 20px 20px;margin-top:40px}
+    .f-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:36px}
+    .f-inner h4{font-size:.76rem;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--text-secondary);margin-bottom:10px}
+    .f-inner p{font-size:.8rem;color:var(--text-tertiary);line-height:1.6}
+    .f-inner ul{list-style:none}.f-inner ul li{margin-bottom:6px}
+    .f-inner ul li a{font-size:.8rem;color:var(--text-secondary)}
+    .f-bottom{max-width:1200px;margin:20px auto 0;padding-top:14px;border-top:1px solid var(--border);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-size:.76rem;color:var(--text-tertiary)}
+    @media(max-width:640px){.v-price{font-size:1.1rem}.v-card{grid-template-columns:1fr}.m-grid{grid-template-columns:1fr}.tools-grid{grid-template-columns:1fr}.f-inner{grid-template-columns:1fr}.v-hero h1{font-size:1.25rem}}
+  </style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-inner">
+    <div class="logo" onclick="location.href='index.html'"><img src="assets/icon-192.svg" alt="" style="height:36px;width:36px;border-radius:6px"><span>Immo</span><span style="color:var(--blue)">Express</span></div>
+    <button class="mobile-toggle" id="menuToggle">☰</button>
+    <div class="header-links" id="headerLinks">
+      <a href="#" class="active">💰 Acheter</a>
+      <a href="scoring.html">🔬 Notation</a>
+      <a href="location.html">📍 Location</a>
+      <a href="pro.html">🏢 Espace Pro</a>
+      <a href="#" class="btn-depot" onclick="alert('Publiez votre annonce depuis la page d\'accueil');return false">+ Vendre</a>
+    </div>
+  </div>
+</header>
+
+<section class="v-hero">
+  <h1>💰 Acheter un bien immobilier</h1>
+  <p>Appartements, maisons, villas — trouvez le bien de vos rêves au meilleur prix</p>
+  <div class="v-search">
+    <input type="text" id="vSearch" placeholder="Ville, quartier…" oninput="filter()">
+    <select id="vType" onchange="filter()"><option value="all">Tous types</option><option value="appartement">Appartement</option><option value="maison">Maison</option><option value="villa">Villa</option><option value="studio">Studio</option></select>
+    <button onclick="filter()">🔍 Rechercher</button>
+  </div>
+</section>
+
+<div class="v-stats">
+  <div class="v-stats-inner">
+    <span>🏠 <strong>2 180+</strong> biens à vendre</span>
+    <span>🛡️ <strong>92%</strong> annonces vérifiées</span>
+    <span>📊 <strong>8 500+</strong> analyses IA réalisées</span>
+    <span>💰 Prix moyen <strong>395 000 €</strong></span>
+  </div>
+</div>
+
+<div class="v-layout">
+  <aside class="v-sidebar">
+    <h3>🔍 Filtrer</h3>
+    <div class="vs-group"><label>Type</label><div class="vs-btns" id="typeBtns"><button class="active" data-v="all">Tous</button><button data-v="appartement">Appartement</button><button data-v="maison">Maison</button><button data-v="villa">Villa</button><button data-v="studio">Studio</button></div></div>
+    <div class="vs-group"><label>Prix</label><div class="vs-price"><input type="number" id="vMin" placeholder="Min €" oninput="filter()"><span>—</span><input type="number" id="vMax" placeholder="Max €" oninput="filter()"></div></div>
+    <div class="vs-group"><label>Surface min</label><input type="number" id="vSurf" placeholder="m² min" oninput="filter()"></div>
+    <div class="vs-group"><label>Pièces</label><div class="vs-btns" id="pieceBtns"><button class="active" data-p="all">Tous</button><button data-p="1">1</button><button data-p="2">2</button><button data-p="3">3</button><button data-p="4">4+</button></div></div>
+    <div class="vs-group"><label>DPE min</label><select id="vDpe" onchange="filter()"><option value="">Tous</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option></select></div>
+    <div class="vs-group"><label>Publié par</label><select id="vPub" onchange="filter()"><option value="all">Tous</option><option value="pro">Professionnels</option><option value="particulier">Particuliers</option></select></div>
+    <button class="vs-reset" onclick="reset()">Réinitialiser</button>
+  </aside>
+  <div class="v-results">
+    <div class="v-rh"><div class="count" id="vCount"><strong>0</strong> biens trouvés</div><div class="v-tabs"><button class="active" data-s="recent" onclick="sort('recent')">Récents</button><button data-s="price-asc" onclick="sort('price-asc')">Prix ↑</button><button data-s="price-desc" onclick="sort('price-desc')">Prix ↓</button><button data-s="surface" onclick="sort('surface')">Surface</button></div></div>
+    <div class="v-grid" id="vGrid"></div>
+  </div>
+</div>
+
+<!-- Outils -->
+<div class="v-layout" style="padding-top:0"><div class="tools-section" style="grid-column:1/-1">
+  <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:14px">
+    <h2 style="font-size:1.1rem;font-weight:700">🛠️ Outils achat</h2>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn-t" style="background:var(--blue);color:white;border:none;padding:10px 20px;border-radius:var(--radius);font-weight:600;font-size:.82rem;cursor:pointer;font-family:var(--font)" onclick="toggleTool('mortgage')">🏦 Simuler un prêt</button>
+      <button class="btn-t" style="padding:10px 20px;border:1px solid var(--border);border-radius:var(--radius);font-weight:500;font-size:.82rem;cursor:pointer;font-family:var(--font);background:var(--white)" onclick="toggleTool('notaire')">📜 Frais de notaire</button>
+    </div>
+  </div>
+
+  <div class="tool-panel" id="tp-mortgage">
+    <h3>🏦 Simulateur de prêt immobilier</h3>
+    <div class="tp-grid">
+      <div class="tp-g"><label>Prix du bien *</label><input type="number" id="mPrice" value="250000"></div>
+      <div class="tp-g"><label>Apport</label><input type="number" id="mDown" value="50000"></div>
+      <div class="tp-g"><label>Taux annuel %</label><input type="number" id="mRate" value="3.5" step="0.1"></div>
+      <div class="tp-g"><label>Durée (ans)</label><select id="mDur"><option value="15">15 ans</option><option value="20" selected>20 ans</option><option value="25">25 ans</option></select></div>
+      <div class="tp-g" style="grid-column:1/-1;display:flex;flex-direction:row;gap:20px;flex-wrap:wrap;justify-content:center;padding:8px 0">
+        <div><div class="res" id="mMonthly" style="font-size:1.1rem">—</div><div class="res-sub">Mensualité</div></div>
+        <div><div class="res" id="mTotal" style="font-size:1.1rem">—</div><div class="res-sub">Total à rembourser</div></div>
+        <div><div class="res" id="mInterest" style="font-size:1.1rem">—</div><div class="res-sub">Intérêts</div></div>
+      </div>
+    </div>
+    <div class="tp-actions"><button class="btn-calc" onclick="calcMortgage()">🏦 Calculer</button><button class="btn-close" onclick="toggleTool('mortgage')">Fermer</button></div>
+  </div>
+
+  <div class="tool-panel" id="tp-notaire">
+    <h3>📜 Estimateur des frais de notaire</h3>
+    <div class="tp-grid">
+      <div class="tp-g"><label>Prix du bien *</label><input type="number" id="nPrice" value="250000"></div>
+      <div class="tp-g"><label>Type</label><select id="nType"><option value="ancien">Ancien</option><option value="neuf">Neuf</option></select></div>
+      <div class="tp-g"><label>Région</label><select id="nRegion"><option value="metro">France métropolitaine</option><option value="corse">Corse</option></select></div>
+      <div class="tp-g" style="grid-column:1/-1;display:flex;flex-direction:row;gap:20px;flex-wrap:wrap;justify-content:center;padding:8px 0">
+        <div><div class="res" id="nFees" style="font-size:1.1rem">—</div><div class="res-sub">Frais de notaire</div></div>
+        <div><div class="res" id="nTotal" style="font-size:1.1rem">—</div><div class="res-sub">Total avec frais</div></div>
+        <div><div class="res" id="nPct" style="font-size:1.1rem">—</div><div class="res-sub">% du prix</div></div>
+      </div>
+    </div>
+    <div class="tp-actions"><button class="btn-calc" onclick="calcNotaire()">📜 Calculer</button><button class="btn-close" onclick="toggleTool('notaire')">Fermer</button></div>
+  </div>
+
+  <div class="tools-grid">
+    <div class="t-card"><div class="tc-i" style="background:var(--blue-light)">📐</div><h3>Calculateur de surface</h3><p>Convertissez et calculez les surfaces : m², pieds carrés, surfaces habitables.</p></div>
+    <div class="t-card"><div class="tc-i" style="background:var(--green-light)">🔬</div><h3>Analyse IA du prix</h3><p>Comparez le prix d'un bien au marché local grâce à notre moteur de notation 8 critères.</p><button class="btn-t" onclick="location.href='scoring.html'">🔬 Analyser un bien</button></div>
+    <div class="t-card"><div class="tc-i" style="background:var(--orange-light)">📋</div><h3>Checklist achat</h3><p>Documents nécessaires, étapes clés, délais et diagnostics obligatoires pour un achat serein.</p></div>
+  </div>
+</div></div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modalOverlay"><div class="modal"><div class="modal-header"><h2 id="modalTitle">Détail du bien</h2><button class="modal-close" onclick="closeModal()">✕</button></div><div class="modal-body" id="modalBody"></div></div></div>
+
+<footer><div class="f-inner">
+  <div><div class="logo" style="margin-bottom:8px"><img src="assets/icon-192.svg" alt="" style="height:28px;width:28px;border-radius:5px;vertical-align:middle;margin-right:6px"><span style="font-weight:800">Immo</span><span style="color:var(--blue);font-weight:800">Express</span></div><p>Plateforme immobilière intelligente. Achat, vente, location, notation IA.</p></div>
+  <div><h4>Achat</h4><ul><li><a href="#">Appartements</a></li><li><a href="#">Maisons</a></li><li><a href="#">Villas</a></li><li><a href="scoring.html">🔬 Analyse IA</a></li></ul></div>
+  <div><h4>Outils</h4><ul><li><a href="#" onclick="toggleTool('mortgage');return false">🏦 Simulateur prêt</a></li><li><a href="#" onclick="toggleTool('notaire');return false">📜 Frais notaire</a></li><li><a href="scoring.html">🔬 Notation</a></li></ul></div>
+  <div><h4>Pro</h4><ul><li><a href="pro.html">🏢 Espace Pro</a></li><li><a href="pro.html">Abonnements</a></li></ul></div>
+</div><div class="f-bottom"><span>© 2025 Immo-Express</span><span>CGU · Confidentialité</span></div></footer>
+
+<script>
+const listings = [
+  {id:1,type:'appartement',title:'3 pièces lumineux centre-ville',location:'Paris 11e',price:425000,pl:'425 000 €',surface:75,pieces:3,publisher:'pro',pubName:'Agence Duval',date:'Aujourd\'hui',bg:'#e8f0fe',emoji:'🏙️',score:94,desc:'Bel appartement 3 pièces de 75 m² au 4e étage avec ascenseur.',marketAvg:440000,dpe:'C',reduc:true},
+  {id:2,type:'maison',title:'Maison de ville avec jardin',location:'Lyon 6e',price:580000,pl:'580 000 €',surface:125,pieces:5,publisher:'particulier',pubName:'M. Bernard',date:'Hier',bg:'#e6f7ed',emoji:'🏠',score:82,desc:'Belle maison de ville 125 m², jardin 50 m², garage.',marketAvg:565000,dpe:'B'},
+  {id:3,type:'villa',title:'Villa contemporaine piscine',location:'Cannes',price:1250000,pl:'1 250 000 €',surface:200,pieces:7,publisher:'pro',pubName:'Côte d\'Azur Immo',date:'Il y a 2 jours',bg:'#fef3e8',emoji:'🌴',score:97,desc:'Superbe villa 200 m², piscine à débordement, vue mer.',marketAvg:1180000,dpe:'A',reduc:true},
+  {id:4,type:'appartement',title:'Duplex vue mer',location:'Marseille Corniche',price:695000,pl:'695 000 €',surface:130,pieces:4,publisher:'pro',pubName:'Marseille Prestige',date:'Hier',bg:'#e8f0fe',emoji:'🌊',score:95,desc:'Duplex 130 m² vue mer, terrasse 25 m², parking.',marketAvg:680000,dpe:'B'},
+  {id:5,type:'studio',title:'Studio rénové centre',location:'Aix-en-Provence',price:185000,pl:'185 000 €',surface:28,pieces:1,publisher:'particulier',pubName:'M. Garcia',date:'Il y a 3 jours',bg:'#fef3e8',emoji:'🏘️',score:68,desc:'Studio rénové 28 m² en centre historique.',marketAvg:190000,dpe:'D',reduc:true},
+  {id:6,type:'appartement',title:'Appartement haussmannien Trocadéro',location:'Paris 16e',price:980000,pl:'980 000 €',surface:100,pieces:4,publisher:'pro',pubName:'Paris Ouest Immo',date:'Il y a 5 jours',bg:'#e8f0fe',emoji:'🏛️',score:96,desc:'Appartement haussmannien 100 m², parquet Versailles.',marketAvg:950000,dpe:'C'},
+  {id:7,type:'maison',title:'Longère à rénover',location:'Rennes campagne',price:220000,pl:'220 000 €',surface:170,pieces:5,publisher:'particulier',pubName:'Famille Moreau',date:'Il y a 2 jours',bg:'#fef3e8',emoji:'🏡',score:65,desc:'Longère 170 m² à rénover sur 2500 m² de terrain.',marketAvg:250000,dpe:'F',reduc:true},
+  {id:8,type:'appartement',title:'T2 neuf avec balcon',location:'Saint-Étienne Centre',price:135000,pl:'135 000 €',surface:52,pieces:2,publisher:'pro',pubName:'Immo Stéphanoise',date:'Aujourd\'hui',bg:'#e8f0fe',emoji:'🏙️',score:70,desc:'T2 neuf 52 m² avec balcon, parking inclus.',marketAvg:140000,dpe:'A'},
+  {id:9,type:'maison',title:'Maison 4 pièces garage',location:'Nantes',price:350000,pl:'350 000 €',surface:95,pieces:4,publisher:'pro',pubName:'Nantes Immo',date:'Hier',bg:'#e6f7ed',emoji:'🏠',score:80,desc:'Maison 95 m² avec garage et jardin.',marketAvg:340000,dpe:'C'},
+  {id:10,type:'appartement',title:'2 pièces centre-ville',location:'Lille',price:185000,pl:'185 000 €',surface:48,pieces:2,publisher:'particulier',pubName:'Mme Dubois',date:'Il y a 2 jours',bg:'#e8f0fe',emoji:'🏙️',score:78,desc:'F2 de 48 m² en plein centre de Lille.',marketAvg:180000,dpe:'D'},
+];
+let state = {search:'',type:'all',minPrice:'',maxPrice:'',minSurface:'',pieces:'all',dpe:'',publisher:'all',sort:'recent'};
+
+document.querySelectorAll('#typeBtns button').forEach(b=>b.addEventListener('click',function(){
+  document.querySelectorAll('#typeBtns button').forEach(x=>x.classList.remove('active'));
+  this.classList.add('active');state.type=this.dataset.v;render();
+}));
+document.querySelectorAll('#pieceBtns button').forEach(b=>b.addEventListener('click',function(){
+  document.querySelectorAll('#pieceBtns button').forEach(x=>x.classList.remove('active'));
+  this.classList.add('active');state.pieces=this.dataset.p;render();
+}));
+
+function filter(){
+  state.search=document.getElementById('vSearch').value;
+  state.minPrice=document.getElementById('vMin').value;
+  state.maxPrice=document.getElementById('vMax').value;
+  state.minSurface=document.getElementById('vSurf').value;
+  state.dpe=document.getElementById('vDpe').value;
+  state.publisher=document.getElementById('vPub').value;
+  render();
+}
+function sort(s){
+  state.sort=s;
+  document.querySelectorAll('.v-tabs button').forEach(b=>b.classList.toggle('active',b.dataset.s===s));
+  render();
+}
+function reset(){
+  state={search:'',type:'all',minPrice:'',maxPrice:'',minSurface:'',pieces:'all',dpe:'',publisher:'all',sort:'recent'};
+  document.getElementById('vSearch').value='';
+  document.getElementById('vMin').value='';
+  document.getElementById('vMax').value='';
+  document.getElementById('vSurf').value='';
+  document.getElementById('vDpe').value='';
+  document.getElementById('vPub').value='all';
+  document.querySelectorAll('.vs-btns button').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('[data-v="all"],[data-p="all"]').forEach(b=>b.classList.add('active'));
+  document.getElementById('vType').value='all';
+  render();
+}
+
+function scoreBadge(s){if(!s)return'';const c=s>=80?'sh':s>=60?'sm':'sl';return`<span class="v-score ${c}">⭐ ${s}</span>`}
+
+function render(){
+  const grid=document.getElementById('vGrid');
+  const count=document.getElementById('vCount');
+  let f=listings.filter(p=>{
+    if(state.type!=='all'&&p.type!==state.type)return false;
+    if(state.pieces!=='all'){const n=parseInt(state.pieces);if(state.pieces==='4'?p.pieces<4:p.pieces!==n)return false}
+    if(state.dpe&&(p.dpe||' ')>state.dpe)return false;
+    if(state.minPrice&&p.price<Number(state.minPrice))return false;
+    if(state.maxPrice&&p.price>Number(state.maxPrice))return false;
+    if(state.minSurface&&p.surface<Number(state.minSurface))return false;
+    if(state.publisher!=='all'&&p.publisher!==state.publisher)return false;
+    if(state.search){const q=state.search.toLowerCase();if(!p.title.toLowerCase().includes(q)&&!p.location.toLowerCase().includes(q))return false}
+    return true;
+  }).sort((a,b)=>{switch(state.sort){case'price-asc':return a.price-b.price;case'price-desc':return b.price-a.price;case'surface':return b.surface-a.surface;default:return b.id-a.id}});
+  count.innerHTML=`<strong>${f.length}</strong> bien${f.length>1?'s':''} trouvé${f.length>1?'s':''}`;
+  if(!f.length){grid.innerHTML=`<div class="no-res"><div class="big">🔍</div><h3>Aucun bien trouvé</h3><p style="color:var(--text-secondary);font-size:.82rem">Essayez de modifier vos filtres.</p></div>`;return}
+  grid.innerHTML=f.map(p=>{
+    const cl=p.publisher==='pro'?'pt-pro':'pt-particulier';const lb=p.publisher==='pro'?'Pro':'Particulier';
+    return `<div class="v-card" onclick="openModal(${p.id})">
+      <div class="v-img" style="background:${p.bg}"><span class="vb vb-sale">Vente</span>${p.reduc?`<span class="vb vb-reduc">-5%</span>`:''}${p.emoji}</div>
+      <div class="v-info">
+        <div class="v-price">${p.pl}${scoreBadge(p.score)}</div>
+        <div class="v-price-sub">${p.dpe?'DPE '+p.dpe+' · ':''}${Math.round(p.price/p.surface).toLocaleString('fr')} €/m²</div>
+        <div class="v-title">${p.title}</div>
+        <div class="v-loc">📍 ${p.location}</div>
+        <div class="v-tags">
+          <span class="v-tag">📐 <strong>${p.surface} m²</strong></span>
+          <span class="v-tag">🛏️ <strong>${p.pieces}</strong> pièces</span>
+          ${p.marketAvg?`<span class="v-tag" style="color:${p.price>p.marketAvg?'var(--orange)':'var(--green)'}">${p.price>p.marketAvg?'📈 +'+Math.round((p.price/p.marketAvg-1)*100):'📉 '+Math.round((p.price/p.marketAvg-1)*100)}% vs marché</span>`:''}
+        </div>
+        <div class="v-footer"><div class="pub"><span class="pt ${cl}">${lb}</span>${p.pubName}</div><div class="date">${p.date}</div></div>
+      </div>
+    </div>`
+  }).join('');
+}
+
+function openModal(id){
+  const p=listings.find(x=>x.id===id);if(!p)return;
+  const cl=p.publisher==='pro'?'pt-pro':'pt-particulier';const lb=p.publisher==='pro'?'Pro':'Particulier';
+  document.getElementById('modalTitle').textContent=p.title;
+  const diff=p.marketAvg?Math.round((p.price-p.marketAvg)/p.marketAvg*100):0;
+  document.getElementById('modalBody').innerHTML=`
+    <div class="m-img" style="background:${p.bg};font-size:4.5rem">${p.emoji}</div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px"><span class="vb vb-sale" style="position:static;font-size:.64rem">Vente</span></div>
+    <div class="m-price">${p.pl}</div>
+    <div class="m-sub">📍 ${p.location} · ${Math.round(p.price/p.surface).toLocaleString('fr')} €/m² · DPE ${p.dpe||'N/C'} · ${lb} ${p.pubName}</div>
+    <div class="m-grid"><div class="m-gi">📐 <strong>${p.surface} m²</strong></div><div class="m-gi">🛏️ <strong>${p.pieces}</strong> pièces</div><div class="m-gi">🔋 DPE <strong>${p.dpe||'N/C'}</strong></div><div class="m-gi">📅 En ligne <strong>${p.date}</strong></div></div>
+    <div class="m-desc">${p.desc}</div>
+    ${p.score?`<div style="background:var(--bg);border-radius:var(--radius);padding:14px 16px;margin:12px 0;display:flex;justify-content:space-between;align-items:center"><span style="font-size:.82rem;font-weight:500">🛡️ Score de confiance</span><span style="font-weight:700;color:${p.score>=80?'#059669':p.score>=60?'#d97706':'#dc2626'}">${p.score}/100</span></div>`:''}
+    ${p.marketAvg?`<div style="background:var(--bg);border-radius:var(--radius);padding:14px 16px;margin:12px 0">
+      <div style="display:flex;justify-content:space-between;font-size:.82rem;margin-bottom:6px"><span>📊 Prix vs marché</span><span style="font-weight:600;color:${diff>5?'#d97706':'#059669'}">${diff>0?'+'+diff:diff}%</span></div>
+      <div style="height:6px;background:var(--border);border-radius:3px;overflow:hidden"><div style="height:100%;width:${Math.min(100,50+diff*2)}%;background:${diff>5?'#d97706':'#059669'};border-radius:3px"></div></div>
+      <div style="display:flex;justify-content:space-between;font-size:.74rem;color:var(--text-secondary);margin-top:4px"><span>${p.pl}</span><span>Moyenne: ${(p.marketAvg||0).toLocaleString('fr-FR')} €</span></div>
+    </div>`:''}
+    <div class="m-contact"><button class="btn-p" onclick="alert('📨 Message envoyé à ${p.pubName} !')">✉️ Contacter le vendeur</button><button class="btn-s" onclick="location.href='scoring.html'">🔬 Analyser ce bien</button></div>`;
+  document.getElementById('modalOverlay').classList.add('open');
+}
+function closeModal(){document.getElementById('modalOverlay').classList.remove('open')}
+document.getElementById('modalOverlay').addEventListener('click',function(e){if(e.target===this)closeModal()});
+
+function toggleTool(id){
+  const p=document.getElementById('tp-'+id);
+  ['mortgage','notaire'].forEach(a=>{document.getElementById('tp-'+a).classList.toggle('open',a===id&&!p.classList.contains('open'))});
+}
+function calcMortgage(){
+  const price=parseFloat(document.getElementById('mPrice').value)||0;
+  const down=parseFloat(document.getElementById('mDown').value)||0;
+  const rate=parseFloat(document.getElementById('mRate').value)||3.5;
+  const years=parseInt(document.getElementById('mDur').value)||20;
+  const loan=price-down;const mr=rate/100/12;const n=years*12;
+  if(loan<=0){document.getElementById('mMonthly').textContent='0 €';return}
+  const monthly=loan*mr*Math.pow(1+mr,n)/(Math.pow(1+mr,n)-1);
+  const total=monthly*n;const interest=total-loan;
+  document.getElementById('mMonthly').textContent=Math.round(monthly).toLocaleString('fr-FR')+' €/mois';
+  document.getElementById('mTotal').textContent=Math.round(total).toLocaleString('fr-FR')+' €';
+  document.getElementById('mInterest').textContent=Math.round(interest).toLocaleString('fr-FR')+' €';
+}
+function calcNotaire(){
+  const price=parseFloat(document.getElementById('nPrice').value)||0;
+  const type=document.getElementById('nType').value;
+  const pct=type==='neuf'?3:8;const fees=Math.round(price*pct/100);
+  document.getElementById('nFees').textContent=fees.toLocaleString('fr-FR')+' €';
+  document.getElementById('nTotal').textContent=(price+fees).toLocaleString('fr-FR')+' €';
+  document.getElementById('nPct').textContent=pct+'%';
+}
+
+document.getElementById('menuToggle').addEventListener('click',()=>{document.getElementById('headerLinks').classList.toggle('open')});
+render();
+</script>
+</body>
+</html>
