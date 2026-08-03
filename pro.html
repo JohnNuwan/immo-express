@@ -198,10 +198,10 @@
       <p id="agencyName">Agence Duval Immobilier</p>
     </div>
     <div class="pro-hero-stats">
-      <div class="phs-item"><div class="num" id="statListings">12</div><div class="label">Annonces</div></div>
-      <div class="phs-item"><div class="num" id="statViews">847</div><div class="label">Vues</div></div>
-      <div class="phs-item"><div class="num" id="statLeads">23</div><div class="label">Contacts</div></div>
-      <div class="phs-item"><div class="num" id="statScore">82</div><div class="label">Score moy.</div></div>
+      <div class="phs-item"><div class="num" id="statListings">0</div><div class="label">Annonces</div></div>
+            <div class="phs-item"><div class="num" id="statViews">0</div><div class="label">Vues</div></div>
+            <div class="phs-item"><div class="num" id="statLeads">0</div><div class="label">Contacts</div></div>
+            <div class="phs-item"><div class="num" id="statScore">0</div><div class="label">Score moy.</div></div>
     </div>
   </div>
 </section>
@@ -381,32 +381,9 @@ const proData = {
     web: 'https://www.duval-immo.fr',
     desc: "Agence immobilière familiale depuis 1985. Spécialistes de l'immobilier parisien haut de gamme. 120+ biens vendus par an."
   },
-  annonces: [
-    {id:101,title:'Appartement 3 pièces Paris 11e',cat:'vente',status:'active',price:'425 000 €',surface:75,pieces:3,views:234,leads:8,date:'Aujourd\'hui',bg:'#e8f0fe',emoji:'🏙️',score:94},
-    {id:102,title:'Duplex vue mer Marseille',cat:'vente',status:'active',price:'695 000 €',surface:130,pieces:4,views:178,leads:5,date:'Hier',bg:'#e8f0fe',emoji:'🌊',score:95},
-    {id:103,title:'Appartement haussmannien Trocadéro',cat:'vente',status:'active',price:'980 000 €',surface:100,pieces:4,views:312,leads:12,date:'Il y a 5 jours',bg:'#e8f0fe',emoji:'🏛️',score:96},
-    {id:104,title:'Villa contemporaine piscine Cannes',cat:'vente',status:'active',price:'1 250 000 €',surface:200,pieces:7,views:89,leads:3,date:'Il y a 2 jours',bg:'#fef3e8',emoji:'🌴',score:97},
-    {id:105,title:'Studio meublé Bordeaux Centre',cat:'location',status:'active',price:'680 €/mois',surface:28,pieces:1,views:56,leads:4,date:'Aujourd\'hui',bg:'#e8f0fe',emoji:'🏙️',score:75},
-    {id:106,title:'Maison T4 Toulouse Ramonville',cat:'location',status:'draft',price:'1 200 €/mois',surface:110,pieces:4,views:0,leads:0,date:'Brouillon',bg:'#e6f7ed',emoji:'🏡',score:null},
-    {id:107,title:'Bureau 80m² centre-ville',cat:'vente',status:'draft',price:'320 000 €',surface:80,pieces:3,views:0,leads:0,date:'Brouillon',bg:'#f3f4f6',emoji:'🏢',score:null},
-  ],
-  activity: [
-    {icon:'👁️',color:'var(--blue-light)',text:'<strong>Appartement Paris 11e</strong> — 12 nouvelles vues aujourd\'hui',time:'il y a 2h'},
-    {icon:'📨',color:'var(--green-light)',text:'Nouveau contact pour <strong>Duplex Marseille</strong> — M. Lefebvre',time:'il y a 3h'},
-    {icon:'⭐',color:'var(--orange-light)',text:'Le <strong>score de confiance</strong> de vos annonces a augmenté de 4 pts',time:'il y a 6h'},
-    {icon:'👁️',color:'var(--blue-light)',text:'<strong>Appartement Trocadéro</strong> — 24 vues cette semaine',time:'il y a 8h'},
-    {icon:'📨',color:'var(--green-light)',text:'Nouveau contact pour <strong>Villa Cannes</strong> — contact téléphonique demandé',time:'hier 18h'},
-    {icon:'📊',color:'var(--purple-light)',text:'Rapport mensuel disponible — <strong>847 vues</strong> ce mois-ci',time:'hier 14h'},
-    {icon:'🏠',color:'var(--blue-light)',text:'Annonce <strong>Studio Bordeaux</strong> publiée avec succès',time:'hier 10h'},
-  ],
-  leads: [
-    {name:'Sophie Martin',msg:'Bonjour, je suis intéressée par l\'appartement 3 pièces Paris 11e. Peut-on visiter cette semaine ?',annonce:'Appartement Paris 11e',date:'Aujourd\'hui 14:32',initial:'SM'},
-    {name:'Pierre Lefebvre',msg:'Magnifique duplex ! Je suis prêt à faire une offre. Pouvez-vous me recontacter ?',annonce:'Duplex Marseille',date:'Aujourd\'hui 11:15',initial:'PL'},
-    {name:'Marie Dubois',msg:'Je cherche un appartement similaire dans le 16e. Avez-vous d\'autres biens ?',annonce:'Appartement Trocadéro',date:'Hier 18:45',initial:'MD'},
-    {name:'Jean Moreau',msg:'Bonjour, la villa de Cannes m\'intéresse pour un achat. Quel est le prix net vendeur ?',annonce:'Villa Cannes',date:'Hier 09:20',initial:'JM'},
-    {name:'Claire Bernard',msg:'Le studio de Bordeaux est-il toujours disponible ? Je suis étudiante et cherche pour septembre.',annonce:'Studio Bordeaux',date:'Avant-hier 16:00',initial:'CB'},
-    {name:'Thomas Richard',msg:'Je voudrais plus d\'informations sur le prix au m² et les charges.',annonce:'Appartement Paris 11e',date:'Avant-hier 11:30',initial:'TR'},
-  ],
+  annonces: [],
+  activity: [],
+  leads: [],
   chartData: [45,62,58,73,81,65,90]
 };
 const weekDays = ['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];

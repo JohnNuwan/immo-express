@@ -166,10 +166,10 @@
 
 <div class="v-stats">
   <div class="v-stats-inner">
-    <span>🏠 <strong>2 180+</strong> biens à vendre</span>
-    <span>🛡️ <strong>92%</strong> annonces vérifiées</span>
-    <span>📊 <strong>8 500+</strong> analyses IA réalisées</span>
-    <span>💰 Prix moyen <strong>395 000 €</strong></span>
+    <span>🏠 <strong>0</strong> biens à vendre</span>
+    <span>🛡️ <strong>—</strong> annonces vérifiées</span>
+    <span>📊 <strong>0</strong> analyses IA réalisées</span>
+    <span>💰 Prix moyen <strong>— €</strong></span>
   </div>
 </div>
 
@@ -249,18 +249,7 @@
 </div><div class="f-bottom"><span>© 2025 Immo-Express</span><span>CGU · Confidentialité</span></div></footer>
 
 <script>
-const listings = [
-  {id:1,type:'appartement',title:'3 pièces lumineux centre-ville',location:'Paris 11e',price:425000,pl:'425 000 €',surface:75,pieces:3,publisher:'pro',pubName:'Agence Duval',date:'Aujourd\'hui',bg:'#e8f0fe',emoji:'🏙️',score:94,desc:'Bel appartement 3 pièces de 75 m² au 4e étage avec ascenseur.',marketAvg:440000,dpe:'C',reduc:true},
-  {id:2,type:'maison',title:'Maison de ville avec jardin',location:'Lyon 6e',price:580000,pl:'580 000 €',surface:125,pieces:5,publisher:'particulier',pubName:'M. Bernard',date:'Hier',bg:'#e6f7ed',emoji:'🏠',score:82,desc:'Belle maison de ville 125 m², jardin 50 m², garage.',marketAvg:565000,dpe:'B'},
-  {id:3,type:'villa',title:'Villa contemporaine piscine',location:'Cannes',price:1250000,pl:'1 250 000 €',surface:200,pieces:7,publisher:'pro',pubName:'Côte d\'Azur Immo',date:'Il y a 2 jours',bg:'#fef3e8',emoji:'🌴',score:97,desc:'Superbe villa 200 m², piscine à débordement, vue mer.',marketAvg:1180000,dpe:'A',reduc:true},
-  {id:4,type:'appartement',title:'Duplex vue mer',location:'Marseille Corniche',price:695000,pl:'695 000 €',surface:130,pieces:4,publisher:'pro',pubName:'Marseille Prestige',date:'Hier',bg:'#e8f0fe',emoji:'🌊',score:95,desc:'Duplex 130 m² vue mer, terrasse 25 m², parking.',marketAvg:680000,dpe:'B'},
-  {id:5,type:'studio',title:'Studio rénové centre',location:'Aix-en-Provence',price:185000,pl:'185 000 €',surface:28,pieces:1,publisher:'particulier',pubName:'M. Garcia',date:'Il y a 3 jours',bg:'#fef3e8',emoji:'🏘️',score:68,desc:'Studio rénové 28 m² en centre historique.',marketAvg:190000,dpe:'D',reduc:true},
-  {id:6,type:'appartement',title:'Appartement haussmannien Trocadéro',location:'Paris 16e',price:980000,pl:'980 000 €',surface:100,pieces:4,publisher:'pro',pubName:'Paris Ouest Immo',date:'Il y a 5 jours',bg:'#e8f0fe',emoji:'🏛️',score:96,desc:'Appartement haussmannien 100 m², parquet Versailles.',marketAvg:950000,dpe:'C'},
-  {id:7,type:'maison',title:'Longère à rénover',location:'Rennes campagne',price:220000,pl:'220 000 €',surface:170,pieces:5,publisher:'particulier',pubName:'Famille Moreau',date:'Il y a 2 jours',bg:'#fef3e8',emoji:'🏡',score:65,desc:'Longère 170 m² à rénover sur 2500 m² de terrain.',marketAvg:250000,dpe:'F',reduc:true},
-  {id:8,type:'appartement',title:'T2 neuf avec balcon',location:'Saint-Étienne Centre',price:135000,pl:'135 000 €',surface:52,pieces:2,publisher:'pro',pubName:'Immo Stéphanoise',date:'Aujourd\'hui',bg:'#e8f0fe',emoji:'🏙️',score:70,desc:'T2 neuf 52 m² avec balcon, parking inclus.',marketAvg:140000,dpe:'A'},
-  {id:9,type:'maison',title:'Maison 4 pièces garage',location:'Nantes',price:350000,pl:'350 000 €',surface:95,pieces:4,publisher:'pro',pubName:'Nantes Immo',date:'Hier',bg:'#e6f7ed',emoji:'🏠',score:80,desc:'Maison 95 m² avec garage et jardin.',marketAvg:340000,dpe:'C'},
-  {id:10,type:'appartement',title:'2 pièces centre-ville',location:'Lille',price:185000,pl:'185 000 €',surface:48,pieces:2,publisher:'particulier',pubName:'Mme Dubois',date:'Il y a 2 jours',bg:'#e8f0fe',emoji:'🏙️',score:78,desc:'F2 de 48 m² en plein centre de Lille.',marketAvg:180000,dpe:'D'},
-];
+const listings = [];
 let state = {search:'',type:'all',minPrice:'',maxPrice:'',minSurface:'',pieces:'all',dpe:'',publisher:'all',sort:'recent'};
 
 document.querySelectorAll('#typeBtns button').forEach(b=>b.addEventListener('click',function(){

@@ -941,26 +941,7 @@ function analyzeListing(listing) {
 }
 
 // ========== EXISTING LISTINGS ==========
-const allListings = [
-  {id:1,cat:'vente',type:'appartement',title:'3 pièces lumineux centre-ville',location:'Paris 11e',price:425000,priceLabel:'425 000 €',surface:75,pieces:3,emoji:'🏙️',bg:'#e8f0fe',trustScore:94,publisher:'pro'},
-  {id:2,cat:'vente',type:'maison',title:'Maison de ville avec jardin',location:'Lyon 6e',price:580000,priceLabel:'580 000 €',surface:125,pieces:5,emoji:'🏠',bg:'#e6f7ed',trustScore:82,publisher:'particulier'},
-  {id:3,cat:'vente',type:'villa',title:'Villa contemporaine piscine',location:'Cannes',price:1250000,priceLabel:'1 250 000 €',surface:200,pieces:7,emoji:'🌴',bg:'#fef3e8',trustScore:97,publisher:'pro'},
-  {id:4,cat:'location',type:'appartement',title:'Studio meublé centre',location:'Bordeaux Centre',price:680,priceLabel:'680 €/mois',surface:28,pieces:1,emoji:'🏙️',bg:'#e8f0fe',trustScore:75,publisher:'particulier'},
-  {id:5,cat:'location',type:'maison',title:'Maison T4 avec jardin',location:'Toulouse, Ramonville',price:1200,priceLabel:'1 200 €/mois',surface:110,pieces:4,emoji:'🏡',bg:'#e6f7ed',trustScore:90,publisher:'pro'},
-  {id:6,cat:'vente',type:'studio',title:'Studio rénové centre historique',location:'Aix-en-Provence',price:185000,priceLabel:'185 000 €',surface:28,pieces:1,emoji:'🏘️',bg:'#fef3e8',trustScore:68,publisher:'particulier'},
-  {id:7,cat:'vente',type:'appartement',title:'Duplex vue mer',location:'Marseille, Corniche',price:695000,priceLabel:'695 000 €',surface:130,pieces:4,emoji:'🌊',bg:'#e8f0fe',trustScore:95,publisher:'pro'},
-  {id:8,cat:'location',type:'villa',title:'Villa provençale saison',location:'Gordes, Luberon',price:3500,priceLabel:'3 500 €/semaine',surface:250,pieces:6,emoji:'🌿',bg:'#fef3e8',trustScore:88,publisher:'pro'},
-  {id:9,cat:'vente',type:'appartement',title:'Appartement haussmannien Trocadéro',location:'Paris 16e, Trocadéro',price:980000,priceLabel:'980 000 €',surface:100,pieces:4,emoji:'🏛️',bg:'#e8f0fe',trustScore:96,publisher:'pro'},
-  {id:10,cat:'location',type:'studio',title:'Studio meublé proche université',location:'Montpellier, Antigone',price:520,priceLabel:'520 €/mois',surface:22,pieces:1,emoji:'📚',bg:'#e6f7ed',trustScore:72,publisher:'particulier'},
-  {id:11,cat:'vente',type:'maison',title:'Longère à rénover',location:'Rennes, campagne',price:220000,priceLabel:'220 000 €',surface:170,pieces:5,emoji:'🏡',bg:'#fef3e8',trustScore:65,publisher:'particulier'},
-  {id:12,cat:'location',type:'appartement',title:'F2 vue jardin',location:'Strasbourg, Orangerie',price:850,priceLabel:'850 €/mois',surface:55,pieces:2,emoji:'🌳',bg:'#e8f0fe',trustScore:87,publisher:'pro'},
-  {id:13,cat:'vente',type:'appartement',title:'T2 neuf avec balcon',location:'Saint-Étienne Centre',price:135000,priceLabel:'135 000 €',surface:52,pieces:2,emoji:'🏙️',bg:'#e8f0fe',trustScore:70,publisher:'pro'},
-  {id:14,cat:'location',type:'appartement',title:'F3 lumineux quartier gare',location:'Saint-Étienne',price:650,priceLabel:'650 €/mois',surface:68,pieces:3,emoji:'🏘️',bg:'#e6f7ed',trustScore:74,publisher:'particulier'},
-  {id:15,cat:'vente',type:'maison',title:'Maison 4 pièces avec garage',location:'Nantes',price:350000,priceLabel:'350 000 €',surface:95,pieces:4,emoji:'🏠',bg:'#e6f7ed',trustScore:80,publisher:'pro'},
-  {id:16,cat:'vente',type:'appartement',title:'2 pièces centre-ville',location:'Lille',price:185000,priceLabel:'185 000 €',surface:48,pieces:2,emoji:'🏙️',bg:'#e8f0fe',trustScore:78,publisher:'particulier'},
-  {id:17,cat:'vente',type:'appartement',title:'Studio investissement étudiant',location:'Grenoble',price:95000,priceLabel:'95 000 €',surface:22,pieces:1,emoji:'📚',bg:'#fef3e8',trustScore:73,publisher:'pro'},
-  {id:18,cat:'location',type:'appartement',title:'T4 familial calme',location:'Lyon 3e',price:1450,priceLabel:'1 450 €/mois',surface:90,pieces:4,emoji:'🏠',bg:'#e8f0fe',trustScore:85,publisher:'pro'},
-];
+const allListings = [];
 window.allListings = allListings;
 
 function renderListings(filter) {

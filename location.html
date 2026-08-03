@@ -234,10 +234,10 @@
 <!-- STATS -->
 <div class="qs-location">
   <div class="qs-inner">
-    <span>🏠 <strong>480+</strong> locations disponibles</span>
-    <span>🛡️ <strong>89%</strong> annonces vérifiées</span>
-    <span>📊 <strong>3 200+</strong> analyses locatives réalisées</span>
-    <span>⚡ Réponse sous <strong>2h</strong> en moyenne</span>
+    <span>🏠 <strong>0</strong> locations disponibles</span>
+    <span>🛡️ <strong>—</strong> annonces vérifiées</span>
+    <span>📊 <strong>0</strong> analyses locatives réalisées</span>
+    <span>⚡ Réponse sous <strong>—</strong> en moyenne</span>
   </div>
 </div>
 
@@ -471,20 +471,7 @@
 
 <script>
 // ========== DATA ==========
-const rentalListings = [
-  {id:101,type:'appartement',title:'Studio meublé centre-ville',location:'Bordeaux Centre',price:680,priceLabel:'680 €/mois',dur:'longue',surface:28,pieces:1,furnished:true,score:78,verified:true,publisher:'particulier',pubName:'Mme Laurent',date:'Aujourd\'hui',bg:'#e8f0fe',emoji:'🏙️',dpe:'C',desc:'Studio meublé 28 m², proche tram et commerces. Cuisine équipée, salle d\'eau, rangements. Idéal étudiant ou jeune actif.',marketAvg:650,smartMatch:88,bookingSlots:['Lun 11h','Mar 14h','Mer 10h'],lat:44.84,lng:-0.58},
-  {id:102,type:'maison',title:'Maison T4 avec jardin',location:'Toulouse, Ramonville',price:1200,priceLabel:'1 200 €/mois',dur:'longue',surface:110,pieces:4,furnished:false,score:90,verified:true,publisher:'pro',pubName:'Immo Toulouse Sud',date:'Hier',bg:'#e6f7ed',emoji:'🏡',dpe:'B',desc:'Maison T4 110 m², jardin 200 m², garage, cave. Quartier calme, proche écoles et métro. Idéal famille.',marketAvg:1150,smartMatch:72,bookingSlots:['Mar 10h','Jeu 15h','Ven 14h'],lat:43.6,lng:1.44},
-  {id:103,type:'villa',title:'Villa provençale location saison',location:'Gordes, Luberon',price:3500,priceLabel:'3 500 €/semaine',dur:'saisonniere',surface:250,pieces:6,furnished:true,score:88,verified:true,publisher:'pro',pubName:'Luberon Locations',date:'Aujourd\'hui',bg:'#fef3e8',emoji:'🌿',dpe:'A',desc:'Magnifique villa provençale 250 m², piscine chauffée, 5 chambres, grande terrasse, oliveraie. Location saisonnière.',marketAvg:3200,smartMatch:60,bookingSlots:['Lun 10h','Mer 15h','Ven 11h'],lat:43.91,lng:5.2},
-  {id:104,type:'appartement',title:'F2 lumineux avec balcon',location:'Lyon 6e',price:950,priceLabel:'950 €/mois',dur:'longue',surface:52,pieces:2,furnished:false,score:85,verified:true,publisher:'pro',pubName:'Lyon Immobilier',date:'Hier',bg:'#e8f0fe',emoji:'🏙️',dpe:'C',desc:'Bel F2 de 52 m² au 4e étage avec ascenseur et balcon. Proche métro, écoles et commerces. Cuisine séparée.',marketAvg:930,smartMatch:82,bookingSlots:['Mar 14h','Mer 10h','Jeu 16h'],lat:45.77,lng:4.85},
-  {id:105,type:'studio',title:'Studio proche université',location:'Montpellier, Antigone',price:520,priceLabel:'520 €/mois',dur:'longue',surface:22,pieces:1,furnished:true,score:72,verified:false,publisher:'particulier',pubName:'Mlle Dubois',date:'Aujourd\'hui',bg:'#e6f7ed',emoji:'📚',dpe:'D',desc:'Studio meublé 22 m² proche université et tram. Calme, lumineux. Cuisine équipée, internet inclus.',marketAvg:540,smartMatch:91,bookingSlots:['Lun 10h','Mar 15h','Mer 14h'],lat:43.61,lng:3.88},
-  {id:106,type:'appartement',title:'F3 vue jardin',location:'Strasbourg, Orangerie',price:850,priceLabel:'850 €/mois',dur:'longue',surface:55,pieces:3,furnished:false,score:87,verified:true,publisher:'pro',pubName:'Strasbourg Immo',date:'Hier',bg:'#e8f0fe',emoji:'🌳',dpe:'B',desc:'Bel F3 de 55 m² avec vue sur le parc de l\'Orangerie. Calme, lumineux, proche centre-ville. Parking possible.',marketAvg:820,smartMatch:80,bookingSlots:['Mar 10h','Mer 15h','Jeu 14h'],lat:48.58,lng:7.77},
-  {id:107,type:'appartement',title:'T4 familial calme',location:'Lyon 3e',price:1450,priceLabel:'1 450 €/mois',dur:'longue',surface:90,pieces:4,furnished:false,score:84,verified:true,publisher:'pro',pubName:'Lyon Immo Ouest',date:'Avant-hier',bg:'#e8f0fe',emoji:'🏡',dpe:'C',desc:'Bel appartement T4 de 90 m², quartier calme et familial. Proche écoles et commerces. Garage inclus.',marketAvg:1400,smartMatch:75,bookingSlots:['Lun 14h','Mer 16h','Ven 10h'],lat:45.75,lng:4.84},
-  {id:108,type:'appartement',title:'Studio lumineux centre',location:'Paris 6e',price:1100,priceLabel:'1 100 €/mois',dur:'longue',surface:28,pieces:1,furnished:true,score:82,verified:true,publisher:'pro',pubName:'Paris Centre Immo',date:'Hier',bg:'#fef3e8',emoji:'🏙️',dpe:'C',desc:'Charmant studio parisien de 28 m², 3e étage. Proche Luxembourg et métro. Calme, traversant.',marketAvg:1050,smartMatch:78,bookingSlots:['Mar 11h','Jeu 15h','Sam 10h'],lat:48.85,lng:2.33},
-  {id:109,type:'appartement',title:'Appartement vue mer',location:'Marseille, Corniche',price:1650,priceLabel:'1 650 €/mois',dur:'longue',surface:80,pieces:3,furnished:true,score:93,verified:true,publisher:'pro',pubName:'Marseille Prestige',date:'Il y a 3 jours',bg:'#e8f0fe',emoji:'🌊',dpe:'B',desc:'Superbe appartement 80 m² avec vue mer panoramique. Terrasse 15 m², cuisine américaine. Parking inclus.',marketAvg:1600,smartMatch:70,bookingSlots:['Mer 14h','Jeu 11h','Sam 15h'],lat:43.28,lng:5.35},
-  {id:110,type:'maison',title:'Maison de ville T3',location:'Bordeaux, Chartrons',price:1350,priceLabel:'1 350 €/mois',dur:'longue',surface:85,pieces:3,furnished:false,score:80,verified:true,publisher:'particulier',pubName:'M. Durand',date:'Il y a 2 jours',bg:'#e6f7ed',emoji:'🏠',dpe:'D',desc:'Maison de ville 85 m² sur 2 niveaux, cour privée. Quartier des Chartrons, proche tram et commerces.',marketAvg:1300,smartMatch:65,bookingSlots:['Lun 15h','Mer 10h','Jeu 16h'],lat:44.84,lng:-0.56},
-  {id:111,type:'appartement',title:'F2 balcon vue dégagée',location:'Lyon 7e',price:780,priceLabel:'780 €/mois',dur:'longue',surface:48,pieces:2,furnished:false,score:76,verified:false,publisher:'particulier',pubName:'M. Petit',date:'Aujourd\'hui',bg:'#e6f7ed',emoji:'🏙️',dpe:'D',desc:'F2 de 48 m² au 5e étage avec balcon, vue dégagée. Proche métro et parc. Calme et lumineux.',marketAvg:800,smartMatch:85,bookingSlots:['Mar 10h','Jeu 14h'],lat:45.73,lng:4.85},
-  {id:112,type:'villa',title:'Villa luxe piscine chauffée',location:'Saint-Tropez',price:5500,priceLabel:'5 500 €/semaine',dur:'saisonniere',surface:300,pieces:7,furnished:true,score:96,verified:true,publisher:'pro',pubName:'Côte d\'Azur Locations',date:'Aujourd\'hui',bg:'#fef3e8',emoji:'🌴',dpe:'A',desc:'Villa d\'exception 300 m², piscine chauffée, vue mer, 6 chambres, jardin méditerranéen. Juillet-Août.',marketAvg:5200,smartMatch:55,bookingSlots:['Lun 10h','Mar 15h','Mer 14h'],lat:43.27,lng:6.64},
-];
+const rentalListings = [];
 
 // ========== STATE ==========
 let state = {search:'',type:'all',dur:'all',maxPrice:'',minSurface:'',furnished:'all',dpe:'',publisher:'all',sort:'recent'};
