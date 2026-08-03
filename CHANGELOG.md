@@ -65,3 +65,9 @@
 - [ ] IA générative pour descriptions d'annonces
 - [ ] Estimation automatique par photo
 - [ ] Marketplace post-achat (artisans, services)
+## [1.1.0] — 2025-07-23
+
+### 📱 Mobile
+- [x] **Capacitor** — wrapper Android natif
+- [x] **APK Debug** — build réussi, 4.0 MB
+- [x] **Installation directe** — pas besoin de store

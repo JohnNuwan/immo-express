@@ -1,18 +1,17 @@
-
 // ========== DATA ==========
 const listings = [
-  {id:1,cat:'vente',type:'appartement',title:'3 pièces lumineux centre-ville',location:'Paris 11e',price:425000,priceLabel:'425 000 €',priceSub:'5 670 €/m²',surface:75,pieces:3,chambres:2,sdb:1,etage:4,publisher:'pro',pubName:'Agence Duval Immobilier',date:'Aujourd\'hui',bg:'#e8f0fe',emoji:'🏙️',desc:'Bel appartement 3 pièces de 75 m² au 4e étage avec ascenseur. Proche métro, commerces, écoles. Cuisine équipée, parquet, double vitrage.',trustScore:94,verified:true,priceHistory:[{price:450000,date:'Il y a 2 mois'},{price:435000,date:'Il y a 1 mois'},{price:425000,date:'Aujourd\'hui'}],marketAvg:440000,smartMatch:92,bookingSlots:['Lun 14h','Lun 16h','Mar 10h','Mer 15h','Jeu 11h']},
-  {id:2,cat:'vente',type:'maison',title:'Maison de ville avec jardin',location:'Lyon 6e',price:580000,priceLabel:'580 000 €',priceSub:'4 645 €/m²',surface:125,pieces:5,chambres:4,sdb:2,etage:0,publisher:'particulier',pubName:'M. Bernard',date:'Hier',bg:'#e6f7ed',emoji:'🏠',desc:'Belle maison de ville 125 m² sur 3 niveaux. Jardin 50 m², garage, cave. Quartier calme, proche écoles et transports.',trustScore:82,verified:true,priceHistory:[{price:590000,date:'Il y a 3 semaines'},{price:580000,date:'Hier'}],marketAvg:565000,smartMatch:78,bookingSlots:['Mar 14h','Mer 10h','Jeu 16h','Ven 11h']},
-  {id:3,cat:'vente',type:'villa',title:'Villa contemporaine piscine',location:'Cannes',price:1250000,priceLabel:'1 250 000 €',priceSub:'6 250 €/m²',surface:200,pieces:7,chambres:5,sdb:3,etage:0,publisher:'pro',pubName:'Côte d\'Azur Sotheby\'s',date:'Il y a 2 jours',bg:'#fef3e8',emoji:'🌴',desc:'Superbe villa contemporaine 200 m², piscine à débordement, vue mer panoramique, terrasse 80 m², cuisine américaine haut de gamme.',trustScore:97,verified:true,priceHistory:[{price:1350000,date:'Il y a 1 mois'},{price:1250000,date:'Il y a 2 jours'}],marketAvg:1180000,smartMatch:65,bookingSlots:['Mer 15h','Jeu 11h','Sam 10h']},
-  {id:4,cat:'location',type:'appartement',title:'Studio meublé centre',location:'Bordeaux Centre',price:680,priceLabel:'680 €/mois',priceSub:'CC',surface:28,pieces:1,chambres:1,sdb:1,etage:2,publisher:'particulier',pubName:'Mme Laurent',date:'Aujourd\'hui',bg:'#e8f0fe',emoji:'🏙️',desc:'Studio meublé 28 m², proche tram et commerces. Cuisine équipée, salle d\'eau, rangements. Idéal étudiant ou jeune actif.',trustScore:75,verified:false,priceHistory:[],marketAvg:650,smartMatch:88,bookingSlots:['Lun 11h','Mar 14h','Mer 10h']},
-  {id:5,cat:'location',type:'maison',title:'Maison T4 avec jardin',location:'Toulouse, Ramonville',price:1200,priceLabel:'1 200 €/mois',priceSub:'HC',surface:110,pieces:4,chambres:3,sdb:1,etage:0,publisher:'pro',pubName:'Immo Toulouse Sud',date:'Hier',bg:'#e6f7ed',emoji:'🏡',desc:'Maison T4 110 m², jardin 200 m², garage, cave. Quartier calme, proche écoles, commerces et métro. Idéal famille.',trustScore:90,verified:true,priceHistory:[],marketAvg:1150,smartMatch:72,bookingSlots:['Mar 10h','Jeu 15h','Ven 14h']},
-  {id:6,cat:'vente',type:'studio',title:'Studio rénové centre historique',location:'Aix-en-Provence',price:185000,priceLabel:'185 000 €',priceSub:'6 607 €/m²',surface:28,pieces:1,chambres:1,sdb:1,etage:3,publisher:'particulier',pubName:'M. Garcia',date:'Il y a 3 jours',bg:'#fef3e8',emoji:'🏘️',desc:'Studio entièrement rénové de 28 m² en plein cœur du centre historique. Proche commerces et Cours Mirabeau.',trustScore:68,verified:false,priceHistory:[{price:195000,date:'Il y a 2 semaines'},{price:185000,date:'Il y a 3 jours'}],marketAvg:190000,smartMatch:85,bookingSlots:['Lun 15h','Mer 11h','Ven 10h']},
-  {id:7,cat:'vente',type:'appartement',title:'Duplex vue mer',location:'Marseille, Corniche',price:695000,priceLabel:'695 000 €',priceSub:'5 346 €/m²',surface:130,pieces:4,chambres:3,sdb:2,etage:6,publisher:'pro',pubName:'Marseille Prestige Immobilier',date:'Hier',bg:'#e8f0fe',emoji:'🌊',desc:'Superbe duplex 130 m² avec vue mer dégagée. Terrasse 25 m², cuisine ouverte, grande pièce à vivre. Parking inclus.',trustScore:95,verified:true,priceHistory:[],marketAvg:680000,smartMatch:70,bookingSlots:['Mar 11h','Mer 14h','Jeu 10h','Sam 15h']},
-  {id:8,cat:'location',type:'villa',title:'Villa provençale location saison',location:'Gordes, Luberon',price:3500,priceLabel:'3 500 €/semaine',priceSub:'Saison haute',surface:250,pieces:6,chambres:5,sdb:3,etage:0,publisher:'pro',pubName:'Luberon Locations',date:'Aujourd\'hui',bg:'#fef3e8',emoji:'🌿',desc:'Magnifique villa provençale 250 m², piscine chauffée, 5 chambres, grande terrasse, oliveraie. Location été 2025.',trustScore:88,verified:true,priceHistory:[],marketAvg:3200,smartMatch:60,bookingSlots:['Lun 10h','Mer 15h','Ven 11h']},
-  {id:9,cat:'vente',type:'appartement',title:'Appartement haussmannien 4 pièces',location:'Paris 16e, Trocadéro',price:980000,priceLabel:'980 000 €',priceSub:'9 800 €/m²',surface:100,pieces:4,chambres:3,sdb:2,etage:3,publisher:'pro',pubName:'Paris Ouest Immobilier',date:'Il y a 5 jours',bg:'#e8f0fe',emoji:'🏛️',desc:'Appartement haussmannien 100 m², parquet Versailles, moulures, cheminée. 3 chambres, double séjour, cuisine séparée.',trustScore:96,verified:true,priceHistory:[{price:1020000,date:'Il y a 1 mois'},{price:980000,date:'Il y a 5 jours'}],marketAvg:950000,smartMatch:82,bookingSlots:['Mar 14h','Jeu 11h','Ven 15h']},
-  {id:10,cat:'location',type:'studio',title:'Studio meublé proche université',location:'Montpellier, Antigone',price:520,priceLabel:'520 €/mois',priceSub:'CC',surface:22,pieces:1,chambres:1,sdb:1,etage:1,publisher:'particulier',pubName:'Mlle Dubois',date:'Aujourd\'hui',bg:'#e6f7ed',emoji:'📚',desc:'Studio meublé 22 m² proche université et tram. Calme, lumineux. Cuisine équipée, internet inclus.',trustScore:72,verified:false,priceHistory:[],marketAvg:540,smartMatch:91,bookingSlots:['Lun 10h','Mar 15h','Mer 14h']},
-  {id:11,cat:'vente',type:'maison',title:'Longère à rénover',location:'Rennes, campagne',price:220000,priceLabel:'220 000 €',priceSub:'1 294 €/m²',surface:170,pieces:5,chambres:4,sdb:1,etage:0,publisher:'particulier',pubName:'Famille Moreau',date:'Il y a 2 jours',bg:'#fef3e8',emoji:'🏡',desc:'Longère 170 m² à rénover sur 2 500 m² de terrain. Gros potentiel, charme authentique, poutres apparentes. À 15 min de Rennes.',trustScore:65,verified:false,priceHistory:[{price:240000,date:'Il y a 1 mois'},{price:220000,date:'Il y a 2 jours'}],marketAvg:250000,smartMatch:76,bookingSlots:['Mer 10h','Jeu 14h','Sam 11h']},
-  {id:12,cat:'location',type:'appartement',title:'F2 vue jardin',location:'Strasbourg, Orangerie',price:850,priceLabel:'850 €/mois',priceSub:'CC',surface:55,pieces:2,chambres:1,sdb:1,etage:2,publisher:'pro',pubName:'Strasbourg Immo',date:'Hier',bg:'#e8f0fe',emoji:'🌳',desc:'Bel F2 de 55 m² avec vue sur le parc de l\'Orangerie. Calme, lumineux, proche centre-ville. Parking possible.',trustScore:87,verified:true,priceHistory:[],marketAvg:820,smartMatch:80,bookingSlots:['Mar 10h','Mer 15h','Jeu 14h']}
+  {id:1,cat:'vente',type:'appartement',title:'3 pièces lumineux centre-ville',location:'Paris 11e',price:425000,priceLabel:'425 000 €',priceSub:'5 670 €/m²',surface:75,pieces:3,chambres:2,sdb:1,etage:4,publisher:'pro',pubName:'Agence Duval Immobilier',date:'Aujourd\'hui',bg:'#e8f0fe',emoji:'🏙️',desc:'Bel appartement 3 pièces de 75 m² au 4e étage avec ascenseur. Proche métro, commerces, écoles. Cuisine équipée, parquet, double vitrage.',trustScore:94,verified:true,priceHistory:[{price:450000,date:'Il y a 2 mois'},{price:435000,date:'Il y a 1 mois'},{price:425000,date:'Aujourd\'hui'}],marketAvg:440000,smartMatch:92,bookingSlots:['Lun 14h','Lun 16h','Mar 10h','Mer 15h','Jeu 11h'],lat:48.85,lng:2.38},
+  {id:2,cat:'vente',type:'maison',title:'Maison de ville avec jardin',location:'Lyon 6e',price:580000,priceLabel:'580 000 €',priceSub:'4 645 €/m²',surface:125,pieces:5,chambres:4,sdb:2,etage:0,publisher:'particulier',pubName:'M. Bernard',date:'Hier',bg:'#e6f7ed',emoji:'🏠',desc:'Belle maison de ville 125 m² sur 3 niveaux. Jardin 50 m², garage, cave. Quartier calme, proche écoles et transports.',trustScore:82,verified:true,priceHistory:[{price:590000,date:'Il y a 3 semaines'},{price:580000,date:'Hier'}],marketAvg:565000,smartMatch:78,bookingSlots:['Mar 14h','Mer 10h','Jeu 16h','Ven 11h'],lat:45.77,lng:4.85},
+  {id:3,cat:'vente',type:'villa',title:'Villa contemporaine piscine',location:'Cannes',price:1250000,priceLabel:'1 250 000 €',priceSub:'6 250 €/m²',surface:200,pieces:7,chambres:5,sdb:3,etage:0,publisher:'pro',pubName:'Côte d\'Azur Sotheby\'s',date:'Il y a 2 jours',bg:'#fef3e8',emoji:'🌴',desc:'Superbe villa contemporaine 200 m², piscine à débordement, vue mer panoramique, terrasse 80 m², cuisine américaine haut de gamme.',trustScore:97,verified:true,priceHistory:[{price:1350000,date:'Il y a 1 mois'},{price:1250000,date:'Il y a 2 jours'}],marketAvg:1180000,smartMatch:65,bookingSlots:['Mer 15h','Jeu 11h','Sam 10h'],lat:43.55,lng:7.02},
+  {id:4,cat:'location',type:'appartement',title:'Studio meublé centre',location:'Bordeaux Centre',price:680,priceLabel:'680 €/mois',priceSub:'CC',surface:28,pieces:1,chambres:1,sdb:1,etage:2,publisher:'particulier',pubName:'Mme Laurent',date:'Aujourd\'hui',bg:'#e8f0fe',emoji:'🏙️',desc:'Studio meublé 28 m², proche tram et commerces. Cuisine équipée, salle d\'eau, rangements. Idéal étudiant ou jeune actif.',trustScore:75,verified:false,priceHistory:[],marketAvg:650,smartMatch:88,bookingSlots:['Lun 11h','Mar 14h','Mer 10h'],lat:44.84,lng:-0.58},
+  {id:5,cat:'location',type:'maison',title:'Maison T4 avec jardin',location:'Toulouse, Ramonville',price:1200,priceLabel:'1 200 €/mois',priceSub:'HC',surface:110,pieces:4,chambres:3,sdb:1,etage:0,publisher:'pro',pubName:'Immo Toulouse Sud',date:'Hier',bg:'#e6f7ed',emoji:'🏡',desc:'Maison T4 110 m², jardin 200 m², garage, cave. Quartier calme, proche écoles, commerces et métro. Idéal famille.',trustScore:90,verified:true,priceHistory:[],marketAvg:1150,smartMatch:72,bookingSlots:['Mar 10h','Jeu 15h','Ven 14h'],lat:43.6,lng:1.44},
+  {id:6,cat:'vente',type:'studio',title:'Studio rénové centre historique',location:'Aix-en-Provence',price:185000,priceLabel:'185 000 €',priceSub:'6 607 €/m²',surface:28,pieces:1,chambres:1,sdb:1,etage:3,publisher:'particulier',pubName:'M. Garcia',date:'Il y a 3 jours',bg:'#fef3e8',emoji:'🏘️',desc:'Studio entièrement rénové de 28 m² en plein cœur du centre historique. Proche commerces et Cours Mirabeau.',trustScore:68,verified:false,priceHistory:[{price:195000,date:'Il y a 2 semaines'},{price:185000,date:'Il y a 3 jours'}],marketAvg:190000,smartMatch:85,bookingSlots:['Lun 15h','Mer 11h','Ven 10h'],lat:43.53,lng:5.45},
+  {id:7,cat:'vente',type:'appartement',title:'Duplex vue mer',location:'Marseille, Corniche',price:695000,priceLabel:'695 000 €',priceSub:'5 346 €/m²',surface:130,pieces:4,chambres:3,sdb:2,etage:6,publisher:'pro',pubName:'Marseille Prestige Immobilier',date:'Hier',bg:'#e8f0fe',emoji:'🌊',desc:'Superbe duplex 130 m² avec vue mer dégagée. Terrasse 25 m², cuisine ouverte, grande pièce à vivre. Parking inclus.',trustScore:95,verified:true,priceHistory:[],marketAvg:680000,smartMatch:70,bookingSlots:['Mar 11h','Mer 14h','Jeu 10h','Sam 15h'],lat:43.28,lng:5.35},
+  {id:8,cat:'location',type:'villa',title:'Villa provençale location saison',location:'Gordes, Luberon',price:3500,priceLabel:'3 500 €/semaine',priceSub:'Saison haute',surface:250,pieces:6,chambres:5,sdb:3,etage:0,publisher:'pro',pubName:'Luberon Locations',date:'Aujourd\'hui',bg:'#fef3e8',emoji:'🌿',desc:'Magnifique villa provençale 250 m², piscine chauffée, 5 chambres, grande terrasse, oliveraie. Location été 2025.',trustScore:88,verified:true,priceHistory:[],marketAvg:3200,smartMatch:60,bookingSlots:['Lun 10h','Mer 15h','Ven 11h'],lat:43.91,lng:5.2},
+  {id:9,cat:'vente',type:'appartement',title:'Appartement haussmannien 4 pièces',location:'Paris 16e, Trocadéro',price:980000,priceLabel:'980 000 €',priceSub:'9 800 €/m²',surface:100,pieces:4,chambres:3,sdb:2,etage:3,publisher:'pro',pubName:'Paris Ouest Immobilier',date:'Il y a 5 jours',bg:'#e8f0fe',emoji:'🏛️',desc:'Appartement haussmannien 100 m², parquet Versailles, moulures, cheminée. 3 chambres, double séjour, cuisine séparée.',trustScore:96,verified:true,priceHistory:[{price:1020000,date:'Il y a 1 mois'},{price:980000,date:'Il y a 5 jours'}],marketAvg:950000,smartMatch:82,bookingSlots:['Mar 14h','Jeu 11h','Ven 15h'],lat:48.86,lng:2.29},
+  {id:10,cat:'location',type:'studio',title:'Studio meublé proche université',location:'Montpellier, Antigone',price:520,priceLabel:'520 €/mois',priceSub:'CC',surface:22,pieces:1,chambres:1,sdb:1,etage:1,publisher:'particulier',pubName:'Mlle Dubois',date:'Aujourd\'hui',bg:'#e6f7ed',emoji:'📚',desc:'Studio meublé 22 m² proche université et tram. Calme, lumineux. Cuisine équipée, internet inclus.',trustScore:72,verified:false,priceHistory:[],marketAvg:540,smartMatch:91,bookingSlots:['Lun 10h','Mar 15h','Mer 14h'],lat:43.61,lng:3.88},
+  {id:11,cat:'vente',type:'maison',title:'Longère à rénover',location:'Rennes, campagne',price:220000,priceLabel:'220 000 €',priceSub:'1 294 €/m²',surface:170,pieces:5,chambres:4,sdb:1,etage:0,publisher:'particulier',pubName:'Famille Moreau',date:'Il y a 2 jours',bg:'#fef3e8',emoji:'🏡',desc:'Longère 170 m² à rénover sur 2 500 m² de terrain. Gros potentiel, charme authentique, poutres apparentes. À 15 min de Rennes.',trustScore:65,verified:false,priceHistory:[{price:240000,date:'Il y a 1 mois'},{price:220000,date:'Il y a 2 jours'}],marketAvg:250000,smartMatch:76,bookingSlots:['Mer 10h','Jeu 14h','Sam 11h'],lat:48.11,lng:-1.68},
+  {id:12,cat:'location',type:'appartement',title:'F2 vue jardin',location:'Strasbourg, Orangerie',price:850,priceLabel:'850 €/mois',priceSub:'CC',surface:55,pieces:2,chambres:1,sdb:1,etage:2,publisher:'pro',pubName:'Strasbourg Immo',date:'Hier',bg:'#e8f0fe',emoji:'🌳',desc:'Bel F2 de 55 m² avec vue sur le parc de l\'Orangerie. Calme, lumineux, proche centre-ville. Parking possible.',trustScore:87,verified:true,priceHistory:[],marketAvg:820,smartMatch:80,bookingSlots:['Mar 10h','Mer 15h','Jeu 14h'],lat:48.58,lng:7.77}
 ];
 
 // ========== STATE ==========
@@ -99,27 +98,26 @@ function openModal(id) {
   const pubClass = p.publisher==='pro'?'pub-pro':'pub-particulier';
   const pubLabel = p.publisher==='pro'?`<span class="pub-type ${pubClass}">Pro</span> ${p.pubName}`:`<span class="pub-type ${pubClass}">Particulier</span> ${p.pubName}`;
 
-  // Trust score color
   const sc = p.trustScore||0;
   const scColor = sc>=80?'#059669':sc>=60?'#d97706':'#dc2626';
   const scLabel = sc>=80?'Excellent':sc>=60?'Bon':'À améliorer';
 
-  // Price analysis
   const priceDiff = p.marketAvg ? Math.round((p.price - p.marketAvg) / p.marketAvg * 100) : 0;
   const diffLabel = priceDiff>0?`+${priceDiff}% au-dessus du marché`:`${priceDiff}% en dessous du marché`;
   const diffColor = priceDiff>5?'#dc2626':priceDiff<-5?'#059669':'#d97706';
 
-  // Price history
   const histHtml = p.priceHistory.length>0?p.priceHistory.map(h=>`<div style="display:flex;justify-content:space-between;font-size:0.8rem;padding:4px 0;border-bottom:1px solid var(--border);"><span>${h.date}</span><strong>${h.price.toLocaleString('fr-FR')} €</strong></div>`).join(''):'<div style="font-size:0.8rem;color:var(--text-tertiary);text-align:center;">Aucune baisse de prix enregistrée</div>';
 
-  // Booking slots
-  const days = ['Lun','Mar','Mer','Jeu','Ven','Sam'];
   const bookingHtml = p.bookingSlots && p.bookingSlots.length>0
     ? `<div class="booking-grid">${p.bookingSlots.map(s=>{
         const [d,time]=s.split(' ');
         return `<div class="booking-day" onclick="bookSlot('${s}')"><div class="day-name">${d}</div><div class="day-num">${time}</div><div class="day-slots">Disponible</div></div>`;
       }).join('')}</div>`
     : '<div style="font-size:0.8rem;color:var(--text-tertiary);text-align:center;">Aucun créneau disponible pour le moment</div>';
+
+  // Stats
+  const stats = getStats();
+  trackView(id);
 
   document.getElementById('modalTitle').textContent = p.title;
   document.getElementById('modalBody').innerHTML = `
@@ -143,7 +141,6 @@ function openModal(id) {
 
     <div class="modal-desc">${p.desc}</div>
 
-    <!-- INNOVATION BLOCK 1: SCORE DE CONFIANCE -->
     <div class="innov-block">
       <h4>🛡️ Score de confiance IA</h4>
       <div class="score-bar">
@@ -158,7 +155,6 @@ function openModal(id) {
       </div>
     </div>
 
-    <!-- INNOVATION BLOCK 2: ANALYSE PRIX -->
     <div class="innov-block">
       <h4>📊 Analyse IA du prix</h4>
       <div class="score-bar">
@@ -173,7 +169,6 @@ function openModal(id) {
       </div>
     </div>
 
-    <!-- INNOVATION BLOCK 3: HISTORIQUE -->
     <div class="innov-block">
       <h4>📉 Historique du prix</h4>
       ${histHtml}
@@ -183,14 +178,12 @@ function openModal(id) {
       </div>
     </div>
 
-    <!-- INNOVATION BLOCK 4: CALENDRIER VISITES -->
     <div class="innov-block">
       <h4>📅 Réserver une visite</h4>
       <p style="font-size:0.8rem;color:var(--text-secondary);margin-bottom:10px;">Cliquez sur un créneau pour le réserver</p>
       ${bookingHtml}
     </div>
 
-    <!-- INNOVATION BLOCK 5: IA DÉCO -->
     <div class="innov-block">
       <h4>🎨 IA Décoration · Visualisez le bien aménagé</h4>
       <p style="font-size:0.8rem;color:var(--text-secondary);margin-bottom:8px;">Choisissez un style pour voir le rendu (simulation)</p>
@@ -202,7 +195,25 @@ function openModal(id) {
       </div>
     </div>
 
-    <!-- CONTACT -->
+    <!-- MAP -->
+    <div class="innov-block">
+      <h4>📍 Localisation</h4>
+      <div id="modalMap_${p.id}" style="height:200px;border-radius:var(--radius-md);margin-top:8px;background:var(--bg-hover);display:flex;align-items:center;justify-content:center;color:var(--text-tertiary);font-size:0.9rem;">🗺️ Chargement de la carte...</div>
+    </div>
+
+    <!-- STATS -->
+    <div class="innov-block" style="background:var(--bg-card);padding:16px;border-radius:var(--radius-md);margin-bottom:12px;">
+      <h4 style="margin-bottom:8px;">📊 Statistiques</h4>
+      <div class="stat-row"><span>👁️ Vues : <strong>${stats.viewCount||0}</strong></span><span>❤️ Favoris : <strong>${stats.favCount||0}</strong></span></div>
+    </div>
+
+    <!-- ACTIONS -->
+    <div class="modal-actions">
+      <button class="btn-export" onclick="exportPDF(${p.id})">📄 PDF</button>
+      <button class="btn-export" onclick="shareProperty(${p.id})">🔗 Partager</button>
+      <button class="btn-export" id="favBtn_${p.id}" onclick="toggleFavBtn(${p.id})" style="${isFavorite(id)?'background:var(--gold);color:#000;':''}">${isFavorite(id)?'❤️':'🤍'} Favori</button>
+    </div>
+
     <div class="modal-contact-bar">
       <button class="btn-contact" onclick="alert('📧 Message envoyé à ${p.pubName}. Réponse sous 24h.')">✉ Contacter</button>
       <button class="btn-phone" onclick="alert('📞 Numéro affiché après confirmation.')">📞 Voir le numéro</button>
@@ -211,6 +222,27 @@ function openModal(id) {
       🛡️ Score de confiance ${sc}/100 · ${p.verified?'Annonce vérifiée par Immo-Express':'Annonce non vérifiée'}
     </div>`;
   document.getElementById('modalOverlay').classList.add('open');
+
+  // Init map after modal opens
+  setTimeout(() => initMap(p), 300);
+}
+
+function initMap(p) {
+  const mapId = 'modalMap_' + p.id;
+  const el = document.getElementById(mapId);
+  if (!el || el.classList.contains('map-initialized')) return;
+  el.classList.add('map-initialized');
+  try {
+    if (typeof L === 'undefined') { el.innerHTML = '📍 ${p.location}'; return; }
+    el.innerHTML = '<div class="leaflet-container" style="width:100%;height:200px;border-radius:8px;"></div>';
+    const container = el.querySelector('.leaflet-container');
+    const map = L.map(container).setView([p.lat||46.6, p.lng||2.2], 12);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '© OpenStreetMap' }).addTo(map);
+    L.marker([p.lat||46.6, p.lng||2.2]).addTo(map).bindPopup('<b>'+p.title+'</b><br>'+p.priceLabel);
+    setTimeout(() => map.invalidateSize(), 100);
+  } catch(e) {
+    el.innerHTML = '📍 ' + p.location;
+  }
 }
 
 function closeModal() {document.getElementById('modalOverlay').classList.remove('open');}
@@ -329,6 +361,109 @@ function showWelcome(){addMessage(chatData.welcome.msg,'bot');showQuickReplies(c
 function sendMessage(text){const input=document.getElementById('chatInput');const msg=text||input.value.trim();if(!msg)return;input.value='';addMessage(msg,'user');const btn=document.getElementById('chatSendBtn');btn.disabled=true;btn.style.opacity='0.5';simulateTyping(()=>{const r=getResponse(msg);addMessage(r.msg,'bot');showQuickReplies(r.quick);btn.disabled=false;btn.style.opacity='1';});}
 function toggleChat(){const p=document.getElementById('chatPanel');const t=document.getElementById('chatToggle');const isOpen=p.classList.contains('open');if(isOpen){p.classList.remove('open');t.classList.remove('open');t.innerHTML='💬<span class="badge-dot"></span>';}else{p.classList.add('open');t.classList.add('open');t.innerHTML='✕';if(document.getElementById('chatMessages').children.length===0)showWelcome();}}
 
+// ========== THEME TOGGLE ==========
+function toggleTheme(){
+  const html=document.documentElement;
+  const isDark=html.getAttribute('data-theme')!=='light';
+  html.setAttribute('data-theme',isDark?'light':'dark');
+  document.getElementById('themeToggle').textContent=isDark?'☀️':'🌙';
+  localStorage.setItem('immo-theme',isDark?'light':'dark');
+}
+(function initTheme(){
+  const saved=localStorage.getItem('immo-theme');
+  if(saved==='light'){document.documentElement.setAttribute('data-theme','light');document.getElementById('themeToggle').textContent='☀️';}
+})();
+
+// ========== STATS ==========
+function getStats(){return JSON.parse(localStorage.getItem('immo-stats')||'{"views":{},"favorites":[],"viewCount":0,"favCount":0}');}
+function saveStats(s){localStorage.setItem('immo-stats',JSON.stringify(s));}
+function trackView(id){
+  const s=getStats();
+  s.views[id]=(s.views[id]||0)+1;
+  s.viewCount=(s.viewCount||0)+1;
+  saveStats(s);
+}
+function toggleFavorite(id){
+  const s=getStats();
+  const idx=s.favorites.indexOf(id);
+  if(idx>-1) s.favorites.splice(idx,1);
+  else s.favorites.push(id);
+  s.favCount=s.favorites.length;
+  saveStats(s);
+  updateFavUI();
+}
+function isFavorite(id){return getStats().favorites.includes(id);}
+function updateFavUI(){
+  const el=document.getElementById('favCount');
+  if(el)el.textContent=getStats().favCount||'';
+}
+function showFavorites(){
+  const favs=getStats().favorites;
+  if(favs.length===0)return alert('💔 Aucun favori pour le moment.\n\nCliquez sur 🤍 dans une annonce pour en ajouter.');
+  alert('❤️ Vos '+favs.length+' favori'+(favs.length>1?'s':'')+' :\n\n'+favs.map(id=>{const p=listings.find(x=>x.id===id);return p?'• '+p.title+' — '+p.priceLabel:'';}).filter(Boolean).join('\n'));
+}
+function toggleFavBtn(id){
+  toggleFavorite(id);
+  const btn=document.getElementById('favBtn_'+id);
+  if(!btn)return;
+  const isFav=isFavorite(id);
+  btn.textContent=isFav?'❤️ Favori':'🤍 Favori';
+  btn.style.background=isFav?'var(--gold)':'';
+  btn.style.color=isFav?'#000':'';
+}
+
+// ========== EXPORT PDF ==========
+function exportPDF(id){
+  try{
+    const p=listings.find(x=>x.id===id);
+    if(!p)return alert('Erreur : bien introuvable');
+    if(typeof window.jspdf==='undefined'||!window.jspdf.jsPDF) return alert('📄 Export PDF : téléchargement...\n\n'+p.title+'\n'+p.priceLabel+'\n📍 '+p.location+'\n📐 '+p.surface+' m²'+'\n🛡️ Score '+p.trustScore+'/100');
+    const {jsPDF}=window.jspdf;
+    const doc=new jsPDF('p','mm','a4');
+    doc.setFillColor(11,11,13);doc.rect(0,0,210,297,'F');
+    doc.setFontSize(28);doc.setTextColor(212,168,83);doc.text('Immo-Express',105,25,{align:'center'});
+    doc.setFontSize(10);doc.setTextColor(150,150,160);doc.text('Fiche détaillée du bien',105,33,{align:'center'});
+    doc.setDrawColor(212,168,83);doc.line(30,38,180,38);
+    doc.setFontSize(22);doc.setTextColor(255,255,255);doc.text(p.title,105,52,{align:'center'});
+    doc.setFontSize(12);doc.setTextColor(212,168,83);doc.text(p.priceLabel,105,62,{align:'center'});
+    doc.setFontSize(10);doc.setTextColor(200,200,200);
+    let y=75;
+    [['📍 Localisation',p.location],['📐 Surface',p.surface+' m²'],['🛏️ Pièces',p.pieces+' pièces'],['🛁 Salles de bain',String(p.sdb)],['📅 En ligne',p.date],['🛡️ Score confiance',p.trustScore+'/100'],['🤖 Smart Match',p.smartMatch?p.smartMatch+'%':'N/A'],['💰 Budget',p.priceLabel],['📈 Prix marché',p.marketAvg?p.marketAvg.toLocaleString('fr-FR')+' €':'N/A']].forEach(([l,v])=>{
+      doc.setFontSize(9);doc.setTextColor(150,150,160);doc.text(l,30,y);
+      doc.setFontSize(10);doc.setTextColor(255,255,255);doc.text(v,90,y);
+      y+=7;
+    });
+    doc.setFontSize(9);doc.setTextColor(150,150,160);
+    const lines=doc.splitTextToSize(p.desc||'',150);
+    doc.text(lines,30,y+10);
+    doc.setFontSize(8);doc.setTextColor(100,100,100);
+    doc.text('Généré par Immo-Express · Bien #'+p.id+' · '+new Date().toLocaleDateString('fr-FR'),105,285,{align:'center'});
+    doc.save('ImmoExpress-'+p.title.slice(0,20).replace(/[^a-zA-Z0-9]/g,'_')+'.pdf');
+  }catch(e){alert('📄 PDF généré !');}
+}
+
+// ========== SHARE ==========
+function shareProperty(id){
+  const p=listings.find(x=>x.id===id);
+  if(!p)return;
+  const text='🏠 '+p.title+' - '+p.priceLabel+'\n📍 '+p.location+'\n🛡️ Score '+p.trustScore+'/100\n\n'+window.location.origin+'?bien='+id;
+  if(navigator.share)navigator.share({title:p.title,text,url:window.location.origin+'?bien='+id});
+  else{navigator.clipboard.writeText(text).then(()=>alert('🔗 Lien copié !')).catch(()=>alert(text));}
+}
+
+// ========== NOTIFICATIONS ==========
+if('Notification'in window&&Notification.permission==='default')Notification.requestPermission();
+(function checkAlerts(){
+  let last=localStorage.getItem('immo-last-alert')||'0';
+  setInterval(()=>{
+    const n=listings.filter(p=>p.date==="Aujourd'hui").length;
+    if(n>Number(last)&&Number(last)>0&&'Notification'in window&&Notification.permission==='granted')
+      new Notification('🏠 Nouveaux biens !',{body:n-Number(last)+' nouvelle'+(n-Number(last)>1?'s':'')+' annonce'+(n-Number(last)>1?'s':'')+' aujourd\'hui',icon:'assets/icon-192.png'});
+    last=String(n);localStorage.setItem('immo-last-alert',last);
+  },60000);
+})();
+
 // ========== INIT ==========
 render();
+updateFavUI();
 console.log('🏠 Immo-Express chargé —',listings.length,'annonces avec innovations IA');

@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Espace Pro — Immo-Express</title>
+  <link rel="icon" href="assets/icon-192.svg" type="image/svg+xml">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--white:#fff;--bg:#f3f4f6;--bg-card:#fff;--border:#e5e7eb;--border-hover:#d1d5db;--text:#111827;--text-secondary:#6b7280;--text-tertiary:#9ca3af;--blue:#2563eb;--blue-light:#eff6ff;--blue-dark:#1d4ed8;--green:#059669;--green-light:#ecfdf5;--orange:#d97706;--orange-light:#fef3c7;--red:#dc2626;--red-light:#fef2f2;--purple:#7c3aed;--purple-light:#f5f3ff;--teal:#0d9488;--shadow-sm:0 1px 2px rgba(0,0,0,0.05);--shadow:0 1px 3px rgba(0,0,0,0.1);--shadow-md:0 4px 12px rgba(0,0,0,0.08);--radius-sm:6px;--radius:8px;--radius-lg:12px;--font:'Inter',-apple-system,sans-serif}
+    body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.5;min-height:100vh}
+    a{color:var(--blue);text-decoration:none}
+    /* HEADER */
+    .header{background:var(--white);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+    .header-inner{max-width:1200px;margin:0 auto;padding:0 20px;height:64px;display:flex;align-items:center;justify-content:space-between}
+    .logo{font-size:1.35rem;font-weight:800;display:flex;align-items:center;gap:8px;cursor:pointer}
+    .logo-icon{width:32px;height:32px;background:var(--blue);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;color:white;font-size:1rem;font-weight:700}
+    .logo span{color:var(--blue)}
+    .header-links{display:flex;align-items:center;gap:4px}
+    .header-links a{padding:8px 16px;border-radius:var(--radius);font-size:0.875rem;font-weight:500;color:var(--text-secondary);transition:all 0.15s;text-decoration:none}
+    .header-links a:hover{background:var(--bg);color:var(--text)}
+    .header-links a.active{color:var(--blue);background:var(--blue-light)}
+    .mobile-toggle{display:none;background:none;border:none;font-size:1.5rem;cursor:pointer;padding:4px;color:var(--text)}
+    .header-right{display:flex;align-items:center;gap:10px}
+    .btn-pro-plan{background:var(--orange);color:white!important;padding:7px 18px!important;border-radius:50px!important;font-size:0.8rem!important;font-weight:600!important}
+    .btn-pro-plan:hover{background:#b45309!important}
+
+    /* HERO */
+    .pro-hero{background:linear-gradient(135deg,#1e3a5f 0%,var(--blue) 100%);padding:36px 20px;color:white}
+    .pro-hero-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+    .pro-hero h1{font-size:1.5rem;font-weight:700;display:flex;align-items:center;gap:10px}
+    .pro-hero h1 .badge{font-size:0.65rem;background:rgba(255,255,255,0.2);padding:4px 12px;border-radius:50px;font-weight:500}
+    .pro-hero p{color:rgba(255,255,255,0.8);font-size:0.9rem;margin-top:4px}
+    .pro-hero-stats{display:flex;gap:20px}
+    .phs-item{text-align:center}
+    .phs-item .num{font-size:1.6rem;font-weight:700}
+    .phs-item .label{font-size:0.7rem;opacity:0.7;text-transform:uppercase;letter-spacing:0.5px}
+
+    /* LAYOUT */
+    .pro-layout{max-width:1200px;margin:0 auto;padding:24px 20px;display:grid;grid-template-columns:220px 1fr;gap:24px}
+    @media(max-width:800px){.pro-layout{grid-template-columns:1fr}}
+
+    /* SIDENAV */
+    .pro-sidenav{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:12px;height:fit-content;position:sticky;top:88px}
+    .pro-sidenav button{display:flex;align-items:center;gap:10px;width:100%;padding:12px 14px;border:none;background:transparent;border-radius:var(--radius);font-size:0.85rem;font-weight:500;color:var(--text-secondary);cursor:pointer;font-family:var(--font);text-align:left;transition:all 0.15s}
+    .pro-sidenav button:hover{background:var(--bg);color:var(--text)}
+    .pro-sidenav button.active{background:var(--blue-light);color:var(--blue);font-weight:600}
+    .pro-sidenav button .sn-icon{font-size:1.1rem;width:24px;text-align:center}
+    .pro-sidenav .sn-divider{height:1px;background:var(--border);margin:8px 12px}
+
+    /* CONTENT */
+    .pro-content{min-height:500px}
+    .pro-section{display:none}
+    .pro-section.active{display:block}
+
+    /* DASHBOARD CARDS */
+    .dash-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;margin-bottom:24px}
+    .dash-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px}
+    .dash-card .dc-icon{width:44px;height:44px;border-radius:var(--radius);display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin-bottom:12px}
+    .dash-card .dc-num{font-size:1.8rem;font-weight:700}
+    .dash-card .dc-label{font-size:0.8rem;color:var(--text-secondary);margin-top:2px}
+    .dash-card .dc-change{font-size:0.75rem;margin-top:6px;font-weight:500}
+
+    /* RECENT ACTIVITY */
+    .section-title{font-size:1rem;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+    .activity-list{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden}
+    .activity-item{display:flex;align-items:center;gap:14px;padding:14px 18px;border-bottom:1px solid var(--border);font-size:0.85rem}
+    .activity-item:last-child{border-bottom:none}
+    .activity-item .ai-icon{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.9rem;flex-shrink:0}
+    .activity-item .ai-text{flex:1}
+    .activity-item .ai-text strong{font-weight:600}
+    .activity-item .ai-time{font-size:0.75rem;color:var(--text-tertiary);white-space:nowrap}
+
+    /* ANNONCES */
+    .pro-actions{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+    .pro-actions .btn-add{background:var(--blue);color:white;border:none;padding:10px 24px;border-radius:var(--radius);font-weight:600;font-size:0.85rem;cursor:pointer;font-family:var(--font);transition:background 0.15s}
+    .pro-actions .btn-add:hover{background:var(--blue-dark)}
+    .pro-actions .btn-filter{padding:10px 16px;border:1px solid var(--border);border-radius:var(--radius);background:var(--white);font-size:0.8rem;cursor:pointer;font-family:var(--font);color:var(--text-secondary);transition:all 0.15s}
+    .pro-actions .btn-filter:hover{border-color:var(--blue);color:var(--blue)}
+    .pro-actions .btn-filter.active{background:var(--blue-light);border-color:var(--blue);color:var(--blue)}
+    .pro-listing-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);display:grid;grid-template-columns:140px 1fr;overflow:hidden;margin-bottom:12px;transition:box-shadow 0.15s}
+    .pro-listing-card:hover{border-color:var(--border-hover);box-shadow:var(--shadow-md)}
+    .pro-listing-img{display:flex;align-items:center;justify-content:center;font-size:2.5rem;min-height:120px}
+    .pro-listing-info{padding:14px 16px;display:flex;flex-direction:column}
+    .pro-listing-info .pli-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+    .pro-listing-info .pli-title{font-weight:600;font-size:0.9rem}
+    .pro-listing-info .pli-sub{font-size:0.77rem;color:var(--text-secondary);margin:4px 0}
+    .pro-listing-info .pli-tags{display:flex;gap:8px;flex-wrap:wrap;margin:4px 0 8px}
+    .pro-listing-info .pli-tag{font-size:0.7rem;padding:2px 8px;border-radius:4px;background:var(--bg);color:var(--text-secondary)}
+    .pro-listing-info .pli-tag.pro-pub{background:var(--blue-light);color:var(--blue)}
+    .pro-listing-info .pli-tag.pro-draft{background:var(--orange-light);color:var(--orange)}
+    .pro-listing-info .pli-actions{display:flex;gap:8px;margin-top:auto;padding-top:8px}
+    .pro-listing-info .pli-actions button{padding:5px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--white);font-size:0.75rem;cursor:pointer;font-family:var(--font);color:var(--text-secondary);transition:all 0.15s}
+    .pro-listing-info .pli-actions button:hover{border-color:var(--blue);color:var(--blue)}
+    .pro-listing-info .pli-actions .btn-danger{color:var(--red);border-color:var(--red-light)}
+    .pro-listing-info .pli-actions .btn-danger:hover{background:var(--red-light)}
+    .pli-stats{display:flex;gap:16px;font-size:0.75rem;color:var(--text-tertiary)}
+    .pli-stats span{display:flex;align-items:center;gap:4px}
+
+    /* LEADS */
+    .lead-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:10px;display:flex;align-items:center;gap:14px}
+    .lead-avatar{width:40px;height:40px;border-radius:50%;background:var(--blue-light);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--blue);font-size:0.9rem;flex-shrink:0}
+    .lead-info{flex:1;min-width:0}
+    .lead-info .lead-name{font-weight:600;font-size:0.9rem}
+    .lead-info .lead-msg{font-size:0.82rem;color:var(--text-secondary);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .lead-info .lead-date{font-size:0.72rem;color:var(--text-tertiary);margin-top:4px}
+    .lead-actions{display:flex;gap:6px}
+    .lead-actions button{padding:6px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--white);font-size:0.75rem;cursor:pointer;font-family:var(--font);color:var(--text-secondary);transition:all 0.15s}
+    .lead-actions button:hover{border-color:var(--blue);color:var(--blue)}
+
+    /* ABONNEMENTS */
+    .plans-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-bottom:24px}
+    .plan-card{background:var(--white);border:2px solid var(--border);border-radius:var(--radius-lg);padding:28px 24px;position:relative;transition:all 0.2s}
+    .plan-card:hover{border-color:var(--border-hover);box-shadow:var(--shadow-md)}
+    .plan-card.popular{border-color:var(--blue);box-shadow:0 0 0 1px var(--blue)}
+    .plan-card .popular-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--blue);color:white;padding:4px 20px;border-radius:50px;font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.5px}
+    .plan-card h3{font-size:1.1rem;font-weight:700;margin-bottom:4px}
+    .plan-card .plan-price{font-size:2rem;font-weight:800;color:var(--blue);margin:12px 0 4px}
+    .plan-card .plan-price span{font-size:0.9rem;font-weight:400;color:var(--text-tertiary)}
+    .plan-card .plan-desc{font-size:0.82rem;color:var(--text-secondary);margin-bottom:16px}
+    .plan-card ul{list-style:none;margin-bottom:20px}
+    .plan-card ul li{font-size:0.82rem;padding:6px 0;display:flex;align-items:center;gap:8px;color:var(--text)}
+    .plan-card ul li .check{color:var(--green);font-weight:700}
+    .plan-card .btn-plan{width:100%;padding:12px;border-radius:var(--radius);font-weight:600;font-size:0.85rem;cursor:pointer;font-family:var(--font);transition:all 0.15s;border:none}
+    .plan-card .btn-plan.btn-outline{background:transparent;border:2px solid var(--border);color:var(--text)}
+    .plan-card .btn-plan.btn-outline:hover{border-color:var(--blue);color:var(--blue)}
+    .plan-card .btn-plan.btn-primary{background:var(--blue);color:white}
+    .plan-card .btn-plan.btn-primary:hover{background:var(--blue-dark)}
+    .plan-card.current .btn-plan{background:var(--green-light);color:var(--green);border:2px solid var(--green);cursor:default}
+
+    /* PROFIL */
+    .profil-form{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px;max-width:600px}
+    .profil-form .pf-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+    .profil-form .pf-group{display:flex;flex-direction:column;gap:4px}
+    .profil-form .pf-group label{font-size:0.78rem;font-weight:500;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.3px}
+    .profil-form .pf-group input,.profil-form .pf-group select,.profil-form .pf-group textarea{padding:10px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:0.85rem;font-family:var(--font);outline:none;transition:border-color 0.15s}
+    .profil-form .pf-group input:focus,.profil-form .pf-group select:focus,.profil-form .pf-group textarea:focus{border-color:var(--blue)}
+    .profil-form .pf-group textarea{resize:vertical;min-height:80px}
+    .profil-form .pf-actions{padding-top:16px;border-top:1px solid var(--border);display:flex;gap:12px;justify-content:flex-end}
+    .profil-form .pf-actions button{padding:10px 28px;border-radius:var(--radius);font-weight:600;font-size:0.85rem;cursor:pointer;font-family:var(--font);transition:all 0.15s}
+    .profil-form .pf-actions .btn-save{background:var(--blue);color:white;border:none}
+    .profil-form .pf-actions .btn-save:hover{background:var(--blue-dark)}
+    .profil-form .pf-actions .btn-cancel{background:var(--white);color:var(--text-secondary);border:1px solid var(--border)}
+
+    /* EMPTY STATE */
+    .empty-state{text-align:center;padding:60px 20px;background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg)}
+    .empty-state .big-icon{font-size:3rem;margin-bottom:12px}
+    .empty-state h3{font-size:1rem;font-weight:600;margin-bottom:6px}
+    .empty-state p{font-size:0.85rem;color:var(--text-secondary);margin-bottom:16px}
+
+    /* CHART BAR simple */
+    .chart-bar{display:flex;align-items:end;gap:8px;height:120px;padding:16px 0}
+    .chart-bar .cb-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
+    .chart-bar .cb-item .cb-col{width:100%;background:var(--blue);border-radius:4px 4px 0 0;min-width:20px;transition:height 0.5s;max-width:40px;margin:0 auto}
+    .chart-bar .cb-item .cb-label{font-size:0.65rem;color:var(--text-tertiary);text-align:center;white-space:nowrap}
+
+    /* RESPONSIVE */
+    @media(max-width:800px){
+      .header-links{display:none;position:absolute;top:64px;left:0;right:0;background:var(--white);flex-direction:column;padding:12px;box-shadow:var(--shadow-md);border-bottom:1px solid var(--border)}
+      .header-links.open{display:flex}
+      .header-links a{padding:12px 16px;width:100%}
+      .pro-hero-stats{gap:12px}
+      .dash-grid{grid-template-columns:repeat(2,1fr)}
+    }
+    @media(max-width:640px){
+      .pro-listing-card{grid-template-columns:1fr}
+      .pro-listing-info .pli-top{flex-direction:column}
+      .lead-card{flex-direction:column;align-items:flex-start}
+      .lead-actions{width:100%;justify-content:flex-end}
+      .profil-form .pf-row{grid-template-columns:1fr}
+      .plans-grid{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-inner">
+    <div class="logo" onclick="location.href='index.html'"><div class="logo-icon">iE</div>Immo<span>Express</span></div>
+    <button class="mobile-toggle" id="menuToggle">☰</button>
+    <div class="header-links" id="headerLinks">
+      <a href="index.html">Accueil</a>
+            <a href="scoring.html">🔬 Notation</a>
+            <a href="location.html">📍 Location</a>
+            <a href="pro.html" class="active">🏢 Espace Pro</a>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="pro-hero">
+  <div class="pro-hero-inner">
+    <div>
+      <h1>🏢 Espace Professionnel <span class="badge" id="planBadge">Plan Starter</span></h1>
+      <p id="agencyName">Agence Duval Immobilier</p>
+    </div>
+    <div class="pro-hero-stats">
+      <div class="phs-item"><div class="num" id="statListings">12</div><div class="label">Annonces</div></div>
+      <div class="phs-item"><div class="num" id="statViews">847</div><div class="label">Vues</div></div>
+      <div class="phs-item"><div class="num" id="statLeads">23</div><div class="label">Contacts</div></div>
+      <div class="phs-item"><div class="num" id="statScore">82</div><div class="label">Score moy.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- LAYOUT -->
+<div class="pro-layout">
+  <!-- Sidenav -->
+  <nav class="pro-sidenav" id="proSidenav">
+    <button class="active" data-section="dashboard" onclick="switchSection('dashboard')"><span class="sn-icon">📊</span> Dashboard</button>
+    <button data-section="annonces" onclick="switchSection('annonces')"><span class="sn-icon">🏠</span> Mes annonces</button>
+    <button data-section="leads" onclick="switchSection('leads')"><span class="sn-icon">📨</span> Contacts</button>
+    <button data-section="abonnements" onclick="switchSection('abonnements')"><span class="sn-icon">⭐</span> Abonnement</button>
+    <div class="sn-divider"></div>
+    <button data-section="profil" onclick="switchSection('profil')"><span class="sn-icon">👤</span> Profil agence</button>
+  </nav>
+
+  <!-- Content -->
+  <div class="pro-content">
+
+    <!-- ===== DASHBOARD ===== -->
+    <section class="pro-section active" id="sec-dashboard">
+      <div class="dash-grid">
+        <div class="dash-card"><div class="dc-icon" style="background:var(--blue-light)">🏠</div><div class="dc-num" id="dashListings">12</div><div class="dc-label">Annonces actives</div><div class="dc-change" style="color:var(--green)">↑ +3 cette semaine</div></div>
+        <div class="dash-card"><div class="dc-icon" style="background:var(--purple-light)">👁️</div><div class="dc-num" id="dashViews">847</div><div class="dc-label">Vues totales</div><div class="dc-change" style="color:var(--green)">↑ +12% vs mois dernier</div></div>
+        <div class="dash-card"><div class="dc-icon" style="background:var(--green-light)">📨</div><div class="dc-num" id="dashLeads">23</div><div class="dc-label">Contacts reçus</div><div class="dc-change" style="color:var(--green)">↑ +5 cette semaine</div></div>
+        <div class="dash-card"><div class="dc-icon" style="background:var(--orange-light)">📊</div><div class="dc-num" id="dashScore">82</div><div class="dc-label">Score confiance moyen</div><div class="dc-change" style="color:var(--green)">↑ +4 pts</div></div>
+        <div class="dash-card"><div class="dc-icon" style="background:#f0fdfa">📈</div><div class="dc-num" id="dashRendement">5.8%</div><div class="dc-label">Rendement locatif moy.</div><div class="dc-change" style="color:var(--text-tertiary)">→ Stable</div></div>
+        <div class="dash-card"><div class="dc-icon" style="background:#fff7ed">⚡</div><div class="dc-num" id="dashTaux">92%</div><div class="dc-label">Taux de réponse</div><div class="dc-change" style="color:var(--green)">↑ Excellent</div></div>
+      </div>
+
+      <div class="section-title">📈 Vues — 7 derniers jours</div>
+      <div class="activity-list" id="dashChartContainer">
+        <div class="chart-bar" id="dashChart"></div>
+      </div>
+
+      <div class="section-title" style="margin-top:24px">🕐 Activité récente</div>
+      <div class="activity-list" id="activityList"></div>
+    </section>
+
+    <!-- ===== ANNONCES ===== -->
+    <section class="pro-section" id="sec-annonces">
+      <div class="pro-actions">
+        <button class="btn-add">+ Nouvelle annonce</button>
+        <button class="btn-filter active" data-filter="all" onclick="filterProAnnonces('all')">Toutes</button>
+        <button class="btn-filter" data-filter="active" onclick="filterProAnnonces('active')">Actives</button>
+        <button class="btn-filter" data-filter="draft" onclick="filterProAnnonces('draft')">Brouillons</button>
+      </div>
+      <div id="proAnnoncesList"></div>
+    </section>
+
+    <!-- ===== LEADS ===== -->
+    <section class="pro-section" id="sec-leads">
+      <div class="section-title">📨 Contacts reçus <span style="font-weight:400;color:var(--text-secondary)">(23)</span></div>
+      <div id="leadsList"></div>
+    </section>
+
+    <!-- ===== ABONNEMENTS ===== -->
+    <section class="pro-section" id="sec-abonnements">
+      <div class="section-title">⭐ Choisissez votre formule</div>
+      <div class="plans-grid">
+        <div class="plan-card" id="plan-starter">
+          <h3>Starter</h3>
+          <div class="plan-price">49<span>€/mois</span></div>
+          <div class="plan-desc">Pour les agents indépendants débutant sur la plateforme.</div>
+          <ul>
+            <li><span class="check">✓</span> Jusqu'à 5 annonces</li>
+            <li><span class="check">✓</span> Score de confiance IA</li>
+            <li><span class="check">✓</span> Analyse de prix IA</li>
+            <li><span class="check">✓</span> Statistiques de base</li>
+            <li class="na" style="color:var(--text-tertiary)"><span style="color:var(--red)">✗</span> Notification leads temps réel</li>
+            <li class="na" style="color:var(--text-tertiary)"><span style="color:var(--red)">✗</span> Mise en avant des annonces</li>
+          </ul>
+          <button class="btn-plan" onclick="selectPlan('starter')">Mon forfait actuel</button>
+        </div>
+        <div class="plan-card popular" id="plan-pro">
+          <div class="popular-badge">⭐ Populaire</div>
+          <h3>Pro</h3>
+          <div class="plan-price">99<span>€/mois</span></div>
+          <div class="plan-desc">Pour les agences établies avec un volume modéré.</div>
+          <ul>
+            <li><span class="check">✓</span> Jusqu'à 20 annonces</li>
+            <li><span class="check">✓</span> Score de confiance IA</li>
+            <li><span class="check">✓</span> Analyse de prix IA</li>
+            <li><span class="check">✓</span> Statistiques avancées</li>
+            <li><span class="check">✓</span> Notification leads temps réel</li>
+            <li class="na" style="color:var(--text-tertiary)"><span style="color:var(--red)">✗</span> Mise en avant des annonces</li>
+          </ul>
+          <button class="btn-plan btn-primary" onclick="selectPlan('pro')">Choisir Pro</button>
+        </div>
+        <div class="plan-card" id="plan-premium">
+          <h3>Premium</h3>
+          <div class="plan-price">199<span>€/mois</span></div>
+          <div class="plan-desc">Pour les réseaux et grandes agences.</div>
+          <ul>
+            <li><span class="check">✓</span> Annonces illimitées</li>
+            <li><span class="check">✓</span> Score de confiance IA</li>
+            <li><span class="check">✓</span> Analyse de prix IA</li>
+            <li><span class="check">✓</span> Statistiques premium + export</li>
+            <li><span class="check">✓</span> Notification leads temps réel</li>
+            <li><span class="check">✓</span> Mise en avant des annonces</li>
+            <li><span class="check">✓</span> API d'intégration</li>
+            <li><span class="check">✓</span> Support prioritaire 24/7</li>
+          </ul>
+          <button class="btn-plan btn-outline" onclick="selectPlan('premium')">Choisir Premium</button>
+        </div>
+      </div>
+      <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;font-size:0.85rem;color:var(--text-secondary)">
+        💡 <strong>Vous êtes actuellement :</strong> <span id="currentPlanDisplay">Plan Starter</span> · 
+        Prochain renouvellement le <span id="nextRenewal">01/09/2026</span> · 
+        <a href="#" onclick="alert('Pour résilier, contactez le support à support@immo-express.fr')">Résilier ?</a>
+      </div>
+    </section>
+
+    <!-- ===== PROFIL ===== -->
+    <section class="pro-section" id="sec-profil">
+      <div class="profil-form">
+        <div class="pf-row">
+          <div class="pf-group"><label>Nom de l'agence *</label><input type="text" id="pfName" value="Agence Duval Immobilier"></div>
+          <div class="pf-group"><label>SIRET</label><input type="text" id="pfSiret" value="824 937 561 00028"></div>
+        </div>
+        <div class="pf-row">
+          <div class="pf-group"><label>Email *</label><input type="email" id="pfEmail" value="contact@duval-immo.fr"></div>
+          <div class="pf-group"><label>Téléphone *</label><input type="tel" id="pfPhone" value="01 42 37 65 00"></div>
+        </div>
+        <div class="pf-row">
+          <div class="pf-group" style="grid-column:1/-1"><label>Adresse</label><input type="text" id="pfAddress" value="15 Rue de la Paix, 75002 Paris"></div>
+        </div>
+        <div class="pf-row">
+          <div class="pf-group"><label>Ville</label><input type="text" id="pfCity" value="Paris"></div>
+          <div class="pf-group"><label>Site web</label><input type="url" id="pfWeb" value="https://www.duval-immo.fr"></div>
+        </div>
+        <div class="pf-row">
+          <div class="pf-group" style="grid-column:1/-1"><label>Description</label><textarea id="pfDesc" rows="3">Agence immobilière familiale depuis 1985. Spécialistes de l'immobilier parisien haut de gamme. 120+ biens vendus par an.</textarea></div>
+        </div>
+        <div class="pf-actions">
+          <button class="btn-cancel" onclick="alert('Modifications annulées')">Annuler</button>
+          <button class="btn-save" onclick="saveProfil()">💾 Enregistrer</button>
+        </div>
+      </div>
+      <div style="margin-top:16px;font-size:0.8rem;color:var(--text-tertiary);background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:16px">
+        🔒 Vos données sont confidentielles. Conformément au RGPD, vous pouvez demander leur suppression à tout moment.
+      </div>
+    </section>
+  </div>
+</div>
+
+<script>
+// ========== DATA ==========
+const proData = {
+  agency: {
+    name: 'Agence Duval Immobilier',
+    plan: 'pro',
+    email: 'contact@duval-immo.fr',
+    phone: '01 42 37 65 00',
+    siret: '824 937 561 00028',
+    address: '15 Rue de la Paix, 75002 Paris',
+    city: 'Paris',
+    web: 'https://www.duval-immo.fr',
+    desc: "Agence immobilière familiale depuis 1985. Spécialistes de l'immobilier parisien haut de gamme. 120+ biens vendus par an."
+  },
+  annonces: [
+    {id:101,title:'Appartement 3 pièces Paris 11e',cat:'vente',status:'active',price:'425 000 €',surface:75,pieces:3,views:234,leads:8,date:'Aujourd\'hui',bg:'#e8f0fe',emoji:'🏙️',score:94},
+    {id:102,title:'Duplex vue mer Marseille',cat:'vente',status:'active',price:'695 000 €',surface:130,pieces:4,views:178,leads:5,date:'Hier',bg:'#e8f0fe',emoji:'🌊',score:95},
+    {id:103,title:'Appartement haussmannien Trocadéro',cat:'vente',status:'active',price:'980 000 €',surface:100,pieces:4,views:312,leads:12,date:'Il y a 5 jours',bg:'#e8f0fe',emoji:'🏛️',score:96},
+    {id:104,title:'Villa contemporaine piscine Cannes',cat:'vente',status:'active',price:'1 250 000 €',surface:200,pieces:7,views:89,leads:3,date:'Il y a 2 jours',bg:'#fef3e8',emoji:'🌴',score:97},
+    {id:105,title:'Studio meublé Bordeaux Centre',cat:'location',status:'active',price:'680 €/mois',surface:28,pieces:1,views:56,leads:4,date:'Aujourd\'hui',bg:'#e8f0fe',emoji:'🏙️',score:75},
+    {id:106,title:'Maison T4 Toulouse Ramonville',cat:'location',status:'draft',price:'1 200 €/mois',surface:110,pieces:4,views:0,leads:0,date:'Brouillon',bg:'#e6f7ed',emoji:'🏡',score:null},
+    {id:107,title:'Bureau 80m² centre-ville',cat:'vente',status:'draft',price:'320 000 €',surface:80,pieces:3,views:0,leads:0,date:'Brouillon',bg:'#f3f4f6',emoji:'🏢',score:null},
+  ],
+  activity: [
+    {icon:'👁️',color:'var(--blue-light)',text:'<strong>Appartement Paris 11e</strong> — 12 nouvelles vues aujourd\'hui',time:'il y a 2h'},
+    {icon:'📨',color:'var(--green-light)',text:'Nouveau contact pour <strong>Duplex Marseille</strong> — M. Lefebvre',time:'il y a 3h'},
+    {icon:'⭐',color:'var(--orange-light)',text:'Le <strong>score de confiance</strong> de vos annonces a augmenté de 4 pts',time:'il y a 6h'},
+    {icon:'👁️',color:'var(--blue-light)',text:'<strong>Appartement Trocadéro</strong> — 24 vues cette semaine',time:'il y a 8h'},
+    {icon:'📨',color:'var(--green-light)',text:'Nouveau contact pour <strong>Villa Cannes</strong> — contact téléphonique demandé',time:'hier 18h'},
+    {icon:'📊',color:'var(--purple-light)',text:'Rapport mensuel disponible — <strong>847 vues</strong> ce mois-ci',time:'hier 14h'},
+    {icon:'🏠',color:'var(--blue-light)',text:'Annonce <strong>Studio Bordeaux</strong> publiée avec succès',time:'hier 10h'},
+  ],
+  leads: [
+    {name:'Sophie Martin',msg:'Bonjour, je suis intéressée par l\'appartement 3 pièces Paris 11e. Peut-on visiter cette semaine ?',annonce:'Appartement Paris 11e',date:'Aujourd\'hui 14:32',initial:'SM'},
+    {name:'Pierre Lefebvre',msg:'Magnifique duplex ! Je suis prêt à faire une offre. Pouvez-vous me recontacter ?',annonce:'Duplex Marseille',date:'Aujourd\'hui 11:15',initial:'PL'},
+    {name:'Marie Dubois',msg:'Je cherche un appartement similaire dans le 16e. Avez-vous d\'autres biens ?',annonce:'Appartement Trocadéro',date:'Hier 18:45',initial:'MD'},
+    {name:'Jean Moreau',msg:'Bonjour, la villa de Cannes m\'intéresse pour un achat. Quel est le prix net vendeur ?',annonce:'Villa Cannes',date:'Hier 09:20',initial:'JM'},
+    {name:'Claire Bernard',msg:'Le studio de Bordeaux est-il toujours disponible ? Je suis étudiante et cherche pour septembre.',annonce:'Studio Bordeaux',date:'Avant-hier 16:00',initial:'CB'},
+    {name:'Thomas Richard',msg:'Je voudrais plus d\'informations sur le prix au m² et les charges.',annonce:'Appartement Paris 11e',date:'Avant-hier 11:30',initial:'TR'},
+  ],
+  chartData: [45,62,58,73,81,65,90]
+};
+const weekDays = ['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
+const monthNames = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+
+// ========== STATE ==========
+let currentSection = 'dashboard';
+let currentAnnonceFilter = 'all';
+
+// ========== INIT ==========
+function init() {
+  loadState();
+  renderAll();
+  addEventListeners();
+}
+function loadState() {
+  const saved = localStorage.getItem('immo-pro-plan');
+  if(saved) proData.agency.plan = saved;
+}
+function savePlan(plan) {
+  proData.agency.plan = plan;
+  localStorage.setItem('immo-pro-plan', plan);
+  renderAll();
+}
+function saveProfil() {
+  const fields = ['pfName','pfSiret','pfEmail','pfPhone','pfAddress','pfCity','pfWeb','pfDesc'];
+  const labels = ['name','siret','email','phone','address','city','web','desc'];
+  fields.forEach((f,i) => {
+    const el = document.getElementById(f);
+    if(el) proData.agency[labels[i]] = el.value;
+  });
+  renderAll();
+  document.getElementById('agencyName').textContent = proData.agency.name;
+  alert('✅ Profil mis à jour !');
+}
+
+// ========== RENDER ==========
+function renderAll() {
+  renderHero();
+  renderDashboard();
+  renderAnnonces();
+  renderLeads();
+  renderPlans();
+  renderActivity();
+}
+
+function renderHero() {
+  const planLabels = {starter:'Plan Starter',pro:'Plan Pro',premium:'Plan Premium'};
+  document.getElementById('planBadge').textContent = planLabels[proData.agency.plan] || 'Plan Starter';
+  document.getElementById('agencyName').textContent = proData.agency.name;
+
+  const totalViews = proData.annonces.reduce((s,a)=>s+a.views,0);
+  const totalLeads = proData.annonces.reduce((s,a)=>s+a.leads,0);
+  const scores = proData.annonces.filter(a=>a.score).map(a=>a.score);
+  const avgScore = scores.length ? Math.round(scores.reduce((s,v)=>s+v,0)/scores.length) : 0;
+  document.getElementById('statListings').textContent = proData.annonces.filter(a=>a.status==='active').length;
+  document.getElementById('statViews').textContent = totalViews;
+  document.getElementById('statLeads').textContent = totalLeads;
+  document.getElementById('statScore').textContent = avgScore;
+}
+
+function renderDashboard() {
+  const totalViews = proData.annonces.reduce((s,a)=>s+a.views,0);
+  const totalLeads = proData.annonces.reduce((s,a)=>s+a.leads,0);
+  const scores = proData.annonces.filter(a=>a.score).map(a=>a.score);
+  const avgScore = scores.length ? Math.round(scores.reduce((s,v)=>s+v,0)/scores.length) : 0;
+  const activeCount = proData.annonces.filter(a=>a.status==='active').length;
+
+  document.getElementById('dashListings').textContent = activeCount;
+  document.getElementById('dashViews').textContent = totalViews;
+  document.getElementById('dashLeads').textContent = totalLeads;
+  document.getElementById('dashScore').textContent = avgScore;
+
+  // Chart
+  const data = proData.chartData;
+  const max = Math.max(...data);
+  const chart = document.getElementById('dashChart');
+  chart.innerHTML = data.map((v,i) => {
+    const h = Math.max(8, (v/max)*90);
+    return `<div class="cb-item"><div class="cb-col" style="height:${h}px;background:var(--blue)"></div><div class="cb-label">${weekDays[i]||''}</div></div>`;
+  }).join('');
+}
+
+function renderActivity() {
+  const list = document.getElementById('activityList');
+  list.innerHTML = proData.activity.map(a => `
+    <div class="activity-item">
+      <div class="ai-icon" style="background:${a.color}">${a.icon}</div>
+      <div class="ai-text">${a.text}</div>
+      <div class="ai-time">${a.time}</div>
+    </div>
+  `).join('');
+}
+
+function renderAnnonces(filter) {
+  filter = filter || currentAnnonceFilter;
+  const list = document.getElementById('proAnnoncesList');
+  const items = filter === 'all' ? proData.annonces : proData.annonces.filter(a => a.status === filter);
+  if(items.length === 0){
+    const draft = filter === 'draft';
+    list.innerHTML = `<div class="empty-state"><div class="big-icon">${draft?'📝':'🏠'}</div><h3>${draft?'Aucun brouillon':'Aucune annonce'}</h3><p>${draft?'Créez une nouvelle annonce pour commencer.':'Publiez votre première annonce pour apparaître dans les recherches.'}</p></div>`;
+    return;
+  }
+  list.innerHTML = items.map(a => {
+    const catLabel = a.cat==='vente'?'Vente':'Location';
+    const catClass = a.cat==='vente'?'badge-sale':'badge-rent';
+    const statusTag = a.status==='draft' ? '<span class="pli-tag pro-draft">📝 Brouillon</span>' : '';
+    const viewsStr = a.views > 0 ? `<span>👁️ ${a.views}</span>` : '';
+    const leadsStr = a.leads > 0 ? `<span>📨 ${a.leads}</span>` : '';
+    const scoreStr = a.score ? `<span class="listing-score ${a.score>=80?'score-high':a.score>=60?'score-mid':'score-low'}">⭐ ${a.score}/100</span>` : '';
+    return `<div class="pro-listing-card">
+      <div class="pro-listing-img" style="background:${a.bg}">${a.emoji}</div>
+      <div class="pro-listing-info">
+        <div class="pli-top">
+          <div>
+            <div class="pli-title">${a.title} ${scoreStr}</div>
+            <div class="pli-sub">📍 ${a.price} · ${a.surface} m² · ${a.pieces} pièces</div>
+          </div>
+        </div>
+        <div class="pli-tags">
+          <span class="pli-tag pro-pub">${catLabel}</span>
+          ${statusTag}
+        </div>
+        <div class="pli-stats">${viewsStr} ${leadsStr} <span>📅 ${a.date}</span></div>
+        <div class="pli-actions">
+          <button>✏️ Modifier</button>
+          <button>📊 Stats</button>
+          ${a.status==='draft'?'<button style="background:var(--blue);color:white;border-color:var(--blue)">✅ Publier</button>':'<button>⏸️ Désactiver</button>'}
+          <button class="btn-danger">🗑️</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function filterProAnnonces(filter) {
+  currentAnnonceFilter = filter;
+  document.querySelectorAll('.pro-actions .btn-filter').forEach(b => b.classList.toggle('active', b.dataset.filter===filter));
+  renderAnnonces(filter);
+}
+
+function renderLeads() {
+  const list = document.getElementById('leadsList');
+  if(proData.leads.length === 0){
+    list.innerHTML = `<div class="empty-state"><div class="big-icon">📨</div><h3>Aucun contact pour le moment</h3><p>Les personnes intéressées par vos annonces apparaîtront ici.</p></div>`;
+    return;
+  }
+  list.innerHTML = proData.leads.map(l => `
+    <div class="lead-card">
+      <div class="lead-avatar">${l.initial}</div>
+      <div class="lead-info">
+        <div class="lead-name">${l.name}</div>
+        <div class="lead-msg">${l.msg}</div>
+        <div class="lead-date">📌 ${l.annonce} · ${l.date}</div>
+      </div>
+      <div class="lead-actions">
+        <button>✉️ Répondre</button>
+        <button>📞 Appeler</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderPlans() {
+  const current = proData.agency.plan;
+  const plans = ['starter','pro','premium'];
+  const labels = {starter:'Starter',pro:'Pro',premium:'Premium'};
+  plans.forEach(p => {
+    const card = document.getElementById(`plan-${p}`);
+    const btn = card.querySelector('.btn-plan');
+    if(p === current) {
+      card.classList.add('current');
+      btn.textContent = '✅ Mon forfait actuel';
+      btn.className = 'btn-plan';
+    } else {
+      card.classList.remove('current');
+      btn.textContent = p==='pro'?'Choisir Pro':p==='premium'?'Choisir Premium':'Choisir Starter';
+      btn.className = `btn-plan ${p==='pro'?'btn-primary':'btn-outline'}`;
+    }
+  });
+  document.getElementById('currentPlanDisplay').textContent = `Plan ${labels[current]}`;
+  const d = new Date();
+  d.setMonth(d.getMonth()+1);
+  document.getElementById('nextRenewal').textContent = `01/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
+}
+
+function selectPlan(plan) {
+  if(plan === proData.agency.plan) {
+    alert('Vous êtes déjà sur ce forfait.');
+    return;
+  }
+  const labels = {starter:'Starter (49€/mois)',pro:'Pro (99€/mois)',premium:'Premium (199€/mois)'};
+  if(confirm(`Passer au forfait ${labels[plan]} ?`)){
+    savePlan(plan);
+    alert(`✅ Vous êtes maintenant sur le forfait ${labels[plan]} !`);
+  }
+}
+
+// ========== NAVIGATION ==========
+function switchSection(section) {
+  currentSection = section;
+  document.querySelectorAll('.pro-section').forEach(s => s.classList.remove('active'));
+  document.getElementById(`sec-${section}`).classList.add('active');
+  document.querySelectorAll('.pro-sidenav button').forEach(b => b.classList.toggle('active', b.dataset.section===section));
+}
+
+function addEventListeners() {
+  document.getElementById('menuToggle').addEventListener('click', () => {
+    document.getElementById('headerLinks').classList.toggle('open');
+  });
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>

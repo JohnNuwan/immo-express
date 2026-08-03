@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notation Immobilière — Immo-Express</title>
+  <link rel="icon" href="assets/icon-192.svg" type="image/svg+xml">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--white:#fff;--bg:#f3f4f6;--bg-card:#fff;--border:#e5e7eb;--border-hover:#d1d5db;--text:#111827;--text-secondary:#6b7280;--text-tertiary:#9ca3af;--blue:#2563eb;--blue-light:#eff6ff;--blue-dark:#1d4ed8;--green:#059669;--green-light:#ecfdf5;--orange:#d97706;--orange-light:#fef3c7;--red:#dc2626;--red-light:#fef2f2;--purple:#7c3aed;--purple-light:#f5f3ff;--teal:#0d9488;--teal-light:#f0fdfa;--shadow-sm:0 1px 2px rgba(0,0,0,0.05);--shadow:0 1px 3px rgba(0,0,0,0.1),0 1px 2px rgba(0,0,0,0.06);--shadow-md:0 4px 6px rgba(0,0,0,0.07),0 2px 4px rgba(0,0,0,0.06);--shadow-lg:0 10px 25px rgba(0,0,0,0.1);--radius-sm:6px;--radius:8px;--radius-lg:12px;--font:'Inter',-apple-system,BlinkMacSystemFont,sans-serif}
+    body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.5;min-height:100vh}
+
+    /* HEADER */
+    .header{background:var(--white);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+    .header-inner{max-width:1200px;margin:0 auto;padding:0 20px;height:64px;display:flex;align-items:center;justify-content:space-between}
+    .logo{font-size:1.35rem;font-weight:800;color:var(--text);display:flex;align-items:center;gap:8px;cursor:pointer}
+    .logo-icon{width:32px;height:32px;background:var(--blue);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;color:white;font-size:1rem;font-weight:700}
+    .logo span{color:var(--blue)}
+    .header-links{display:flex;align-items:center;gap:4px}
+    .header-links a{padding:8px 16px;border-radius:var(--radius);font-size:0.875rem;font-weight:500;color:var(--text-secondary);transition:all 0.15s;text-decoration:none}
+    .header-links a:hover{background:var(--bg);color:var(--text);text-decoration:none}
+    .header-links a.active{color:var(--blue);background:var(--blue-light)}
+    .mobile-toggle{display:none;background:none;border:none;font-size:1.5rem;cursor:pointer;padding:4px;color:var(--text)}
+
+    /* HERO */
+    .hero-score{background:linear-gradient(135deg,var(--blue) 0%,#1e40af 100%);padding:40px 20px;text-align:center}
+    .hero-score h1{font-size:1.8rem;font-weight:700;color:white;margin-bottom:6px}
+    .hero-score p{color:rgba(255,255,255,0.85);font-size:0.95rem;margin-bottom:24px;max-width:600px;margin-left:auto;margin-right:auto}
+
+    /* MODE TOGGLE */
+    .mode-toggle{display:flex;gap:8px;justify-content:center;margin-bottom:24px;flex-wrap:wrap}
+    .mode-btn{padding:12px 28px;border:2px solid rgba(255,255,255,0.3);border-radius:50px;background:transparent;color:rgba(255,255,255,0.8);font-size:0.9rem;font-weight:500;cursor:pointer;font-family:var(--font);transition:all 0.2s}
+    .mode-btn:hover{background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.5)}
+    .mode-btn.active{background:white;color:var(--blue);border-color:white;font-weight:600}
+
+    /* MAIN */
+    .scoring-main{max-width:1200px;margin:0 auto;padding:24px 20px}
+
+    /* FORM */
+    .scoring-form{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px;margin-bottom:24px;display:none}
+    .scoring-form.active{display:block}
+    .scoring-form h2{font-size:1.1rem;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+    .scoring-form h2 .icon{font-size:1.3rem}
+    .form-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-bottom:20px}
+    .form-group{display:flex;flex-direction:column;gap:4px}
+    .form-group label{font-size:0.8rem;font-weight:500;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.3px}
+    .form-group input,.form-group select{width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:0.85rem;font-family:var(--font);background:var(--white);color:var(--text);outline:none;transition:border-color 0.15s}
+    .form-group input:focus,.form-group select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,99,235,0.1)}
+    .form-group .helper{font-size:0.7rem;color:var(--text-tertiary)}
+    .form-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px}
+    .form-actions{display:flex;gap:12px;justify-content:flex-end;padding-top:16px;border-top:1px solid var(--border)}
+    .btn-primary{padding:12px 32px;background:var(--blue);color:white;border:none;border-radius:var(--radius);font-weight:600;font-size:0.9rem;cursor:pointer;font-family:var(--font);transition:background 0.15s}
+    .btn-primary:hover{background:var(--blue-dark)}
+    .btn-secondary{padding:12px 32px;background:var(--white);color:var(--text-secondary);border:1px solid var(--border);border-radius:var(--radius);font-weight:500;font-size:0.9rem;cursor:pointer;font-family:var(--font);transition:all 0.15s}
+    .btn-secondary:hover{background:var(--bg);border-color:var(--border-hover)}
+    .btn-success{padding:12px 32px;background:var(--green);color:white;border:none;border-radius:var(--radius);font-weight:600;font-size:0.9rem;cursor:pointer;font-family:var(--font);transition:background 0.15s}
+    .btn-success:hover{background:#047857}
+
+    /* RESULTS */
+    .score-results{display:none}
+    .score-results.active{display:block}
+
+    /* SCORE HERO CARD */
+    .score-hero-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:32px;margin-bottom:24px;display:grid;grid-template-columns:auto 1fr;gap:32px;align-items:center}
+    @media(max-width:700px){.score-hero-card{grid-template-columns:1fr;text-align:center}}
+    .score-circle{width:160px;height:160px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;flex-shrink:0;margin:0 auto}
+    .score-circle canvas{position:absolute;top:0;left:0;width:160px;height:160px}
+    .score-circle .score-value{font-size:2.6rem;font-weight:800;z-index:1;color:var(--text)}
+    .score-circle .score-label{font-size:0.7rem;color:var(--text-secondary);z-index:1;font-weight:500;text-transform:uppercase;letter-spacing:0.5px}
+    .score-hero-info h2{font-size:1.3rem;font-weight:600;margin-bottom:4px}
+    .score-hero-info .location{font-size:0.9rem;color:var(--text-secondary);margin-bottom:8px}
+    .score-hero-info .price{font-size:1.5rem;font-weight:700;color:var(--blue);margin-bottom:6px}
+    .score-hero-info .verdict{font-size:0.9rem;padding:8px 16px;border-radius:var(--radius);font-weight:500;display:inline-block}
+    .verdict-excellent{background:var(--green-light);color:var(--green)}
+    .verdict-good{background:var(--teal-light);color:var(--teal)}
+    .verdict-average{background:var(--orange-light);color:var(--orange)}
+    .verdict-poor{background:var(--red-light);color:var(--red)}
+
+    /* SCORE GRID */
+    .score-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px;margin-bottom:24px}
+    .score-item{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px}
+    .score-item-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+    .score-item-header .label{font-size:0.9rem;font-weight:600;display:flex;align-items:center;gap:8px}
+    .score-item-header .label .emoji{font-size:1.2rem}
+    .score-item-header .value{font-size:1.2rem;font-weight:700}
+    .score-bar{height:8px;background:var(--bg);border-radius:4px;overflow:hidden;margin-bottom:8px}
+    .score-bar-fill{height:100%;border-radius:4px;transition:width 1s ease}
+    .score-detail{font-size:0.8rem;color:var(--text-secondary);display:flex;justify-content:space-between}
+    .score-detail .detail-label{color:var(--text-tertiary)}
+    .score-detail .detail-value{font-weight:500}
+
+    /* RADAR CHART */
+    .radar-section{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px;margin-bottom:24px}
+    .radar-section h3{font-size:1rem;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+    .radar-container{max-width:500px;margin:0 auto;position:relative}
+
+    /* BREAKDOWN TABLE */
+    .breakdown-table-wrap{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px;margin-bottom:24px;overflow-x:auto}
+    .breakdown-table-wrap h3{font-size:1rem;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+    table.score-table{width:100%;border-collapse:collapse;font-size:0.85rem}
+    table.score-table th{text-align:left;padding:10px 12px;background:var(--bg);font-weight:500;color:var(--text-secondary);font-size:0.8rem;text-transform:uppercase;letter-spacing:0.3px;border-bottom:1px solid var(--border)}
+    table.score-table td{padding:10px 12px;border-bottom:1px solid var(--border)}
+    table.score-table tr:last-child td{border-bottom:none}
+    table.score-table tr:hover td{background:var(--bg)}
+    table.score-table .td-score{font-weight:700;text-align:center}
+    table.score-table .td-weight{color:var(--text-secondary);text-align:center}
+    .mini-bar{display:inline-block;height:6px;width:60px;background:var(--bg);border-radius:3px;vertical-align:middle;margin-right:8px}
+    .mini-bar-fill{height:100%;border-radius:3px;display:block}
+
+    /* SELECTED LISTING */
+    .selected-listing{background:var(--blue-light);border:1px solid var(--blue);border-radius:var(--radius-lg);padding:16px 20px;margin-bottom:20px;display:none;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+    .selected-listing.show{display:flex}
+    .selected-listing-info{display:flex;align-items:center;gap:12px}
+    .selected-listing-info .emoji-big{font-size:2rem}
+    .selected-listing-info .title{font-weight:600;font-size:0.95rem}
+    .selected-listing-info .sub{font-size:0.8rem;color:var(--text-secondary)}
+    .selected-listing .btn-remove{background:none;border:none;color:var(--red);cursor:pointer;font-size:0.85rem;font-weight:500;padding:6px 12px;border-radius:var(--radius-sm)}
+    .selected-listing .btn-remove:hover{background:var(--red-light)}
+
+    /* EXISTING LISTINGS BROWSER */
+    .listing-browser{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;margin-bottom:24px;display:none}
+    .listing-browser.active{display:block}
+    .listing-browser h3{font-size:1rem;font-weight:600;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+    .lb-search{display:flex;gap:8px;margin-bottom:16px}
+    .lb-search input{flex:1;padding:10px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:0.85rem;font-family:var(--font);outline:none}
+    .lb-search input:focus{border-color:var(--blue)}
+    .lb-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;max-height:400px;overflow-y:auto}
+    .lb-card{display:flex;align-items:center;gap:12px;padding:12px;border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;transition:all 0.15s}
+    .lb-card:hover{border-color:var(--blue);background:var(--blue-light)}
+    .lb-card .emoji{font-size:1.8rem;width:48px;text-align:center}
+    .lb-card .info{flex:1;min-width:0}
+    .lb-card .info .title{font-size:0.85rem;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .lb-card .info .sub{font-size:0.75rem;color:var(--text-secondary)}
+    .lb-card .btn-analyze{padding:6px 16px;background:var(--blue);color:white;border:none;border-radius:var(--radius-sm);font-size:0.8rem;font-weight:500;cursor:pointer;font-family:var(--font);transition:background 0.15s}
+    .lb-card .btn-analyze:hover{background:var(--blue-dark)}
+
+    /* COMPARE */
+    .compare-section{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px;margin-bottom:24px;display:none}
+    .compare-section.active{display:block}
+    .compare-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+    .compare-card{border:1px solid var(--border);border-radius:var(--radius);padding:16px;position:relative}
+    .compare-card .c-score{font-size:1.4rem;font-weight:700;margin-bottom:4px}
+    .compare-card .c-title{font-size:0.85rem;font-weight:500;margin-bottom:2px}
+    .compare-card .c-sub{font-size:0.75rem;color:var(--text-secondary)}
+    .compare-card .c-bar{margin-top:8px}
+
+    /* TIPS */
+    .tips-section{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px;margin-bottom:24px;display:none}
+    .tips-section.active{display:block}
+    .tips-section h3{font-size:1rem;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+    .tips-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
+    .tip-item{padding:14px;background:var(--bg);border-radius:var(--radius);font-size:0.85rem}
+    .tip-item .tip-icon{font-size:1.2rem;margin-right:8px}
+    .tip-item .tip-title{font-weight:600;margin-bottom:4px}
+    .tip-item .tip-desc{color:var(--text-secondary);font-size:0.8rem}
+
+    /* LOADING */
+    .loading-spinner{display:none;text-align:center;padding:40px}
+    .loading-spinner.active{display:block}
+    .spinner{width:40px;height:40px;border:4px solid var(--border);border-top-color:var(--blue);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 12px}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .loading-spinner p{color:var(--text-secondary);font-size:0.85rem}
+
+    /* RESPONSIVE */
+    @media(max-width:900px){
+      .header-links a{font-size:0.8rem;padding:6px 10px}
+      .score-grid{grid-template-columns:1fr}
+    }
+    @media(max-width:640px){
+      .mobile-toggle{display:block}
+      .header-links{display:none;position:absolute;top:64px;left:0;right:0;background:var(--white);border-bottom:1px solid var(--border);flex-direction:column;padding:12px;box-shadow:var(--shadow-md)}
+      .header-links.open{display:flex}
+      .header-links a{padding:12px 16px;width:100%}
+      .hero-score h1{font-size:1.3rem}
+      .score-hero-card{padding:20px}
+      .score-circle{width:120px;height:120px}
+      .score-circle .score-value{font-size:2rem}
+      .form-grid{grid-template-columns:1fr}
+      .form-row{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-inner">
+    <div class="logo" onclick="location.href='index.html'"><div class="logo-icon">iE</div>Immo<span>Express</span></div>
+    <button class="mobile-toggle" id="menuToggle">☰</button>
+    <div class="header-links" id="headerLinks">
+      <a href="index.html">Accueil</a>
+      <a href="scoring.html" class="active">🔬 Notation</a>
+      <a href="location.html">📍 Location</a>
+      <a href="pro.html">🏢 Espace Pro</a>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero-score">
+  <h1>🔬 Notation Immobilière Intelligente</h1>
+  <p>Analyse multi-critères de vos biens immobiliers : prix, rendement, risques, projets urbains, loyers, DPE, transports…</p>
+  <div class="mode-toggle">
+    <button class="mode-btn active" onclick="switchMode('manual')">📝 Saisie manuelle</button>
+    <button class="mode-btn" onclick="switchMode('existing')">🏠 Depuis une annonce</button>
+  </div>
+</section>
+
+<!-- MAIN -->
+<div class="scoring-main">
+
+  <!-- Existing listings browser -->
+  <div class="listing-browser" id="listingBrowser">
+    <h3>🏠 Sélectionner une annonce existante</h3>
+    <div class="lb-search">
+      <input type="text" id="lbSearchInput" placeholder="Rechercher par ville, type, prix…" oninput="filterListings()">
+    </div>
+    <div class="lb-grid" id="lbGrid"></div>
+  </div>
+
+  <!-- Selected listing bar -->
+  <div class="selected-listing" id="selectedListing">
+    <div class="selected-listing-info">
+      <span class="emoji-big" id="selEmoji">🏙️</span>
+      <div>
+        <div class="title" id="selTitle"></div>
+        <div class="sub" id="selSub"></div>
+      </div>
+    </div>
+    <button class="btn-remove" onclick="clearSelected()">✕ Changer</button>
+  </div>
+
+  <!-- Manual form -->
+  <div class="scoring-form active" id="manualForm">
+    <h2><span class="icon">📝</span> Décrivez le bien à évaluer</h2>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Adresse / Ville *</label>
+        <input type="text" id="fCity" placeholder="Paris 11e, Lyon 6e…" value="Paris 11e">
+        <span class="helper">Ex: Paris 11e, Lyon 6e, Marseille Corniche</span>
+      </div>
+      <div class="form-group">
+        <label>Type de bien *</label>
+        <select id="fType">
+          <option value="appartement">Appartement</option>
+          <option value="maison">Maison</option>
+          <option value="villa">Villa</option>
+          <option value="studio">Studio</option>
+          <option value="local">Local commercial</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Catégorie *</label>
+        <select id="fCat">
+          <option value="vente">Achat (vente)</option>
+          <option value="location">Location</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Prix *</label>
+        <input type="number" id="fPrice" placeholder="250000" value="425000">
+        <span class="helper">€ — prix de vente ou loyer mensuel</span>
+      </div>
+      <div class="form-group">
+        <label>Surface (m²) *</label>
+        <input type="number" id="fSurface" placeholder="75" value="75">
+      </div>
+      <div class="form-group">
+        <label>Nombre de pièces</label>
+        <select id="fPieces">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3" selected>3</option>
+          <option value="4">4</option>
+          <option value="5">5+</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>État</label>
+        <select id="fCondition">
+          <option value="neuf">Neuf</option>
+          <option value="bon">Bon état</option>
+          <option value="travaux">À rafraîchir</option>
+          <option value="renover">À rénover</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>DPE (diagnostic énergétique)</label>
+        <select id="fDPE">
+          <option value="">Non connu</option>
+          <option value="A">A</option>
+          <option value="B">B</option>
+          <option value="C">C</option>
+          <option value="D">D</option>
+          <option value="E">E</option>
+          <option value="F">F</option>
+          <option value="G">G</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Étage</label>
+        <input type="number" id="fEtage" placeholder="0" value="4">
+      </div>
+      <div class="form-group">
+        <label>Équipements</label>
+        <select id="fEquip">
+          <option value="aucun">Aucun</option>
+          <option value="basique">Basique</option>
+          <option value="moyen">Moyen</option>
+          <option value="haut">Haut de gamme</option>
+          <option value="luxe">Luxe</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Transports</label>
+        <select id="fTransports">
+          <option value="excellent">Excellent (métro/train à 5min)</option>
+          <option value="bon">Bon (bus/tram à 10min)</option>
+          <option value="moyen">Moyen (bus à 15min)</option>
+          <option value="faible">Faible (voiture nécessaire)</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-actions">
+      <button class="btn-primary" onclick="analyzeManual()">🔬 Analyser le bien</button>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div class="loading-spinner" id="loadingSpinner">
+    <div class="spinner"></div>
+    <p>Analyse en cours — calcul des scores…</p>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="score-results" id="scoreResults">
+
+    <!-- Score Hero -->
+    <div class="score-hero-card">
+      <div class="score-circle" id="scoreCircle">
+        <canvas id="scoreCanvas" width="160" height="160"></canvas>
+        <span class="score-value" id="scoreFinalValue">—</span>
+        <span class="score-label">/100</span>
+      </div>
+      <div class="score-hero-info">
+        <h2 id="resultTitle">Bien immobilier</h2>
+        <div class="location" id="resultLocation">📍 </div>
+        <div class="price" id="resultPrice"></div>
+        <div class="verdict" id="resultVerdict"></div>
+      </div>
+    </div>
+
+    <!-- Radar Chart -->
+    <div class="radar-section">
+      <h3>📊 Vue d'ensemble — Radar des critères</h3>
+      <div class="radar-container">
+        <canvas id="radarCanvas" width="500" height="420"></canvas>
+      </div>
+    </div>
+
+    <!-- Score Grid -->
+    <div class="score-grid" id="scoreGrid"></div>
+
+    <!-- Breakdown Table -->
+    <div class="breakdown-table-wrap">
+      <h3>📋 Détail de la notation</h3>
+      <table class="score-table">
+        <thead>
+          <tr><th>Critère</th><th>Note</th><th>Coefficient</th><th>Pondéré</th><th>Détail</th></tr>
+        </thead>
+        <tbody id="scoreTableBody"></tbody>
+        <tfoot id="scoreTableFoot"></tfoot>
+      </table>
+    </div>
+
+    <!-- Tips -->
+    <div class="tips-section active" id="tipsSection">
+      <h3>💡 Recommandations & Axes d'amélioration</h3>
+      <div class="tips-grid" id="tipsGrid"></div>
+    </div>
+
+    <!-- Compare -->
+    <div class="compare-section" id="compareSection">
+      <h3>📈 Comparer avec d'autres biens</h3>
+      <div class="compare-grid" id="compareGrid"></div>
+    </div>
+
+    <div style="display:flex;gap:12px;justify-content:center;margin-bottom:24px;flex-wrap:wrap">
+      <button class="btn-primary" onclick="window.print()">🖨️ Imprimer le rapport</button>
+      <button class="btn-secondary" onclick="scrollTo(0,0)">⬆️ Nouvelle analyse</button>
+      <button class="btn-secondary" onclick="saveScore()">💾 Sauvegarder</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ========== MARKET DATA — DONNÉES DE RÉFÉRENCE POUR LA FRANCE ==========
+const marketData = {
+  'paris 11e':   {avgPrice:10500, avgRent:28, risk:3, transport:95, projets:['Nouvelle ligne métro 11 prolongée','ZAC Paris Est','Végétalisation rues']},
+  'paris 16e':   {avgPrice:14000, avgRent:30, risk:2, transport:92, projets:['Rénovation Trocadéro','Jardin climato-résilient']},
+  'paris 6e':    {avgPrice:15000, avgRent:32, risk:2, transport:96, projets:['Piétonnisation quais Seine']},
+  'lyon 6e':     {avgPrice:6400,  avgRent:22, risk:3, transport:88, projets:['Métro E','Confluence']},
+  'lyon 3e':     {avgPrice:5500,  avgRent:20, risk:4, transport:87, projets:['Pôle multimodal','Rénovation Part-Dieu']},
+  'marseille corniche':{avgPrice:5800,avgRent:18,risk:2,transport:72, projets:['Rénovation Vieux-Port','Euroméditerranée']},
+  'marseille':   {avgPrice:4200,  avgRent:16, risk:5, transport:70, projets:['Euroméditerranée','Nouveau stade']},
+  'bordeaux':    {avgPrice:5800,  avgRent:22, risk:6, transport:85, projets:['LGV Bordeaux-Toulouse','Pont Simone Veil']},
+  'bordeaux centre':{avgPrice:6200,avgRent:24,risk:6,transport:88,projets:['Tram extension','Piétonnisation centre']},
+  'toulouse':    {avgPrice:4200,  avgRent:18, risk:5, transport:82, projets:['Ligne C métro','Aéroport']},
+  'toulouse ramonville':{avgPrice:3900,avgRent:17,risk:4,transport:80,projets:['Métro Ligne B extension']},
+  'cannes':      {avgPrice:9500,  avgRent:28, risk:1, transport:72, projets:['Palais des Festivals rénovation']},
+  'nice':        {avgPrice:5500,  avgRent:22, risk:4, transport:78, projets:['Tram Ouest-Est','Grand Arénas']},
+  'aix en provence':{avgPrice:5200,avgRent:20,risk:3,transport:70,projets:['Parc d\'activités','Métro?']},
+  'aix-en-provence':{avgPrice:5200,avgRent:20,risk:3,transport:70,projets:['Parc d\'activités']},
+  'rennes':      {avgPrice:4400,  avgRent:19, risk:4, transport:80, projets:['Ligne B métro','ZAC Atalante']},
+  'strasbourg':  {avgPrice:4300,  avgRent:20, risk:7, transport:85, projets:['Tram extension','Pont de l\'Europe']},
+  'strasbourg orangerie':{avgPrice:4800,avgRent:22,risk:7,transport:87,projets:['Parc Orangerie rénovation']},
+  'montpellier': {avgPrice:3800,  avgRent:18, risk:6, transport:82, projets:['Ligne 5 tram','ZAC ODE']},
+  'montpellier antigone':{avgPrice:4000,avgRent:19,risk:6,transport:84,projets:['Tram']},
+  'nantes':      {avgPrice:4000,  avgRent:19, risk:6, transport:80, projets:['Ligne C tram','Île de Nantes']},
+  'lille':       {avgPrice:3500,  avgRent:17, risk:6, transport:88, projets:['Métro extension','Euralille']},
+  'grenoble':    {avgPrice:3200,  avgRent:16, risk:4, transport:78, projets:['Tram','Écoquartier']},
+  'gordes':      {avgPrice:6500,  avgRent:22, risk:2, transport:30, projets:['Rénovation centre historique']},
+  'luberon':     {avgPrice:5500,  avgRent:20, risk:2, transport:25, projets:['Protection parc naturel']},
+  'saint etienne':{avgPrice:1800, avgRent:12, risk:3, transport:60, projets:['Rénovation centre','Cité du design']},
+};
+
+function findMarket(city) {
+  const q = city.trim().toLowerCase();
+  if(marketData[q]) return marketData[q];
+  // fuzzy match
+  for(const k in marketData){
+    if(q.includes(k) || k.includes(q)) return marketData[k];
+  }
+  // generic default
+  return {avgPrice:2500, avgRent:14, risk:5, transport:50, projets:['Non renseigné']};
+}
+
+// Risk labels
+const riskLabels = {1:'Très faible',2:'Faible',3:'Modéré',4:'Moyen',5:'Élevé',6:'Fort',7:'Très fort'};
+const riskColors = {1:['#059669','#ecfdf5'],2:['#0d9488','#f0fdfa'],3:['#d97706','#fef3c7'],4:['#ea580c','#fff7ed'],5:['#dc2626','#fef2f2'],6:['#b91c1c','#fef2f2'],7:['#991b1b','#fef2f2']};
+
+// ========== SCORING ENGINE ==========
+function computeScore(input) {
+  const {city, type, cat, price, surface, pieces, condition, dpe, etage, equip, transports} = input;
+  const market = findMarket(city);
+  const pricePerM2 = surface > 0 ? price / surface : 0;
+
+  // 1. PRIX DE MARCHÉ (25%)
+  let prixScore = 50;
+  if(market.avgPrice > 0){
+    const ratio = pricePerM2 / market.avgPrice;
+    if(cat === 'vente'){
+      if(ratio <= 0.7) prixScore = 95;
+      else if(ratio <= 0.85) prixScore = 85;
+      else if(ratio <= 0.95) prixScore = 75;
+      else if(ratio <= 1.05) prixScore = 65; // au juste prix
+      else if(ratio <= 1.15) prixScore = 50;
+      else if(ratio <= 1.30) prixScore = 35;
+      else if(ratio <= 1.50) prixScore = 20;
+      else prixScore = 10;
+    } else {
+      // location
+      if(ratio <= 0.7) prixScore = 80;
+      else if(ratio <= 0.85) prixScore = 70;
+      else if(ratio <= 1.0) prixScore = 60;
+      else if(ratio <= 1.15) prixScore = 45;
+      else if(ratio <= 1.30) prixScore = 30;
+      else prixScore = 15;
+    }
+  }
+  const prixDetail = `${pricePerM2.toFixed(0)} €/m² vs marché ${market.avgPrice} €/m² (${((pricePerM2/market.avgPrice-1)*100).toFixed(1)}%)`;
+
+  // 2. RENDEMENT LOCATIF (20%)
+  let rendementScore = 0;
+  let rendementDetail = '';
+  if(cat === 'vente'){
+    const estLoyer = surface * market.avgRent;
+    const annualRent = estLoyer * 12;
+    const grossYield = price > 0 ? (annualRent / price) * 100 : 0;
+    if(grossYield >= 8) rendementScore = 95;
+    else if(grossYield >= 6) rendementScore = 85;
+    else if(grossYield >= 5) rendementScore = 75;
+    else if(grossYield >= 4) rendementScore = 65;
+    else if(grossYield >= 3.5) rendementScore = 55;
+    else if(grossYield >= 3) rendementScore = 45;
+    else if(grossYield >= 2.5) rendementScore = 35;
+    else if(grossYield >= 2) rendementScore = 25;
+    else rendementScore = 15;
+    rendementDetail = `Estimation loyer: ${estLoyer.toFixed(0)} €/mois → rendement brut ${grossYield.toFixed(1)}%`;
+  } else {
+    // location: compare prix du loyer au marché
+    const expectedRent = surface * market.avgRent;
+    const ratio = price / expectedRent;
+    if(ratio <= 0.7) rendementScore = 85;
+    else if(ratio <= 0.85) rendementScore = 75;
+    else if(ratio <= 1.0) rendementScore = 65;
+    else if(ratio <= 1.15) rendementScore = 50;
+    else if(ratio <= 1.3) rendementScore = 35;
+    else rendementScore = 20;
+    rendementDetail = `Loyer actuel ${price} € vs marché ${expectedRent.toFixed(0)} € (${((price/expectedRent-1)*100).toFixed(1)}%)`;
+  }
+
+  // 3. LOCALISATION & TRANSPORTS (15%)
+  const transportScore = {excellent:92, bon:78, moyen:55, faible:25};
+  let locScore = transportScore[transports] || 55;
+  locScore = Math.min(100, locScore + (market.transport > 80 ? 8 : market.transport > 60 ? 4 : 0));
+  const locDetail = `Transport: ${transports} · Ville notée ${market.transport}/100`;
+
+  // 4. RISQUES INONDATION (10%)
+  const risk = market.risk || 5;
+  const floodScore = Math.max(5, 100 - (risk * 14));
+  const floodDetail = `Risque: ${riskLabels[risk]} (niveau ${risk}/7)`;
+
+  // 5. PROJETS URBAINS (10%)
+  const projets = market.projets || [];
+  const projCount = projets.length;
+  const projScore = Math.min(95, 40 + projCount * 20 + (projCount > 2 ? 10 : 0));
+  const projDetail = projets.length > 0 ? projets.slice(0,3).join(' · ') : 'Aucun projet majeur identifié';
+
+  // 6. DPE & ÉNERGIE (10%)
+  const dpeScores = {'':40, 'G':10, 'F':20, 'E':35, 'D':50, 'C':65, 'B':80, 'A':95};
+  let dpeScore = dpeScores[dpe] || 40;
+  // bonus pour condition
+  if(condition === 'neuf') dpeScore = Math.max(dpeScore, 70);
+  if(condition === 'renover') dpeScore = Math.min(dpeScore, 30);
+  const dpeDetail = `DPE: ${dpe || 'Non connu'} · État: ${condition}`;
+
+  // 7. QUARTIER & COMMODITÉS (5%)
+  const equipScores = {aucun:20, basique:40, moyen:60, haut:80, luxe:95};
+  let quartierScore = equipScores[equip] || 40;
+  if(market.transport > 80) quartierScore += 10;
+  if(etage > 1 && type !== 'maison') quartierScore += 5;
+  quartierScore = Math.min(100, quartierScore);
+  const quartierDetail = `Équipements: ${equip} · Ville dynamique: ${market.transport > 70 ? 'Oui' : 'Moyen'}`;
+
+  // 8. POTENTIEL PLUS-VALUE (5%)
+  let plusvalScore = 50;
+  if(cat === 'vente'){
+    // neighbourhood, projects, condition
+    if(projCount >= 2) plusvalScore += 15;
+    if(condition === 'renover' || condition === 'travaux') plusvalScore += 15; // marge de rénovation
+    if(market.transport > 75) plusvalScore += 5;
+    if(type === 'villa' || type === 'maison') plusvalScore += 5;
+    if(equip === 'luxe') plusvalScore -= 10; // déjà valorisé
+  } else {
+    plusvalScore = 40; // pas de plus-value en location
+  }
+  plusvalScore = Math.max(5, Math.min(98, plusvalScore));
+  const plusvalDetail = `Projets urbains: ${projCount} · État: ${condition}${condition==='renover'?' (potentiel rénovation)':''}`;
+
+  // WEIGHTS
+  const weights = {
+    prix: 25,
+    rendement: 20,
+    localisation: 15,
+    risque: 10,
+    projets: 10,
+    dpe: 10,
+    quartier: 5,
+    plusvalue: 5
+  };
+
+  const raw = {
+    prix: {score: prixScore, detail: prixDetail, weight: weights.prix},
+    rendement: {score: rendementScore, detail: rendementDetail, weight: weights.rendement},
+    localisation: {score: locScore, detail: locDetail, weight: weights.localisation},
+    risque: {score: floodScore, detail: floodDetail, weight: weights.risque},
+    projets: {score: projScore, detail: projDetail, weight: weights.projets},
+    dpe: {score: dpeScore, detail: dpeDetail, weight: weights.dpe},
+    quartier: {score: quartierScore, detail: quartierDetail, weight: weights.quartier},
+    plusvalue: {score: plusvalScore, detail: plusvalDetail, weight: weights.plusvalue}
+  };
+
+  let final = 0;
+  let totalWeight = 0;
+  for(const k in raw){
+    final += raw[k].score * raw[k].weight;
+    totalWeight += raw[k].weight;
+  }
+  final = Math.round(final / totalWeight);
+
+  // Verdict
+  let verdict, verdictClass;
+  if(final >= 85){verdict='Exceptionnel — Excellent investissement'; verdictClass='verdict-excellent';}
+  else if(final >= 75){verdict='Très bon — Opportunité à saisir'; verdictClass='verdict-excellent';}
+  else if(final >= 65){verdict='Bon — Bien équilibré'; verdictClass='verdict-good';}
+  else if(final >= 55){verdict='Correct — Quelques points d\'attention'; verdictClass='verdict-average';}
+  else if(final >= 45){verdict='Moyen — À étudier avec prudence'; verdictClass='verdict-average';}
+  else if(final >= 35){verdict='Risqué — Plusieurs points faibles'; verdictClass='verdict-poor';}
+  else {verdict='Déconseillé — Investissement risqué'; verdictClass='verdict-poor';}
+
+  // Tips
+  const tips = [];
+  if(prixScore < 40) tips.push({icon:'💰', title:'Prix au-dessus du marché', desc:'Le prix au m² est supérieur à la moyenne locale. Justifiez la différence (prestations, emplacement exceptionnel) ou négociez.'});
+  else if(prixScore > 80) tips.push({icon:'🏷️', title:'Prix attractif', desc:'Le bien est en dessous du prix du marché. Vérifiez qu\'il n\'y a pas de vices cachés.'});
+  if(floodScore < 40) tips.push({icon:'🌊', title:'Zone inondable', desc:'Risque inondation élevé. Vérifiez l\'assurance et l\'historique des crues. Un diagnostic ERNMT est obligatoire.'});
+  if(dpeScore < 30) tips.push({icon:'🔋', title:'Mauvaise performance énergétique', desc:'DPE F ou G (passoire thermique). Des travaux de rénovation seront obligatoires (interdiction location progressive).'});
+  else if(dpeScore > 75) tips.push({icon:'🔋', title:'Bonne performance énergétique', desc:'DPE A ou B — un vrai plus pour la valeur du bien et l\'attractivité locative.'});
+  if(rendementScore < 40 && cat === 'vente') tips.push({icon:'📈', title:'Rendement locatif faible', desc:'Le rendement brut estimé est bas. Vérifiez si le quartier justifie un investissement en plus-value plutôt qu\'en rentabilité.'});
+  if(rendementScore > 75 && cat === 'vente') tips.push({icon:'📈', title:'Bon rendement locatif', desc:'Le rendement brut estimé est intéressant. Vérifiez la demande locative dans le secteur.'});
+  if(projCount >= 2) tips.push({icon:'🏗️', title:'Projets urbains en cours', desc:`Plusieurs projets d'aménagement identifiés : ${projets.slice(0,3).join(', ')}. Potentiel de plus-value à moyen terme.`});
+  if(locScore < 40) tips.push({icon:'🚇', title:'Transports limités', desc:'La desserte en transports en commun est faible. Vérifiez les projets d\'extension.'});
+  if(plusvalScore > 70) tips.push({icon:'📊', title:'Bon potentiel de plus-value', desc:'Plusieurs facteurs favorables : projets urbains, état à rénover, quartier en développement.'});
+  if(tips.length === 0) tips.push({icon:'✅', title:'Profil équilibré', desc:'Le bien présente un bon équilibre entre prix, qualité et potentiel.'});
+
+  return {final, raw, weights, verdict, verdictClass, tips, market, projetNames: projets, _input: input};
+}
+
+// ========== RENDERING ==========
+function renderScore(result, input) {
+  const {final, raw, verdict, verdictClass, tips, market, projetNames} = result;
+  // Compute comparables
+  const comparable = [];
+  const listings = typeof window.allListings !== 'undefined' ? window.allListings : [];
+  for(const l of listings){
+    const inp = {
+      city: l.location||'', type: l.type||'', cat: l.cat||'vente',
+      price: l.price||0, surface: l.surface||50, pieces: l.pieces||2,
+      condition: 'bon', dpe: '', etage: l.etage||0, equip: 'moyen', transports: 'bon'
+    };
+    const cResult = computeScore(inp);
+    comparable.push({title: l.title, price: l.priceLabel, score: cResult.final, id: l.id, emoji: l.emoji});
+  }
+  comparable.sort((a,b)=>b.score-a.score);
+  const comparaison = comparable.slice(0, 6);
+  const city = typeof input.city === 'string' ? input.city : (input.city || '');
+  const priceLabel = input.cat === 'vente' ? `${(input.price||0).toLocaleString('fr-FR')} €` : `${(input.price||0).toLocaleString('fr-FR')} €/mois`;
+  const typeLabel = {appartement:'Appartement',maison:'Maison',villa:'Villa',studio:'Studio',local:'Local commercial'}[input.type]||'Bien';
+
+  // Hero
+  document.getElementById('scoreFinalValue').textContent = final;
+  document.getElementById('resultTitle').textContent = `${typeLabel} — ${city}`;
+  document.getElementById('resultLocation').textContent = `📍 ${city} · ${input.surface} m² · ${input.pieces} pièce(s)`;
+  document.getElementById('resultPrice').textContent = priceLabel;
+  const verdictEl = document.getElementById('resultVerdict');
+  verdictEl.textContent = verdict;
+  verdictEl.className = `verdict ${verdictClass}`;
+  document.getElementById('scoreResults').classList.add('active');
+  document.getElementById('loadingSpinner').classList.remove('active');
+
+  // Draw score circle
+  drawScoreCircle(final);
+
+  // Radar
+  drawRadar(raw);
+
+  // Score grid
+  const grid = document.getElementById('scoreGrid');
+  grid.innerHTML = '';
+  const labels = {
+    prix:'💰 Prix de marché',rendement:'📈 Rendement locatif',localisation:'📍 Localisation & Transports',
+    risque:'🌊 Risques inondation',projets:'🏗️ Projets urbains',dpe:'🔋 DPE & Énergie',
+    quartier:'🏘️ Quartier & Commodités',plusvalue:'📊 Potentiel plus-value'
+  };
+  const emojis = {prix:'💰',rendement:'📈',localisation:'📍',risque:'🌊',projets:'🏗️',dpe:'🔋',quartier:'🏘️',plusvalue:'📊'};
+  const colors = [
+    '#2563eb','#059669','#7c3aed','#dc2626','#d97706','#0d9488','#8b5cf6','#e11d48'
+  ];
+  let i=0;
+  for(const k in raw){
+    const item = document.createElement('div');
+    item.className = 'score-item';
+    const score = Math.round(raw[k].score);
+    const color = score >= 75 ? '#059669' : score >= 55 ? '#d97706' : '#dc2626';
+    item.innerHTML = `
+      <div class="score-item-header">
+        <div class="label"><span class="emoji">${emojis[k]}</span> ${labels[k]}</div>
+        <div class="value" style="color:${color}">${score}<span style="font-size:0.7rem;color:var(--text-tertiary)">/100</span></div>
+      </div>
+      <div class="score-bar"><div class="score-bar-fill" style="width:${score}%;background:${color}"></div></div>
+      <div class="score-detail"><span class="detail-label">Pondération ${raw[k].weight}%</span><span class="detail-value">${raw[k].detail}</span></div>
+    `;
+    grid.appendChild(item);
+    i++;
+  }
+
+  // Table
+  const tbody = document.getElementById('scoreTableBody');
+  tbody.innerHTML = '';
+  let totalWeighted = 0;
+  for(const k in raw){
+    const r = raw[k];
+    const weighted = Math.round(r.score * r.weight / 100);
+    totalWeighted += weighted;
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><strong>${emojis[k]} ${labels[k]}</strong></td>
+      <td class="td-score" style="color:${r.score>=75?'#059669':r.score>=55?'#d97706':'#dc2626'}">${Math.round(r.score)}</td>
+      <td class="td-weight">${r.weight}%</td>
+      <td class="td-score" style="color:${weighted>=15?'#059669':weighted>=10?'#d97706':'#dc2626'}">${weighted}</td>
+      <td style="font-size:0.8rem;color:var(--text-secondary);max-width:250px">${r.detail}</td>
+    `;
+    tbody.appendChild(tr);
+  }
+  const tfoot = document.getElementById('scoreTableFoot');
+  if(!tfoot) return;
+  tfoot.innerHTML = `<tr style="background:var(--bg);font-weight:600"><td>TOTAL</td><td class="td-score">—</td><td class="td-weight">100%</td><td class="td-score" style="color:${final>=75?'#059669':final>=55?'#d97706':'#dc2626'};font-size:1.1rem">${Math.round(totalWeighted)}</td><td>Note finale : ${final}/100 — ${verdict}</td></tr>`;
+
+  // Tips
+  const tipsGrid = document.getElementById('tipsGrid');
+  tipsGrid.innerHTML = '';
+  document.getElementById('tipsSection').classList.add('active');
+  if(tips.length === 0){
+    tipsGrid.innerHTML = '<div class="tip-item"><div class="tip-icon">✅</div><div class="tip-title">Profil équilibré</div><div class="tip-desc">Le bien présente un bon équilibre entre prix, qualité et potentiel.</div></div>';
+  } else {
+    for(const t of tips){
+      const div = document.createElement('div');
+      div.className = 'tip-item';
+      div.innerHTML = `<div><span style="font-size:1.2rem;margin-right:8px">${t.icon}</span><span class="tip-title">${t.title}</span></div><div class="tip-desc">${t.desc}</div>`;
+      tipsGrid.appendChild(div);
+    }
+  }
+
+  // Comparaison
+  const compSection = document.getElementById('compareSection');
+  const compGrid = document.getElementById('compareGrid');
+  compGrid.innerHTML = '';
+  if(comparaison && comparaison.length > 0){
+    compSection.classList.add('active');
+    const myCard = document.createElement('div');
+    myCard.className = 'compare-card';
+    myCard.style.border = '2px solid var(--blue)';
+    myCard.innerHTML = `<div class="c-score" style="color:var(--blue)">${final}<span style="font-size:0.8rem;color:var(--text-tertiary)">/100</span></div>
+      <div class="c-title">📌 Ce bien</div>
+      <div class="c-sub">${city} · ${input.surface}m²</div>
+      <div class="c-bar"><div class="score-bar"><div class="score-bar-fill" style="width:${final}%;background:var(--blue)"></div></div></div>`;
+    compGrid.appendChild(myCard);
+    for(const c of comparaison.slice(0,5)){
+      const card = document.createElement('div');
+      card.className = 'compare-card';
+      const s = c.score;
+      const color = s >= 75 ? '#059669' : s >= 55 ? '#d97706' : '#dc2626';
+      card.innerHTML = `<div class="c-score" style="color:${color}">${s}<span style="font-size:0.8rem;color:var(--text-tertiary)">/100</span></div>
+        <div class="c-title">${c.emoji||'🏠'} ${c.title}</div>
+        <div class="c-sub">${c.price||''}</div>
+        <div class="c-bar"><div class="score-bar"><div class="score-bar-fill" style="width:${s}%;background:${color}"></div></div></div>`;
+      compGrid.appendChild(card);
+    }
+  } else {
+    compSection.classList.remove('active');
+  }
+
+  // Scroll to results
+  document.getElementById('scoreResults').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+// ========== DRAWING ==========
+function drawScoreCircle(score) {
+  const canvas = document.getElementById('scoreCanvas');
+  const ctx = canvas.getContext('2d');
+  const w = canvas.width, h = canvas.height;
+  ctx.clearRect(0,0,w,h);
+
+  const cx = w/2, cy = h/2, r = 68;
+  const start = -Math.PI/2;
+  const end = start + (score/100) * Math.PI * 2;
+  const color = score >= 75 ? '#059669' : score >= 55 ? '#d97706' : '#dc2626';
+
+  // bg circle
+  ctx.beginPath();
+  ctx.arc(cx, cy, r, 0, Math.PI*2);
+  ctx.strokeStyle = '#e5e7eb';
+  ctx.lineWidth = 10;
+  ctx.stroke();
+
+  // progress arc
+  ctx.beginPath();
+  ctx.arc(cx, cy, r, start, end);
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 10;
+  ctx.lineCap = 'round';
+  ctx.stroke();
+}
+
+function drawRadar(raw) {
+  const canvas = document.getElementById('radarCanvas');
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.getBoundingClientRect();
+  // Reset canvas
+  canvas.width = 500 * dpr;
+  canvas.height = 420 * dpr;
+  canvas.style.width = '500px';
+  canvas.style.height = '420px';
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+
+  const labels = ['Prix','Rendement','Localisation','Risques','Projets','DPE','Quartier','Plus-value'];
+  const keys = ['prix','rendement','localisation','risque','projets','dpe','quartier','plusvalue'];
+  const n = labels.length;
+  const cx = 250, cy = 210, r = 140;
+
+  ctx.clearRect(0,0,500,420);
+
+  function angle(i){return -Math.PI/2 + (2*Math.PI*i)/n}
+
+  // Grid rings
+  for(let ring=1; ring<=5; ring++){
+    const radius = (r * ring) / 5;
+    ctx.beginPath();
+    for(let i=0; i<=n; i++){
+      const a = angle(i % n);
+      const x = cx + radius * Math.cos(a);
+      const y = cy + radius * Math.sin(a);
+      if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    }
+    ctx.closePath();
+    ctx.strokeStyle = '#e5e7eb';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  }
+
+  // Axes
+  for(let i=0; i<n; i++){
+    const a = angle(i);
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(cx + r * Math.cos(a), cy + r * Math.sin(a));
+    ctx.strokeStyle = '#e5e7eb';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  }
+
+  // Data polygon
+  const colors = ['#2563eb','#059669','#7c3aed','#dc2626','#d97706','#0d9488','#8b5cf6','#e11d48'];
+  ctx.beginPath();
+  for(let i=0; i<=n; i++){
+    const idx = i % n;
+    const val = (raw[keys[idx]]?.score || 50) / 100;
+    const a = angle(idx);
+    const dist = r * val;
+    const x = cx + dist * Math.cos(a);
+    const y = cy + dist * Math.sin(a);
+    if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+  }
+  ctx.closePath();
+  ctx.fillStyle = 'rgba(37,99,235,0.15)';
+  ctx.fill();
+  ctx.strokeStyle = '#2563eb';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  // Dots + labels
+  for(let i=0; i<n; i++){
+    const val = (raw[keys[i]]?.score || 50) / 100;
+    const a = angle(i);
+    const dist = r * val;
+    const x = cx + dist * Math.cos(a);
+    const y = cy + dist * Math.sin(a);
+
+    ctx.beginPath();
+    ctx.arc(x, y, 4, 0, Math.PI*2);
+    ctx.fillStyle = colors[i];
+    ctx.fill();
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Label
+    const lx = cx + (r + 32) * Math.cos(a);
+    const ly = cy + (r + 32) * Math.sin(a);
+    ctx.fillStyle = '#374151';
+    ctx.font = '11px Inter, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    const labelText = `${labels[i]} ${Math.round(raw[keys[i]]?.score||0)}`;
+    ctx.fillText(labelText, lx, ly);
+  }
+
+  // Center label
+  ctx.fillStyle = '#9ca3af';
+  ctx.font = '11px Inter, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('Critères', cx, cy);
+}
+
+// ========== ANALYSIS ENTRY POINTS ==========
+function analyzeManual() {
+  const input = {
+    city: document.getElementById('fCity').value.trim() || 'Paris 11e',
+    type: document.getElementById('fType').value,
+    cat: document.getElementById('fCat').value,
+    price: parseFloat(document.getElementById('fPrice').value) || 0,
+    surface: parseFloat(document.getElementById('fSurface').value) || 50,
+    pieces: parseInt(document.getElementById('fPieces').value) || 3,
+    condition: document.getElementById('fCondition').value,
+    dpe: document.getElementById('fDPE').value,
+    etage: parseInt(document.getElementById('fEtage').value) || 0,
+    equip: document.getElementById('fEquip').value,
+    transports: document.getElementById('fTransports').value
+  };
+
+  if(!input.city || !input.price || !input.surface){
+    alert('Veuillez remplir les champs obligatoires : ville, prix et surface.');
+    return;
+  }
+
+  document.getElementById('loadingSpinner').classList.add('active');
+  document.getElementById('scoreResults').classList.remove('active');
+
+  // Analyse immédiate
+  setTimeout(() => {
+    try {
+      const result = computeScore(input);
+      renderScore(result, input);
+    } catch(e) {
+      alert('Erreur lors de l\'analyse: ' + e.message);
+      document.getElementById('loadingSpinner').classList.remove('active');
+    }
+  }, 100);
+}
+
+function analyzeListing(listing) {
+  const input = {
+    city: listing.location || '',
+    type: listing.type || 'appartement',
+    cat: listing.cat || 'vente',
+    price: listing.price || 0,
+    surface: listing.surface || 50,
+    pieces: listing.pieces || 2,
+    condition: 'bon',
+    dpe: '',
+    etage: listing.etage || 0,
+    equip: ['parking','piscine','ascenseur','jardin'].some(e=>listing.equip&&listing.equip.includes(e)) ? 'haut' : 'moyen',
+    transports: listing.location && (listing.location.toLowerCase().includes('paris')||listing.location.toLowerCase().includes('lyon')||listing.location.toLowerCase().includes('bordeaux')) ? 'excellent' : 'bon'
+  };
+  window._lastListing = listing;
+
+  document.getElementById('loadingSpinner').classList.add('active');
+  document.getElementById('scoreResults').classList.remove('active');
+  document.getElementById('listingBrowser').classList.remove('active');
+
+  setTimeout(() => {
+    const result = computeScore(input);
+    renderScore(result, input);
+  }, 600);
+}
+
+// ========== EXISTING LISTINGS ==========
+const allListings = [
+  {id:1,cat:'vente',type:'appartement',title:'3 pièces lumineux centre-ville',location:'Paris 11e',price:425000,priceLabel:'425 000 €',surface:75,pieces:3,emoji:'🏙️',bg:'#e8f0fe',trustScore:94,publisher:'pro'},
+  {id:2,cat:'vente',type:'maison',title:'Maison de ville avec jardin',location:'Lyon 6e',price:580000,priceLabel:'580 000 €',surface:125,pieces:5,emoji:'🏠',bg:'#e6f7ed',trustScore:82,publisher:'particulier'},
+  {id:3,cat:'vente',type:'villa',title:'Villa contemporaine piscine',location:'Cannes',price:1250000,priceLabel:'1 250 000 €',surface:200,pieces:7,emoji:'🌴',bg:'#fef3e8',trustScore:97,publisher:'pro'},
+  {id:4,cat:'location',type:'appartement',title:'Studio meublé centre',location:'Bordeaux Centre',price:680,priceLabel:'680 €/mois',surface:28,pieces:1,emoji:'🏙️',bg:'#e8f0fe',trustScore:75,publisher:'particulier'},
+  {id:5,cat:'location',type:'maison',title:'Maison T4 avec jardin',location:'Toulouse, Ramonville',price:1200,priceLabel:'1 200 €/mois',surface:110,pieces:4,emoji:'🏡',bg:'#e6f7ed',trustScore:90,publisher:'pro'},
+  {id:6,cat:'vente',type:'studio',title:'Studio rénové centre historique',location:'Aix-en-Provence',price:185000,priceLabel:'185 000 €',surface:28,pieces:1,emoji:'🏘️',bg:'#fef3e8',trustScore:68,publisher:'particulier'},
+  {id:7,cat:'vente',type:'appartement',title:'Duplex vue mer',location:'Marseille, Corniche',price:695000,priceLabel:'695 000 €',surface:130,pieces:4,emoji:'🌊',bg:'#e8f0fe',trustScore:95,publisher:'pro'},
+  {id:8,cat:'location',type:'villa',title:'Villa provençale saison',location:'Gordes, Luberon',price:3500,priceLabel:'3 500 €/semaine',surface:250,pieces:6,emoji:'🌿',bg:'#fef3e8',trustScore:88,publisher:'pro'},
+  {id:9,cat:'vente',type:'appartement',title:'Appartement haussmannien Trocadéro',location:'Paris 16e, Trocadéro',price:980000,priceLabel:'980 000 €',surface:100,pieces:4,emoji:'🏛️',bg:'#e8f0fe',trustScore:96,publisher:'pro'},
+  {id:10,cat:'location',type:'studio',title:'Studio meublé proche université',location:'Montpellier, Antigone',price:520,priceLabel:'520 €/mois',surface:22,pieces:1,emoji:'📚',bg:'#e6f7ed',trustScore:72,publisher:'particulier'},
+  {id:11,cat:'vente',type:'maison',title:'Longère à rénover',location:'Rennes, campagne',price:220000,priceLabel:'220 000 €',surface:170,pieces:5,emoji:'🏡',bg:'#fef3e8',trustScore:65,publisher:'particulier'},
+  {id:12,cat:'location',type:'appartement',title:'F2 vue jardin',location:'Strasbourg, Orangerie',price:850,priceLabel:'850 €/mois',surface:55,pieces:2,emoji:'🌳',bg:'#e8f0fe',trustScore:87,publisher:'pro'},
+  {id:13,cat:'vente',type:'appartement',title:'T2 neuf avec balcon',location:'Saint-Étienne Centre',price:135000,priceLabel:'135 000 €',surface:52,pieces:2,emoji:'🏙️',bg:'#e8f0fe',trustScore:70,publisher:'pro'},
+  {id:14,cat:'location',type:'appartement',title:'F3 lumineux quartier gare',location:'Saint-Étienne',price:650,priceLabel:'650 €/mois',surface:68,pieces:3,emoji:'🏘️',bg:'#e6f7ed',trustScore:74,publisher:'particulier'},
+  {id:15,cat:'vente',type:'maison',title:'Maison 4 pièces avec garage',location:'Nantes',price:350000,priceLabel:'350 000 €',surface:95,pieces:4,emoji:'🏠',bg:'#e6f7ed',trustScore:80,publisher:'pro'},
+  {id:16,cat:'vente',type:'appartement',title:'2 pièces centre-ville',location:'Lille',price:185000,priceLabel:'185 000 €',surface:48,pieces:2,emoji:'🏙️',bg:'#e8f0fe',trustScore:78,publisher:'particulier'},
+  {id:17,cat:'vente',type:'appartement',title:'Studio investissement étudiant',location:'Grenoble',price:95000,priceLabel:'95 000 €',surface:22,pieces:1,emoji:'📚',bg:'#fef3e8',trustScore:73,publisher:'pro'},
+  {id:18,cat:'location',type:'appartement',title:'T4 familial calme',location:'Lyon 3e',price:1450,priceLabel:'1 450 €/mois',surface:90,pieces:4,emoji:'🏠',bg:'#e8f0fe',trustScore:85,publisher:'pro'},
+];
+window.allListings = allListings;
+
+function renderListings(filter) {
+  const grid = document.getElementById('lbGrid');
+  const q = (filter||'').toLowerCase();
+  const f = allListings.filter(l => {
+    if(!q) return true;
+    return l.title.toLowerCase().includes(q) || l.location.toLowerCase().includes(q) || l.priceLabel.toLowerCase().includes(q);
+  });
+  grid.innerHTML = f.map(l => `
+    <div class="lb-card" onclick="selectListing(${l.id})">
+      <div class="emoji">${l.emoji||'🏠'}</div>
+      <div class="info">
+        <div class="title">${l.title}</div>
+        <div class="sub">${l.location} · ${l.priceLabel} · ${l.surface}m²</div>
+      </div>
+      <button class="btn-analyze">🔬 Noter</button>
+    </div>
+  `).join('');
+}
+
+function filterListings() {
+  renderListings(document.getElementById('lbSearchInput').value);
+}
+
+function selectListing(id) {
+  const listing = allListings.find(l => l.id === id);
+  if(!listing) return;
+  const bar = document.getElementById('selectedListing');
+  document.getElementById('selEmoji').textContent = listing.emoji||'🏠';
+  document.getElementById('selTitle').textContent = listing.title;
+  document.getElementById('selSub').textContent = `${listing.location} · ${listing.priceLabel} · ${listing.surface} m² · ${listing.pieces} pièce(s)`;
+  bar.classList.add('show');
+  analyzeListing(listing);
+}
+
+function clearSelected() {
+  document.getElementById('selectedListing').classList.remove('show');
+  document.getElementById('listingBrowser').classList.add('active');
+  document.getElementById('scoreResults').classList.remove('active');
+}
+
+// ========== MODES ==========
+function switchMode(mode) {
+  document.querySelectorAll('.mode-btn').forEach(b=>b.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('manualForm').classList.toggle('active', mode==='manual');
+  document.getElementById('listingBrowser').classList.toggle('active', mode==='existing');
+  document.getElementById('selectedListing').classList.remove('show');
+  document.getElementById('scoreResults').classList.remove('active');
+  if(mode==='existing') renderListings();
+}
+
+// ========== SAVE ==========
+function saveScore() {
+  const key = 'immo-saved-scores';
+  const saved = JSON.parse(localStorage.getItem(key)||'[]');
+  const entry = {
+    id: Date.now(),
+    date: new Date().toLocaleDateString('fr-FR'),
+    title: document.getElementById('resultTitle').textContent,
+    score: document.getElementById('scoreFinalValue').textContent,
+    verdict: document.getElementById('resultVerdict').textContent
+  };
+  saved.unshift(entry);
+  localStorage.setItem(key, JSON.stringify(saved.slice(0,20)));
+  alert('✅ Notation sauvegardée !');
+}
+
+// ========== INIT ==========
+document.addEventListener('DOMContentLoaded', () => {
+  renderListings();
+  // Mobile menu toggle
+  document.getElementById('menuToggle').addEventListener('click', () => {
+    document.getElementById('headerLinks').classList.toggle('open');
+  });
+});
+
+// Print-friendly
+window.addEventListener('beforeprint', () => {
+  document.querySelector('.hero-score').style.background = '#2563eb';
+  document.querySelector('.hero-score').style.webkitPrintColorAdjust = 'exact';
+});
+</script>
+</body>
+</html>

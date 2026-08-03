@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Location — Immo-Express</title>
+  <link rel="icon" href="assets/icon-192.svg" type="image/svg+xml">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--white:#fff;--bg:#f3f4f6;--bg-card:#fff;--border:#e5e7eb;--border-hover:#d1d5db;--text:#111827;--text-secondary:#6b7280;--text-tertiary:#9ca3af;--blue:#2563eb;--blue-light:#eff6ff;--blue-dark:#1d4ed8;--green:#059669;--green-light:#ecfdf5;--orange:#d97706;--orange-light:#fef3c7;--red:#dc2626;--red-light:#fef2f2;--purple:#7c3aed;--purple-light:#f5f3ff;--teal:#0d9488;--shadow-sm:0 1px 2px rgba(0,0,0,0.05);--shadow:0 1px 3px rgba(0,0,0,0.1),0 1px 2px rgba(0,0,0,0.06);--shadow-md:0 4px 12px rgba(0,0,0,0.08);--shadow-lg:0 10px 25px rgba(0,0,0,0.1);--radius-sm:6px;--radius:8px;--radius-lg:12px;--font:'Inter',-apple-system,BlinkMacSystemFont,sans-serif}
+    body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.5;min-height:100vh}
+    a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}
+
+    /* HEADER */
+    .header{background:var(--white);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+    .header-inner{max-width:1200px;margin:0 auto;padding:0 20px;height:64px;display:flex;align-items:center;justify-content:space-between}
+    .logo{font-size:1.35rem;font-weight:800;display:flex;align-items:center;gap:8px;cursor:pointer}
+    .logo-icon{width:32px;height:32px;background:var(--blue);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;color:white;font-size:1rem;font-weight:700}
+    .logo span{color:var(--blue)}
+    .header-links{display:flex;align-items:center;gap:4px}
+    .header-links a{padding:8px 16px;border-radius:var(--radius);font-size:0.875rem;font-weight:500;color:var(--text-secondary);transition:all 0.15s;text-decoration:none}
+    .header-links a:hover{background:var(--bg);color:var(--text);text-decoration:none}
+    .header-links a.active{color:var(--blue);background:var(--blue-light)}
+    .mobile-toggle{display:none;background:none;border:none;font-size:1.5rem;cursor:pointer;padding:4px;color:var(--text)}
+    .btn-depot{background:var(--blue)!important;color:white!important;font-weight:600!important;padding:8px 20px!important;border-radius:var(--radius)!important;cursor:pointer}
+    .btn-depot:hover{background:var(--blue-dark)!important}
+
+    /* HERO */
+    .loc-hero{background:linear-gradient(135deg,var(--teal) 0%,#0f766e 100%);padding:40px 20px;text-align:center}
+    .loc-hero h1{font-size:1.7rem;font-weight:700;color:white;margin-bottom:6px}
+    .loc-hero p{color:rgba(255,255,255,0.85);font-size:0.95rem;margin-bottom:20px}
+    .loc-search{max-width:780px;margin:0 auto;background:white;border-radius:var(--radius-lg);padding:8px;display:flex;gap:8px;box-shadow:0 4px 20px rgba(0,0,0,0.15);flex-wrap:wrap}
+    .loc-search input{flex:1;min-width:180px;border:none;outline:none;padding:12px 16px;font-size:0.9rem;font-family:var(--font);border-radius:var(--radius)}
+    .loc-search select{border:none;outline:none;padding:12px 16px;font-size:0.85rem;font-family:var(--font);background:var(--bg);border-radius:var(--radius);cursor:pointer;color:var(--text-secondary);min-width:140px}
+    .loc-search button{padding:12px 28px;background:var(--teal);color:white;border:none;border-radius:var(--radius);font-weight:600;font-size:0.9rem;cursor:pointer;font-family:var(--font);transition:background 0.15s}
+    .loc-search button:hover{background:#0f766e}
+
+    /* STATS */
+    .qs-location{background:var(--white);border-bottom:1px solid var(--border);padding:14px 20px}
+    .qs-inner{max-width:1200px;margin:0 auto;display:flex;gap:28px;justify-content:center;flex-wrap:wrap;font-size:0.85rem;color:var(--text-secondary)}
+    .qs-inner strong{color:var(--text)}
+
+    /* MAIN LAYOUT */
+    .loc-layout{max-width:1200px;margin:0 auto;padding:24px 20px;display:grid;grid-template-columns:260px 1fr;gap:24px}
+    @media(max-width:900px){.loc-layout{grid-template-columns:1fr}}
+
+    /* SIDEBAR */
+    .loc-sidebar{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;height:fit-content;position:sticky;top:88px}
+    .loc-sidebar h3{font-size:0.9rem;font-weight:600;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
+    .loc-sect{margin-bottom:18px}
+    .loc-sect label{display:block;font-size:0.78rem;font-weight:500;color:var(--text-secondary);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.3px}
+    .loc-sect select,.loc-sect input{width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:0.82rem;font-family:var(--font);background:var(--white);color:var(--text);outline:none}
+    .loc-sect select:focus,.loc-sect input:focus{border-color:var(--teal)}
+    .loc-sect .pr-range{display:flex;gap:8px;align-items:center}
+    .loc-sect .pr-range input{width:100%}
+    .loc-sect .pr-range span{font-size:0.78rem;color:var(--text-tertiary)}
+    .loc-btn-group{display:flex;gap:6px;flex-wrap:wrap}
+    .loc-btn-group button{padding:6px 14px;border:1px solid var(--border);border-radius:50px;background:var(--white);font-size:0.78rem;cursor:pointer;font-family:var(--font);color:var(--text-secondary);transition:all 0.15s}
+    .loc-btn-group button:hover{border-color:var(--teal);color:var(--teal)}
+    .loc-btn-group button.active{background:var(--teal);color:white;border-color:var(--teal)}
+    .loc-reset{width:100%;padding:8px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--white);font-size:0.78rem;cursor:pointer;font-family:var(--font);color:var(--text-secondary);transition:all 0.15s;margin-top:4px}
+    .loc-reset:hover{background:var(--bg)}
+
+    /* RESULTS */
+    .loc-results{min-height:400px}
+    .loc-rh{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px}
+    .loc-rh .count{font-size:0.85rem;color:var(--text-secondary)}
+    .loc-rh .count strong{color:var(--text)}
+    .loc-tabs{display:flex;gap:0;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;background:var(--white)}
+    .loc-tabs button{padding:8px 20px;border:none;font-size:0.82rem;font-weight:500;cursor:pointer;font-family:var(--font);color:var(--text-secondary);background:var(--white);transition:all 0.15s}
+    .loc-tabs button:not(:last-child){border-right:1px solid var(--border)}
+    .loc-tabs button:hover{background:var(--bg)}
+    .loc-tabs button.active{background:var(--teal);color:white}
+
+    /* CARDS */
+    .loc-grid{display:grid;grid-template-columns:1fr;gap:14px}
+    .loc-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);display:grid;grid-template-columns:260px 1fr;overflow:hidden;transition:box-shadow 0.2s,border-color 0.2s;cursor:pointer}
+    .loc-card:hover{box-shadow:var(--shadow-md);border-color:var(--border-hover)}
+    .loc-img{display:flex;align-items:center;justify-content:center;font-size:2.8rem;position:relative;overflow:hidden;min-height:170px}
+    .loc-img .lb{position:absolute;top:10px;left:10px;font-size:0.68rem;font-weight:600;padding:3px 9px;border-radius:4px;text-transform:uppercase;letter-spacing:0.3px}
+    .lb-rent{background:var(--teal);color:white}
+    .lb-furnished{background:var(--purple);color:white}
+    .lb-seasonal{background:var(--orange);color:white}
+    .lb-verified{background:var(--green);color:white;left:auto;right:10px}
+    .loc-info{padding:16px 18px;display:flex;flex-direction:column}
+    .loc-price{font-size:1.3rem;font-weight:700;color:var(--text);margin-bottom:2px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+    .loc-price-sub{font-size:0.78rem;color:var(--text-tertiary);margin-bottom:4px}
+    .loc-title{font-size:0.95rem;font-weight:500;margin-bottom:3px}
+    .loc-loc{font-size:0.82rem;color:var(--text-secondary);margin-bottom:8px}
+    .loc-tags{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:8px}
+    .loc-tag{display:flex;align-items:center;gap:4px;font-size:0.78rem;color:var(--text-secondary)}
+    .loc-tag strong{color:var(--text);font-weight:500}
+    .loc-footer{margin-top:auto;display:flex;justify-content:space-between;align-items:center;padding-top:10px;border-top:1px solid var(--border);font-size:0.78rem}
+    .loc-footer .pub{display:flex;align-items:center;gap:6px}
+    .loc-footer .pub .pt{padding:2px 7px;border-radius:4px;font-size:0.68rem;font-weight:500}
+    .pt-pro{background:var(--blue-light);color:var(--blue)}
+    .pt-particulier{background:var(--green-light);color:var(--green)}
+    .loc-footer .date{color:var(--text-tertiary)}
+    .loc-score{display:inline-flex;align-items:center;gap:4px;padding:2px 9px;border-radius:50px;font-size:0.68rem;font-weight:600}
+    .sc-h{background:#ecfdf5;color:#059669}
+    .sc-m{background:#fef3c7;color:#d97706}
+    .sc-l{background:#fef2f2;color:#dc2626}
+
+    /* MODAL */
+    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}
+    .modal-overlay.open{display:flex}
+    .modal{background:var(--white);border-radius:var(--radius-lg);max-width:760px;width:100%;max-height:90vh;overflow-y:auto;animation:fadeIn 0.2s ease}
+    @keyframes fadeIn{from{opacity:0;transform:scale(0.97)}to{opacity:1;transform:scale(1)}}
+    .modal-header{display:flex;justify-content:space-between;align-items:center;padding:18px 22px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--white);z-index:2;border-radius:var(--radius-lg) var(--radius-lg) 0 0}
+    .modal-header h2{font-size:1.15rem;font-weight:600}
+    .modal-close{width:32px;height:32px;border-radius:50%;border:none;background:var(--bg);font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text-secondary);transition:all 0.15s}
+    .modal-close:hover{background:var(--border)}
+    .modal-body{padding:22px}
+    .modal-img{width:100%;height:260px;border-radius:var(--radius);display:flex;align-items:center;justify-content:center;font-size:4.5rem;margin-bottom:16px}
+    .m-price{font-size:1.6rem;font-weight:700;margin-bottom:2px}
+    .m-sub{font-size:0.85rem;color:var(--text-secondary);margin-bottom:10px}
+    .m-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
+    .m-gi{display:flex;align-items:center;gap:7px;padding:9px 13px;background:var(--bg);border-radius:var(--radius-sm);font-size:0.82rem}
+    .m-desc{color:var(--text-secondary);line-height:1.7;margin:14px 0;font-size:0.85rem}
+    .m-contact{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+    .m-contact button{flex:1;padding:11px 22px;border-radius:var(--radius);font-weight:600;font-size:0.85rem;cursor:pointer;font-family:var(--font);transition:all 0.15s;border:none}
+    .m-contact .btn-primary{background:var(--teal);color:white}
+    .m-contact .btn-primary:hover{background:#0f766e}
+    .m-contact .btn-secondary{background:var(--white);color:var(--text);border:1px solid var(--border)}
+    .m-contact .btn-secondary:hover{background:var(--bg)}
+
+    /* TOOLS SECTION */
+    .tools-section{margin-top:32px}
+    .tools-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px}
+    .tool-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px;transition:box-shadow 0.2s}
+    .tool-card:hover{box-shadow:var(--shadow-md)}
+    .tool-card .tc-icon{width:48px;height:48px;border-radius:var(--radius);display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin-bottom:12px}
+    .tool-card h3{font-size:1rem;font-weight:600;margin-bottom:6px}
+    .tool-card p{font-size:0.82rem;color:var(--text-secondary);margin-bottom:14px;line-height:1.5}
+    .tool-card .btn-tool{padding:9px 20px;border:1px solid var(--border);border-radius:var(--radius);background:var(--white);font-size:0.82rem;font-weight:500;cursor:pointer;font-family:var(--font);color:var(--text);transition:all 0.15s}
+    .tool-card .btn-tool:hover{border-color:var(--teal);color:var(--teal);background:var(--blue-light)}
+    .tool-card .btn-tool.primary{background:var(--teal);color:white;border-color:var(--teal)}
+    .tool-card .btn-tool.primary:hover{background:#0f766e}
+
+    /* TOOL PANEL (inline calculator) */
+    .tool-panel{display:none;background:var(--white);border:1px solid var(--teal);border-radius:var(--radius-lg);padding:24px;margin-bottom:24px}
+    .tool-panel.open{display:block}
+    .tool-panel h3{font-size:1rem;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+    .tp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-bottom:16px}
+    .tp-group{display:flex;flex-direction:column;gap:4px}
+    .tp-group label{font-size:0.78rem;font-weight:500;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.3px}
+    .tp-group input,.tp-group select{padding:10px 13px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:0.85rem;font-family:var(--font);outline:none}
+    .tp-group input:focus,.tp-group select:focus{border-color:var(--teal)}
+    .tp-group .result{font-size:1.4rem;font-weight:700;color:var(--teal);padding:8px 0}
+    .tp-group .result-sub{font-size:0.8rem;color:var(--text-secondary)}
+    .tp-actions{display:flex;gap:10px;justify-content:flex-end;padding-top:14px;border-top:1px solid var(--border)}
+    .tp-actions button{padding:10px 24px;border-radius:var(--radius);font-weight:600;font-size:0.85rem;cursor:pointer;font-family:var(--font);transition:all 0.15s}
+    .tp-actions .btn-calc{background:var(--teal);color:white;border:none}
+    .tp-actions .btn-calc:hover{background:#0f766e}
+    .tp-actions .btn-close{background:var(--white);color:var(--text-secondary);border:1px solid var(--border)}
+
+    /* GUIDE TABLE */
+    .guide-table{width:100%;border-collapse:collapse;font-size:0.82rem;margin-top:12px}
+    .guide-table th{text-align:left;padding:9px 11px;background:var(--bg);font-weight:500;color:var(--text-secondary);font-size:0.78rem;text-transform:uppercase;letter-spacing:0.3px;border-bottom:1px solid var(--border)}
+    .guide-table td{padding:9px 11px;border-bottom:1px solid var(--border)}
+
+    /* FOOTER */
+    .page-footer{background:var(--white);border-top:1px solid var(--border);padding:36px 20px 20px;margin-top:40px}
+    .footer-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:36px}
+    .footer-inner h4{font-size:0.78rem;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-secondary);margin-bottom:10px}
+    .footer-inner p{font-size:0.82rem;color:var(--text-tertiary);line-height:1.6}
+    .footer-inner ul{list-style:none}
+    .footer-inner ul li{margin-bottom:6px}
+    .footer-inner ul li a{font-size:0.82rem;color:var(--text-secondary)}
+    .footer-bottom{max-width:1200px;margin:20px auto 0;padding-top:14px;border-top:1px solid var(--border);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-size:0.78rem;color:var(--text-tertiary)}
+
+    /* RESPONSIVE */
+    @media(max-width:900px){
+      .loc-sidebar{position:static}
+      .loc-card{grid-template-columns:1fr}
+      .loc-img{min-height:150px}
+      .footer-inner{grid-template-columns:1fr 1fr}
+    }
+    @media(max-width:640px){
+      .mobile-toggle{display:block}
+      .header-links{display:none;position:absolute;top:64px;left:0;right:0;background:var(--white);flex-direction:column;padding:12px;box-shadow:var(--shadow-md);border-bottom:1px solid var(--border)}
+      .header-links.open{display:flex}
+      .header-links a{padding:12px 16px;width:100%}
+      .loc-hero h1{font-size:1.25rem}
+      .loc-search{flex-direction:column;background:transparent;box-shadow:none;gap:8px}
+      .loc-search input,.loc-search select,.loc-search button{border-radius:var(--radius)}
+      .m-grid{grid-template-columns:1fr}
+      .tools-grid{grid-template-columns:1fr}
+      .footer-inner{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-inner">
+    <div class="logo" onclick="location.href='index.html'"><div class="logo-icon">iE</div>Immo<span>Express</span></div>
+    <button class="mobile-toggle" id="menuToggle">☰</button>
+    <div class="header-links" id="headerLinks">
+      <a href="index.html">Accueil</a>
+      <a href="scoring.html">🔬 Notation</a>
+      <a href="#" class="active">📍 Location</a>
+      <a href="pro.html">🏢 Espace Pro</a>
+      <a href="#" class="btn-depot" onclick="openDepositModal();return false;">+ Déposer une annonce</a>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="loc-hero">
+  <h1>📍 Trouvez votre location idéale</h1>
+  <p>Appartements, maisons, studios en location longue durée ou saisonnière — partout en France</p>
+  <div class="loc-search">
+    <input type="text" id="locSearch" placeholder="Ville, quartier, code postal…" oninput="filterListings()">
+    <select id="locType" onchange="filterListings()">
+      <option value="all">Tous types</option>
+      <option value="appartement">Appartement</option>
+      <option value="maison">Maison</option>
+      <option value="studio">Studio</option>
+      <option value="villa">Villa</option>
+    </select>
+    <select id="locDuration" onchange="filterListings()">
+      <option value="all">Toutes durées</option>
+      <option value="longue">Longue durée</option>
+      <option value="saisonniere">Saisonnière</option>
+    </select>
+    <button onclick="filterListings()">🔍 Rechercher</button>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="qs-location">
+  <div class="qs-inner">
+    <span>🏠 <strong>480+</strong> locations disponibles</span>
+    <span>🛡️ <strong>89%</strong> annonces vérifiées</span>
+    <span>📊 <strong>3 200+</strong> analyses locatives réalisées</span>
+    <span>⚡ Réponse sous <strong>2h</strong> en moyenne</span>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="loc-layout">
+  <aside class="loc-sidebar">
+    <h3>🔍 Filtrer</h3>
+    <div class="loc-sect">
+      <label>Type</label>
+      <div class="loc-btn-group" id="locTypeFilter">
+        <button class="active" data-lt="all">Tous</button>
+        <button data-lt="appartement">Appartement</button>
+        <button data-lt="maison">Maison</button>
+        <button data-lt="studio">Studio</button>
+      </div>
+    </div>
+    <div class="loc-sect">
+      <label>Durée</label>
+      <div class="loc-btn-group" id="locDurFilter">
+        <button class="active" data-ld="all">Toutes</button>
+        <button data-ld="longue">Longue durée</button>
+        <button data-ld="saisonniere">Saisonnière</button>
+      </div>
+    </div>
+    <div class="loc-sect">
+      <label>Loyer max</label>
+      <div class="pr-range"><input type="number" id="locMaxPrice" placeholder="Max €" min="0" oninput="filterListings()"><span>€/mois</span></div>
+    </div>
+    <div class="loc-sect">
+      <label>Surface min</label>
+      <input type="number" id="locMinSurface" placeholder="m² min" min="0" oninput="filterListings()">
+    </div>
+    <div class="loc-sect">
+      <label>Meublé</label>
+      <div class="loc-btn-group" id="locFurnishedFilter">
+        <button class="active" data-lf="all">Tous</button>
+        <button data-lf="meuble">Meublé</button>
+        <button data-lf="non-meuble">Non meublé</button>
+      </div>
+    </div>
+    <div class="loc-sect">
+      <label>DPE min.</label>
+      <select id="locDPE" onchange="filterListings()">
+        <option value="">Tous</option>
+        <option value="A">A</option>
+        <option value="B">B</option>
+        <option value="C">C</option>
+        <option value="D">D</option>
+        <option value="E">E</option>
+      </select>
+    </div>
+    <div class="loc-sect">
+      <label>Publié par</label>
+      <select id="locPublisher" onchange="filterListings()">
+        <option value="all">Tous</option>
+        <option value="pro">Professionnels</option>
+        <option value="particulier">Particuliers</option>
+      </select>
+    </div>
+    <button class="loc-reset" onclick="resetFilters()">Réinitialiser les filtres</button>
+  </aside>
+
+  <div class="loc-results">
+    <div class="loc-rh">
+      <div class="count" id="locCount"><strong>0</strong> locations trouvées</div>
+      <div class="loc-tabs">
+        <button class="active" data-sort="recent" onclick="setSort('recent')">Récents</button>
+        <button data-sort="price-asc" onclick="setSort('price-asc')">Prix ↑</button>
+        <button data-sort="price-desc" onclick="setSort('price-desc')">Prix ↓</button>
+        <button data-sort="surface" onclick="setSort('surface')">Surface</button>
+      </div>
+    </div>
+    <div class="loc-grid" id="locGrid"></div>
+  </div>
+</div>
+
+<!-- OUTILS LOCATION -->
+<div class="loc-layout" style="padding-top:0">
+  <div class="tools-section" style="grid-column:1/-1">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:18px">
+      <h2 style="font-size:1.15rem;font-weight:700">🛠️ Outils location</h2>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn-tool primary" onclick="toggleTool('estimate')">📊 Estimer un loyer</button>
+        <button class="btn-tool" onclick="toggleTool('yield')">📈 Rendement locatif</button>
+        <button class="btn-tool" onclick="toggleTool('guide')">📋 Guide des loyers</button>
+      </div>
+    </div>
+
+    <!-- ESTIMATE TOOL -->
+    <div class="tool-panel" id="tp-estimate">
+      <h3>📊 Estimer le loyer de votre bien</h3>
+      <div class="tp-grid">
+        <div class="tp-group"><label>Ville *</label><input type="text" id="estCity" placeholder="Paris, Lyon, Bordeaux…" value="Paris 11e"></div>
+        <div class="tp-group"><label>Type *</label><select id="estType"><option value="appartement">Appartement</option><option value="maison">Maison</option><option value="studio">Studio</option></select></div>
+        <div class="tp-group"><label>Surface (m²) *</label><input type="number" id="estSurface" value="55" min="1"></div>
+        <div class="tp-group"><label>Pièces</label><select id="estPieces"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4+</option></select></div>
+        <div class="tp-group"><label>Meublé ?</label><select id="estMeuble"><option value="non">Non</option><option value="oui">Oui (+15%)</option></select></div>
+        <div class="tp-group"><label>DPE</label><select id="estDPE"><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option></select></div>
+        <div class="tp-group" style="grid-column:1/-1;text-align:center;padding:12px 0">
+          <div class="result" id="estResult">—</div>
+          <div class="result-sub" id="estResultSub">Remplissez les champs et calculez</div>
+        </div>
+      </div>
+      <div class="tp-actions">
+        <button class="btn-calc" onclick="estimateRent()">📊 Calculer le loyer estimé</button>
+        <button class="btn-close" onclick="toggleTool('estimate')">Fermer</button>
+      </div>
+    </div>
+
+    <!-- YIELD TOOL -->
+    <div class="tool-panel" id="tp-yield">
+      <h3>📈 Calculateur de rendement locatif</h3>
+      <div class="tp-grid">
+        <div class="tp-group"><label>Prix d'achat *</label><input type="number" id="yieldPrice" placeholder="250000" value="250000"></div>
+        <div class="tp-group"><label>Loyer mensuel estimé *</label><input type="number" id="yieldRent" placeholder="1100" value="1100"></div>
+        <div class="tp-group"><label>Charges annuelles</label><input type="number" id="yieldCharges" placeholder="2000" value="2000"></div>
+        <div class="tp-group"><label>Frais de notaire</label><input type="number" id="yieldNotaire" placeholder="20000" value="20000"></div>
+        <div class="tp-group" style="grid-column:1/-1;display:flex;flex-direction:row;gap:20px;flex-wrap:wrap;justify-content:center;padding:12px 0">
+          <div><div class="result" id="yieldBrut" style="font-size:1.1rem">—</div><div class="result-sub">Rendement brut</div></div>
+          <div><div class="result" id="yieldNet" style="font-size:1.1rem">—</div><div class="result-sub">Rendement net</div></div>
+          <div><div class="result" id="yieldCashflow" style="font-size:1.1rem">—</div><div class="result-sub">Cashflow mensuel</div></div>
+        </div>
+      </div>
+      <div class="tp-actions">
+        <button class="btn-calc" onclick="calcYield()">📈 Calculer</button>
+        <button class="btn-close" onclick="toggleTool('yield')">Fermer</button>
+      </div>
+    </div>
+
+    <!-- GUIDE TOOL -->
+    <div class="tool-panel" id="tp-guide">
+      <h3>📋 Guide des loyers par ville (moyenne €/m²)</h3>
+      <table class="guide-table">
+        <thead><tr><th>Ville</th><th>Studio</th><th>2 pièces</th><th>3 pièces</th><th>Maison</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Paris</strong></td><td>28 €</td><td>26 €</td><td>24 €</td><td>22 €</td></tr>
+          <tr><td><strong>Lyon</strong></td><td>20 €</td><td>18 €</td><td>16 €</td><td>15 €</td></tr>
+          <tr><td><strong>Bordeaux</strong></td><td>22 €</td><td>20 €</td><td>18 €</td><td>17 €</td></tr>
+          <tr><td><strong>Marseille</strong></td><td>16 €</td><td>14 €</td><td>13 €</td><td>12 €</td></tr>
+          <tr><td><strong>Toulouse</strong></td><td>17 €</td><td>15 €</td><td>14 €</td><td>13 €</td></tr>
+          <tr><td><strong>Lille</strong></td><td>15 €</td><td>13 €</td><td>12 €</td><td>11 €</td></tr>
+          <tr><td><strong>Montpellier</strong></td><td>16 €</td><td>14 €</td><td>13 €</td><td>12 €</td></tr>
+          <tr><td><strong>Saint-Étienne</strong></td><td>10 €</td><td>9 €</td><td>8 €</td><td>7.5 €</td></tr>
+          <tr><td><strong>Nantes</strong></td><td>18 €</td><td>16 €</td><td>14 €</td><td>13 €</td></tr>
+          <tr><td><strong>Strasbourg</strong></td><td>19 €</td><td>17 €</td><td>15 €</td><td>14 €</td></tr>
+        </tbody>
+      </table>
+      <div class="tp-actions" style="border-top:1px solid var(--border);margin-top:16px;padding-top:14px">
+        <button class="btn-close" onclick="toggleTool('guide')">Fermer</button>
+      </div>
+    </div>
+
+    <!-- TOOLS CARDS -->
+    <div class="tools-grid" style="margin-top:16px">
+      <div class="tool-card">
+        <div class="tc-icon" style="background:#f0fdfa">📝</div>
+        <h3>Dossier de location</h3>
+        <p>Rassemblez pièce d'identité, 3 derniers bulletins de salaire, dernier avis d'imposition et justificatif de domicile. La garantie Visale est gratuite pour les -30 ans.</p>
+      </div>
+      <div class="tool-card">
+        <div class="tc-icon" style="background:#fef3c7">⚖️</div>
+        <h3>Lois & Plafonds</h3>
+        <p>Plafonds 2026 : Zone A bis 18.89€/m², Zone A 14.03€/m², Zone B1 11.31€/m². Loi Climat : DPE G interdit en 2025, F en 2028, E en 2034.</p>
+      </div>
+      <div class="tool-card">
+        <div class="tc-icon" style="background:#ecfdf5">🔍</div>
+        <h3>Vérifier un bailleur</h3>
+        <p>Exigez un état des lieux, un bail écrit et le DPE. Ne versez jamais d'argent sans avoir visité le logement.</p>
+      </div>
+      <div class="tool-card">
+        <div class="tc-icon" style="background:#f5f3ff">🏠</div>
+        <h3>Garantie Visale</h3>
+        <p>Action Logement garantit vos loyers impayés jusqu'à 36 mois. Gratuit pour les -30 ans et salariés. Demandez sur visale.fr.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 id="modalTitle">Détail de la location</h2>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<!-- DEPOSIT MODAL -->
+<div class="modal-overlay" id="depositOverlay">
+  <div class="modal" style="max-width:680px">
+    <div class="modal-header">
+      <h2>🏠 Déposer une annonce de location</h2>
+      <button class="modal-close" onclick="closeDeposit()">✕</button>
+    </div>
+    <div class="modal-body">
+      <form id="depositForm" onsubmit="submitDeposit(event)">
+        <div class="loc-sect"><label>Titre *</label><input type="text" id="depTitle" required placeholder="Ex : Studio meublé centre-ville" maxlength="80"></div>
+        <div class="loc-sect"><label>Description *</label><textarea id="depDesc" required rows="4" style="width:100%;padding:10px 13px;border:1px solid var(--border);border-radius:var(--radius-sm);font-family:var(--font);font-size:0.85rem;resize:vertical" placeholder="Décrivez le logement, l'état, le quartier…"></textarea></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div class="loc-sect"><label>Ville *</label><input type="text" id="depCity" required placeholder="Paris"></div>
+          <div class="loc-sect"><label>Type *</label><select id="depType"><option value="appartement">Appartement</option><option value="maison">Maison</option><option value="studio">Studio</option></select></div>
+          <div class="loc-sect"><label>Loyer *</label><input type="number" id="depPrice" required placeholder="850" min="1"></div>
+          <div class="loc-sect"><label>Charges</label><select id="depCharges"><option value="CC">CC (charges comprises)</option><option value="HC">HC (hors charges)</option></select></div>
+          <div class="loc-sect"><label>Surface (m²) *</label><input type="number" id="depSurface" required placeholder="45" min="1"></div>
+          <div class="loc-sect"><label>Pièces</label><select id="depPieces"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4+</option></select></div>
+          <div class="loc-sect"><label>Meublé</label><select id="depMeuble"><option value="non">Non</option><option value="oui">Oui</option></select></div>
+          <div class="loc-sect"><label>DPE</label><select id="depDPE"><option value="">Non connu</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option></select></div>
+          <div class="loc-sect" style="grid-column:1/-1"><label>Nom *</label><input type="text" id="depName" required placeholder="Votre nom"></div>
+          <div class="loc-sect" style="grid-column:1/-1"><label>Email *</label><input type="email" id="depEmail" required placeholder="email@exemple.fr"></div>
+        </div>
+        <div class="tp-actions" style="margin-top:16px">
+          <button type="button" class="btn-close" onclick="closeDeposit()">Annuler</button>
+          <button type="submit" class="btn-calc">✅ Publier l'annonce</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<footer class="page-footer">
+  <div class="footer-inner">
+    <div><div class="logo" style="margin-bottom:8px;font-size:1rem"><div class="logo-icon">iE</div>Immo<span>Express</span></div><p>La plateforme immobilière intelligente. Location, vente, notation IA.</p></div>
+    <div><h4>Location</h4><ul><li><a href="location.html">📍 Trouver une location</a></li><li><a href="scoring.html">🔬 Score de confiance</a></li><li><a href="pro.html">🏢 Espace Pro</a></li></ul></div>
+    <div><h4>Outils</h4><ul><li><a href="#" onclick="toggleTool('estimate');return false">📊 Estimer un loyer</a></li><li><a href="#" onclick="toggleTool('yield');return false">📈 Calcul rendement</a></li><li><a href="#" onclick="toggleTool('guide');return false">📋 Guide des loyers</a></li></ul></div>
+    <div><h4>Infos</h4><ul><li><a href="scoring.html">📊 Notation immobilière</a></li><li><a href="pro.html">⭐ Abonnements Pro</a></li></ul></div>
+  </div>
+  <div class="footer-bottom"><span>© 2025 Immo-Express — Plateforme immobilière intelligente</span><span>CGU · Confidentialité · Cookies</span></div>
+</footer>
+
+<script>
+// ========== DATA ==========
+const rentalListings = [
+  {id:101,type:'appartement',title:'Studio meublé centre-ville',location:'Bordeaux Centre',price:680,priceLabel:'680 €/mois',dur:'longue',surface:28,pieces:1,furnished:true,score:78,verified:true,publisher:'particulier',pubName:'Mme Laurent',date:'Aujourd\'hui',bg:'#e8f0fe',emoji:'🏙️',dpe:'C',desc:'Studio meublé 28 m², proche tram et commerces. Cuisine équipée, salle d\'eau, rangements. Idéal étudiant ou jeune actif.',marketAvg:650,smartMatch:88,bookingSlots:['Lun 11h','Mar 14h','Mer 10h'],lat:44.84,lng:-0.58},
+  {id:102,type:'maison',title:'Maison T4 avec jardin',location:'Toulouse, Ramonville',price:1200,priceLabel:'1 200 €/mois',dur:'longue',surface:110,pieces:4,furnished:false,score:90,verified:true,publisher:'pro',pubName:'Immo Toulouse Sud',date:'Hier',bg:'#e6f7ed',emoji:'🏡',dpe:'B',desc:'Maison T4 110 m², jardin 200 m², garage, cave. Quartier calme, proche écoles et métro. Idéal famille.',marketAvg:1150,smartMatch:72,bookingSlots:['Mar 10h','Jeu 15h','Ven 14h'],lat:43.6,lng:1.44},
+  {id:103,type:'villa',title:'Villa provençale location saison',location:'Gordes, Luberon',price:3500,priceLabel:'3 500 €/semaine',dur:'saisonniere',surface:250,pieces:6,furnished:true,score:88,verified:true,publisher:'pro',pubName:'Luberon Locations',date:'Aujourd\'hui',bg:'#fef3e8',emoji:'🌿',dpe:'A',desc:'Magnifique villa provençale 250 m², piscine chauffée, 5 chambres, grande terrasse, oliveraie. Location saisonnière.',marketAvg:3200,smartMatch:60,bookingSlots:['Lun 10h','Mer 15h','Ven 11h'],lat:43.91,lng:5.2},
+  {id:104,type:'appartement',title:'F2 lumineux avec balcon',location:'Lyon 6e',price:950,priceLabel:'950 €/mois',dur:'longue',surface:52,pieces:2,furnished:false,score:85,verified:true,publisher:'pro',pubName:'Lyon Immobilier',date:'Hier',bg:'#e8f0fe',emoji:'🏙️',dpe:'C',desc:'Bel F2 de 52 m² au 4e étage avec ascenseur et balcon. Proche métro, écoles et commerces. Cuisine séparée.',marketAvg:930,smartMatch:82,bookingSlots:['Mar 14h','Mer 10h','Jeu 16h'],lat:45.77,lng:4.85},
+  {id:105,type:'studio',title:'Studio proche université',location:'Montpellier, Antigone',price:520,priceLabel:'520 €/mois',dur:'longue',surface:22,pieces:1,furnished:true,score:72,verified:false,publisher:'particulier',pubName:'Mlle Dubois',date:'Aujourd\'hui',bg:'#e6f7ed',emoji:'📚',dpe:'D',desc:'Studio meublé 22 m² proche université et tram. Calme, lumineux. Cuisine équipée, internet inclus.',marketAvg:540,smartMatch:91,bookingSlots:['Lun 10h','Mar 15h','Mer 14h'],lat:43.61,lng:3.88},
+  {id:106,type:'appartement',title:'F3 vue jardin',location:'Strasbourg, Orangerie',price:850,priceLabel:'850 €/mois',dur:'longue',surface:55,pieces:3,furnished:false,score:87,verified:true,publisher:'pro',pubName:'Strasbourg Immo',date:'Hier',bg:'#e8f0fe',emoji:'🌳',dpe:'B',desc:'Bel F3 de 55 m² avec vue sur le parc de l\'Orangerie. Calme, lumineux, proche centre-ville. Parking possible.',marketAvg:820,smartMatch:80,bookingSlots:['Mar 10h','Mer 15h','Jeu 14h'],lat:48.58,lng:7.77},
+  {id:107,type:'appartement',title:'T4 familial calme',location:'Lyon 3e',price:1450,priceLabel:'1 450 €/mois',dur:'longue',surface:90,pieces:4,furnished:false,score:84,verified:true,publisher:'pro',pubName:'Lyon Immo Ouest',date:'Avant-hier',bg:'#e8f0fe',emoji:'🏡',dpe:'C',desc:'Bel appartement T4 de 90 m², quartier calme et familial. Proche écoles et commerces. Garage inclus.',marketAvg:1400,smartMatch:75,bookingSlots:['Lun 14h','Mer 16h','Ven 10h'],lat:45.75,lng:4.84},
+  {id:108,type:'appartement',title:'Studio lumineux centre',location:'Paris 6e',price:1100,priceLabel:'1 100 €/mois',dur:'longue',surface:28,pieces:1,furnished:true,score:82,verified:true,publisher:'pro',pubName:'Paris Centre Immo',date:'Hier',bg:'#fef3e8',emoji:'🏙️',dpe:'C',desc:'Charmant studio parisien de 28 m², 3e étage. Proche Luxembourg et métro. Calme, traversant.',marketAvg:1050,smartMatch:78,bookingSlots:['Mar 11h','Jeu 15h','Sam 10h'],lat:48.85,lng:2.33},
+  {id:109,type:'appartement',title:'Appartement vue mer',location:'Marseille, Corniche',price:1650,priceLabel:'1 650 €/mois',dur:'longue',surface:80,pieces:3,furnished:true,score:93,verified:true,publisher:'pro',pubName:'Marseille Prestige',date:'Il y a 3 jours',bg:'#e8f0fe',emoji:'🌊',dpe:'B',desc:'Superbe appartement 80 m² avec vue mer panoramique. Terrasse 15 m², cuisine américaine. Parking inclus.',marketAvg:1600,smartMatch:70,bookingSlots:['Mer 14h','Jeu 11h','Sam 15h'],lat:43.28,lng:5.35},
+  {id:110,type:'maison',title:'Maison de ville T3',location:'Bordeaux, Chartrons',price:1350,priceLabel:'1 350 €/mois',dur:'longue',surface:85,pieces:3,furnished:false,score:80,verified:true,publisher:'particulier',pubName:'M. Durand',date:'Il y a 2 jours',bg:'#e6f7ed',emoji:'🏠',dpe:'D',desc:'Maison de ville 85 m² sur 2 niveaux, cour privée. Quartier des Chartrons, proche tram et commerces.',marketAvg:1300,smartMatch:65,bookingSlots:['Lun 15h','Mer 10h','Jeu 16h'],lat:44.84,lng:-0.56},
+  {id:111,type:'appartement',title:'F2 balcon vue dégagée',location:'Lyon 7e',price:780,priceLabel:'780 €/mois',dur:'longue',surface:48,pieces:2,furnished:false,score:76,verified:false,publisher:'particulier',pubName:'M. Petit',date:'Aujourd\'hui',bg:'#e6f7ed',emoji:'🏙️',dpe:'D',desc:'F2 de 48 m² au 5e étage avec balcon, vue dégagée. Proche métro et parc. Calme et lumineux.',marketAvg:800,smartMatch:85,bookingSlots:['Mar 10h','Jeu 14h'],lat:45.73,lng:4.85},
+  {id:112,type:'villa',title:'Villa luxe piscine chauffée',location:'Saint-Tropez',price:5500,priceLabel:'5 500 €/semaine',dur:'saisonniere',surface:300,pieces:7,furnished:true,score:96,verified:true,publisher:'pro',pubName:'Côte d\'Azur Locations',date:'Aujourd\'hui',bg:'#fef3e8',emoji:'🌴',dpe:'A',desc:'Villa d\'exception 300 m², piscine chauffée, vue mer, 6 chambres, jardin méditerranéen. Juillet-Août.',marketAvg:5200,smartMatch:55,bookingSlots:['Lun 10h','Mar 15h','Mer 14h'],lat:43.27,lng:6.64},
+];
+
+// ========== STATE ==========
+let state = {search:'',type:'all',dur:'all',maxPrice:'',minSurface:'',furnished:'all',dpe:'',publisher:'all',sort:'recent'};
+
+// ========== FILTER ==========
+function getFiltered() {
+  return rentalListings.filter(p => {
+    if(state.type!=='all' && p.type!==state.type) return false;
+    if(state.dur!=='all' && p.dur!==state.dur) return false;
+    if(state.furnished!=='all'){
+      if(state.furnished==='meuble' && !p.furnished) return false;
+      if(state.furnished==='non-meuble' && p.furnished) return false;
+    }
+    if(state.dpe && (p.dpe||' ')>state.dpe) return false;
+    if(state.maxPrice && p.price>Number(state.maxPrice)) return false;
+    if(state.minSurface && p.surface<Number(state.minSurface)) return false;
+    if(state.publisher!=='all' && p.publisher!==state.publisher) return false;
+    if(state.search){
+      const q=state.search.toLowerCase();
+      if(!p.title.toLowerCase().includes(q)&&!p.location.toLowerCase().includes(q)&&!p.type.toLowerCase().includes(q)) return false;
+    }
+    return true;
+  }).sort((a,b)=>{
+    switch(state.sort){
+      case'price-asc':return a.price-b.price;
+      case'price-desc':return b.price-a.price;
+      case'surface':return b.surface-a.surface;
+      default:return b.id-a.id;
+    }
+  });
+}
+
+// ========== RENDER ==========
+function scoreBadge(s) {
+  if(!s) return '';
+  const c=s>=80?'sc-h':s>=60?'sc-m':'sc-l';
+  return `<span class="loc-score ${c}">⭐ ${s}</span>`;
+}
+
+function renderListings() {
+  const grid=document.getElementById('locGrid');
+  const count=document.getElementById('locCount');
+  const f=getFiltered();
+  count.innerHTML=`<strong>${f.length}</strong> location${f.length>1?'s':''} trouvée${f.length>1?'s':''}`;
+  if(f.length===0){
+    grid.innerHTML='<div style="text-align:center;padding:60px;background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg)"><div style="font-size:3rem;margin-bottom:12px">🔍</div><h3>Aucune location trouvée</h3><p style="color:var(--text-secondary);font-size:0.85rem">Essayez de modifier vos filtres.</p></div>';
+    return;
+  }
+  grid.innerHTML=f.map(p=>{
+    const pubClass=p.publisher==='pro'?'pt-pro':'pt-particulier';
+    const pubLabel=p.publisher==='pro'?'Pro':'Particulier';
+    const durLabel=p.dur==='longue'?'Longue durée':'Saisonnière';
+    const furnLabel=p.furnished?'🪑 Meublé':'🚪 Non meublé';
+    const durClass=p.dur==='saisonniere'?'lb-seasonal':'lb-rent';
+    return `<div class="loc-card" onclick="openModal(${p.id})">
+      <div class="loc-img" style="background:${p.bg}">
+        <span class="lb ${durClass}">${durLabel}</span>
+        ${p.verified?`<span class="lb lb-verified">🛡️</span>`:''}
+        ${p.emoji}
+      </div>
+      <div class="loc-info">
+        <div class="loc-price">${p.priceLabel}${scoreBadge(p.score)}</div>
+        <div class="loc-price-sub">${p.dpe?'DPE '+p.dpe+' · ':''}${furnLabel}</div>
+        <div class="loc-title">${p.title}</div>
+        <div class="loc-loc">📍 ${p.location}</div>
+        <div class="loc-tags">
+          <span class="loc-tag">📐 <strong>${p.surface} m²</strong></span>
+          <span class="loc-tag">🛏️ <strong>${p.pieces}</strong> pièce${p.pieces>1?'s':''}</span>
+          ${p.smartMatch?`<span class="loc-tag" style="color:var(--purple)">🤖 <strong>${p.smartMatch}%</strong> match</span>`:''}
+        </div>
+        <div class="loc-footer">
+          <div class="pub"><span class="pt ${pubClass}">${pubLabel}</span>${p.pubName}</div>
+          <div class="date">${p.date}</div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function filterListings() {
+  state.search=document.getElementById('locSearch').value;
+  renderListings();
+}
+
+function setSort(s) {
+  state.sort=s;
+  document.querySelectorAll('.loc-tabs button').forEach(b=>b.classList.toggle('active',b.dataset.sort===s));
+  renderListings();
+}
+
+function resetFilters() {
+  state={search:'',type:'all',dur:'all',maxPrice:'',minSurface:'',furnished:'all',dpe:'',publisher:'all',sort:'recent'};
+  document.getElementById('locSearch').value='';
+  document.getElementById('locMaxPrice').value='';
+  document.getElementById('locMinSurface').value='';
+  document.getElementById('locDPE').value='';
+  document.getElementById('locPublisher').value='all';
+  document.querySelectorAll('.loc-btn-group button').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('[data-lt="all"]').forEach(b=>b.classList.add('active'));
+  document.querySelectorAll('[data-ld="all"]').forEach(b=>b.classList.add('active'));
+  document.querySelectorAll('[data-lf="all"]').forEach(b=>b.classList.add('active'));
+  document.getElementById('locType').value='all';
+  document.getElementById('locDuration').value='all';
+  renderListings();
+}
+
+// Sidebar filter events
+document.querySelectorAll('#locTypeFilter button').forEach(b=>{
+  b.addEventListener('click',()=>{
+    document.querySelectorAll('#locTypeFilter button').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+    state.type=b.dataset.lt;
+    renderListings();
+  });
+});
+document.querySelectorAll('#locDurFilter button').forEach(b=>{
+  b.addEventListener('click',()=>{
+    document.querySelectorAll('#locDurFilter button').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+    state.dur=b.dataset.ld;
+    renderListings();
+  });
+});
+document.querySelectorAll('#locFurnishedFilter button').forEach(b=>{
+  b.addEventListener('click',()=>{
+    document.querySelectorAll('#locFurnishedFilter button').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+    state.furnished=b.dataset.lf;
+    renderListings();
+  });
+});
+document.getElementById('locMaxPrice').addEventListener('input',function(){state.maxPrice=this.value;renderListings()});
+document.getElementById('locMinSurface').addEventListener('input',function(){state.minSurface=this.value;renderListings()});
+document.getElementById('locDPE').addEventListener('change',function(){state.dpe=this.value;renderListings()});
+document.getElementById('locPublisher').addEventListener('change',function(){state.publisher=this.value;renderListings()});
+
+// ========== MODAL ==========
+function openModal(id) {
+  const p=rentalListings.find(x=>x.id===id);
+  if(!p) return;
+  const durLabel=p.dur==='longue'?'Longue durée':'Saisonnière';
+  const furnLabel=p.furnished?'🪑 Meublé':'🚪 Non meublé';
+  const pubClass=p.publisher==='pro'?'pt-pro':'pt-particulier';
+  const pubLabel=p.publisher==='pro'?'Pro':'Particulier';
+  document.getElementById('modalTitle').textContent=p.title;
+  document.getElementById('modalBody').innerHTML=`
+    <div class="modal-img" style="background:${p.bg};font-size:4.5rem">${p.emoji}</div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">
+      <span class="lb lb-rent" style="position:static;font-size:0.65rem">${durLabel}</span>
+      ${p.verified?`<span class="lb lb-verified" style="position:static;font-size:0.65rem">🛡️ Vérifié</span>`:''}
+      ${p.furnished?`<span class="lb lb-furnished" style="position:static;font-size:0.65rem">Meublé</span>`:''}
+    </div>
+    <div class="m-price">${p.priceLabel}</div>
+    <div class="m-sub">📍 ${p.location} · ${furnLabel} · DPE ${p.dpe||'N/C'} · ${pubLabel} ${p.pubName}</div>
+    <div class="m-grid">
+      <div class="m-gi">📐 <strong>${p.surface} m²</strong></div>
+      <div class="m-gi">🛏️ <strong>${p.pieces}</strong> pièce${p.pieces>1?'s':''}</div>
+      ${p.dpe?`<div class="m-gi">🔋 DPE <strong>${p.dpe}</strong></div>`:''}
+      <div class="m-gi">📅 En ligne <strong>${p.date}</strong></div>
+    </div>
+    <div class="m-desc">${p.desc}</div>
+    ${p.score?`<div style="background:var(--bg);border-radius:var(--radius);padding:14px 16px;margin:12px 0;display:flex;justify-content:space-between;align-items:center">
+      <span style="font-size:0.85rem;font-weight:500">🛡️ Score de confiance</span>
+      <span style="font-weight:700;color:${p.score>=80?'#059669':p.score>=60?'#d97706':'#dc2626'}">${p.score}/100</span>
+    </div>`:''}
+    ${p.marketAvg?`<div style="background:var(--bg);border-radius:var(--radius);padding:14px 16px;margin:12px 0">
+      <div style="display:flex;justify-content:space-between;font-size:0.85rem;margin-bottom:6px">
+        <span>📊 Loyer vs marché</span>
+        <span style="font-weight:600;color:${p.price>p.marketAvg?'#d97706':'#059669'}">${p.price>p.marketAvg?'+'+Math.round((p.price-p.marketAvg)/p.marketAvg*100):Math.round((p.price-p.marketAvg)/p.marketAvg*100)}%</span>
+      </div>
+      <div style="height:6px;background:var(--border);border-radius:3px;overflow:hidden">
+        <div style="height:100%;width:${Math.min(100,Math.round(p.price/p.marketAvg*50)+50)}%;background:${p.price>p.marketAvg?'#d97706':'#059669'};border-radius:3px"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:0.75rem;color:var(--text-secondary);margin-top:4px">
+        <span>${p.priceLabel}</span>
+        <span>Moyenne: ${p.marketAvg} €</span>
+      </div>
+    </div>`:''}
+    <div class="m-contact">
+      <button class="btn-primary" onclick="alert('📨 Message envoyé à ${p.pubName} !')">✉️ Contacter le bailleur</button>
+      <button class="btn-secondary" onclick="alert('📞 Appel en cours... ${p.publisher==='pro'?'01 42 37 65 00':'06 12 34 56 78'}')">📞 Appeler</button>
+    </div>
+  `;
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function closeModal(){document.getElementById('modalOverlay').classList.remove('open')}
+document.getElementById('modalOverlay').addEventListener('click',function(e){if(e.target===this)closeModal()});
+
+// ========== TOOLS ==========
+function toggleTool(id) {
+  const p=document.getElementById('tp-'+id);
+  const all=['estimate','yield','guide'];
+  all.forEach(a=>{document.getElementById('tp-'+a).classList.toggle('open',a===id&&!p.classList.contains('open'))});
+}
+
+function estimateRent() {
+  const city=document.getElementById('estCity').value.trim().toLowerCase()||'paris 11e';
+  const type=document.getElementById('estType').value;
+  const surface=parseFloat(document.getElementById('estSurface').value)||50;
+  const meuble=document.getElementById('estMeuble').value;
+  const dpe=document.getElementById('estDPE').value;
+
+  const guide={paris:{appartement:26,maison:22,studio:28},lyon:{appartement:17,maison:15,studio:20},
+    bordeaux:{appartement:19,maison:17,studio:22},marseille:{appartement:13.5,maison:12,studio:16},
+    toulouse:{appartement:14.5,maison:13,studio:17},lille:{appartement:12.5,maison:11,studio:15},
+    montpellier:{appartement:13.5,maison:12,studio:16},nantes:{appartement:15,maison:13,studio:18},
+    strasbourg:{appartement:16,maison:14,studio:19},'saint-etienne':{appartement:8.5,maison:7.5,studio:10},
+    grenoble:{appartement:12,maison:11,studio:14}};
+
+  let base=9;
+  for(const k in guide){
+    if(city.includes(k)){base=guide[k][type]||guide[k].appartement||9;break}
+  }
+  if(meuble==='oui') base*=1.15;
+  const dpeAdjust={A:1.1,B:1.05,C:1.03,D:1.0,E:0.95,F:0.88,G:0.8};
+  base*=dpeAdjust[dpe]||1.0;
+  const rent=Math.round(base*surface);
+  document.getElementById('estResult').textContent=rent.toLocaleString('fr-FR')+' €/mois';
+  document.getElementById('estResultSub').textContent=`Soit ${base.toFixed(1)} €/m² · ${type} ${meuble==='oui'?'meublé':'non meublé'} · DPE ${dpe}`;
+}
+
+function calcYield() {
+  const price=parseFloat(document.getElementById('yieldPrice').value)||0;
+  const rent=parseFloat(document.getElementById('yieldRent').value)||0;
+  const charges=parseFloat(document.getElementById('yieldCharges').value)||0;
+  const notaire=parseFloat(document.getElementById('yieldNotaire').value)||0;
+  const totalInvest=price+notaire;
+  const annualRent=rent*12;
+  const brut=totalInvest>0?(annualRent/totalInvest*100):0;
+  const net=totalInvest>0?((annualRent-charges)/totalInvest*100):0;
+  const cashflow=rent-(charges/12);
+  document.getElementById('yieldBrut').textContent=brut.toFixed(1)+' %';
+  document.getElementById('yieldNet').textContent=net.toFixed(1)+' %';
+  document.getElementById('yieldCashflow').textContent=(cashflow>0?'+':'')+cashflow.toFixed(0)+' €/mois';
+}
+
+// ========== DEPOSIT ==========
+function openDepositModal(){document.getElementById('depositOverlay').classList.add('open')}
+function closeDeposit(){document.getElementById('depositOverlay').classList.remove('open')}
+document.getElementById('depositOverlay').addEventListener('click',function(e){if(e.target===this)closeDeposit()});
+function submitDeposit(e){
+  e.preventDefault();
+  const title=document.getElementById('depTitle').value;
+  alert('✅ Votre annonce "'+title+'" a été publiée avec succès !');
+  closeDeposit();
+}
+
+// ========== INIT ==========
+document.addEventListener('DOMContentLoaded',()=>{
+  renderListings();
+  document.getElementById('menuToggle').addEventListener('click',()=>{
+    document.getElementById('headerLinks').classList.toggle('open');
+  });
+});
+</script>
+</body>
+</html>

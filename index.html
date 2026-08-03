@@ -2,10 +2,17 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Immo-Express — Plateforme Immobilière Intelligente</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Immo-Express — Plateforme Immobilière Intelligente</title>
+    <meta name="theme-color" content="#d4a853">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="ImmoExpress">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="assets/icon-192.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="assets/icon-192.svg">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
@@ -15,11 +22,12 @@
     <div class="logo"><div class="logo-icon">iE</div>Immo<span>Express</span></div>
     <button class="mobile-toggle" id="menuToggle">☰</button>
     <div class="header-links" id="headerLinks">
-      <a href="#" class="active">Vente</a>
-      <a href="#">Location</a>
-      <a href="#">Professionnels</a>
-      <a href="#" class="btn-depot" onclick="openDepositModal();return false;">+ Déposer une annonce</a>
-    </div>
+                        <a href="scoring.html">🔬 Notation</a>
+                        <a href="location.html">📍 Location</a>
+                        <a href="pro.html">🏢 Espace Pro</a>
+          <a href="#" class="btn-depot" onclick="openDepositModal();return false;">+ Déposer une annonce</a>
+          <button class="btn-user" id="userBtn" onclick="openAuthModal();return false;">👤 <span>Connexion</span></button>
+        </div>
   </div>
 </header>
 
@@ -206,6 +214,36 @@
   </div>
 </div>
 
+<!-- ============ AUTH MODAL ============ -->
+<div class="modal-overlay" id="authModal" onclick="if(event.target===this)closeAuthModal()">
+  <div class="modal auth-modal">
+    <button class="modal-close" onclick="closeAuthModal()">✕</button>
+    <div class="auth-header">
+      <h2>Bienvenue</h2>
+      <p>Connectez-vous pour gérer vos annonces</p>
+    </div>
+    <div class="auth-tabs">
+      <button class="auth-tab active" data-tab="login" onclick="switchTab('login')">Connexion</button>
+      <button class="auth-tab" data-tab="register" onclick="switchTab('register')">Inscription</button>
+    </div>
+    <div class="auth-status" id="authStatus"></div>
+    <form class="auth-form active" id="authLogin" onsubmit="handleLogin(event)">
+      <input type="email" id="loginEmail" placeholder="Votre email" required>
+      <input type="password" id="loginPassword" placeholder="Mot de passe" required>
+      <button type="submit" class="auth-submit">Se connecter</button>
+    </form>
+    <form class="auth-form" id="authRegister" onsubmit="handleRegister(event)">
+      <input type="text" id="regName" placeholder="Votre nom" required>
+      <input type="email" id="regEmail" placeholder="Votre email" required>
+      <input type="password" id="regPassword" placeholder="Mot de passe (6+ car.)" required minlength="6">
+      <button type="submit" class="auth-submit">Créer mon compte</button>
+    </form>
+    <div class="auth-footer" id="authFooter" style="display:none;">
+      <button class="btn-logout" onclick="handleLogout()">Se déconnecter</button>
+    </div>
+  </div>
+</div>
+
 <!-- CHATBOT -->
 <button class="chat-toggle" id="chatToggle" onclick="toggleChat()">💬<span class="badge-dot"></span></button>
 <div class="chat-panel" id="chatPanel">
@@ -217,15 +255,23 @@
 
 <footer class="page-footer">
   <div class="footer-inner">
-    <div><div class="logo" style="margin-bottom:8px;"><div class="logo-icon">iE</div>Immo<span>Express</span></div><p>La plateforme immobilière intelligente. Annonces vérifiées, analyses IA, mise en relation directe.</p></div>
-    <div><h4>Vente</h4><ul><li><a href="#">Appartements</a></li><li><a href="#">Maisons</a></li><li><a href="#">Villas</a></li><li><a href="#">Studios</a></li></ul></div>
-    <div><h4>Location</h4><ul><li><a href="#">Appartements</a></li><li><a href="#">Maisons</a></li><li><a href="#">Studios</a></li><li><a href="#">Saisonnière</a></li></ul></div>
-    <div><h4>Innovations</h4><ul><li><a href="#" onclick="alert('🛡️ Score de confiance IA : chaque annonce est analysée et notée sur 100 selon la qualité des informations fournies.')">Score de confiance</a></li><li><a href="#" onclick="alert('📊 Analyse IA : notre intelligence artificielle compare le prix du bien au marché local et estime sa justesse.')">Analyse IA des prix</a></li><li><a href="#" onclick="alert('🤝 Smart Match : l\'IA trouve les biens qui correspondent le mieux à vos critères avec un score de compatibilité.')">Smart Match</a></li><li><a href="#" onclick="alert('📅 Visites en ligne : réservez vos visites directement depuis l\'annonce, sans appel.')">Visites programmées</a></li></ul></div>
-  </div>
+      <div><div class="logo" style="margin-bottom:8px;"><div class="logo-icon">iE</div>Immo<span>Express</span></div><p>La plateforme immobilière intelligente. Annonces vérifiées, analyses IA, mise en relation directe.</p></div>
+      <div><h4>Notation</h4><ul><li><a href="scoring.html">🔬 Analyser un bien</a></li><li><a href="scoring.html">Score de confiance</a></li><li><a href="scoring.html">Rendement locatif</a></li></ul></div>
+      <div><h4>Location</h4><ul><li><a href="location.html">📍 Trouver une location</a></li><li><a href="location.html">📊 Estimer un loyer</a></li><li><a href="location.html">📈 Calcul rendement</a></li></ul></div>
+      <div><h4>Pro</h4><ul><li><a href="pro.html">🏢 Espace professionnel</a></li><li><a href="pro.html">Dashboard</a></li><li><a href="pro.html">Abonnements</a></li></ul></div>
+    </div>
   <div class="footer-bottom"><span>© 2025 Immo-Express — Plateforme immobilière intelligente</span><span>CGU · Confidentialité · Cookies</span></div>
 </footer>
 
 
+<script src="js/auth.js"></script>
 <script src="js/app.js"></script>
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js')
+      .then(() => console.log('📱 PWA ready'))
+      .catch(() => console.log('SW not supported'));
+  }
+</script>
 </body>
 </html>
