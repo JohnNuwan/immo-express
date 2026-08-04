@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Risques Géographiques — Immo-Express</title>
+  <link rel="icon" href="assets/icon-192.svg" type="image/svg+xml">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--white:#fff;--bg:#f3f4f6;--bg-card:#fff;--border:#e5e7eb;--border-hover:#d1d5db;--text:#111827;--text-secondary:#6b7280;--text-tertiary:#9ca3af;--blue:#2563eb;--blue-light:#eff6ff;--blue-dark:#1d4ed8;--green:#059669;--green-light:#ecfdf5;--orange:#d97706;--orange-light:#fef3c7;--red:#dc2626;--red-light:#fef2f2;--purple:#7c3aed;--purple-light:#f5f3ff;--teal:#0d9488;--teal-light:#f0fdfa;--shadow-sm:0 1px 2px rgba(0,0,0,0.05);--shadow:0 1px 3px rgba(0,0,0,0.1),0 1px 2px rgba(0,0,0,0.06);--shadow-md:0 4px 6px rgba(0,0,0,0.07),0 2px 4px rgba(0,0,0,0.06);--shadow-lg:0 10px 25px rgba(0,0,0,0.1);--radius-sm:6px;--radius:8px;--radius-lg:12px;--font:'Inter',-apple-system,BlinkMacSystemFont,sans-serif}
+    body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.5;min-height:100vh}
+
+    /* HEADER */
+    .header{background:var(--white);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+    .header-inner{max-width:1200px;margin:0 auto;padding:0 20px;height:64px;display:flex;align-items:center;justify-content:space-between}
+    .logo{font-size:1.35rem;font-weight:800;color:var(--text);display:flex;align-items:center;gap:8px;cursor:pointer}
+    .logo span{color:var(--blue)}
+    .header-links{display:flex;align-items:center;gap:4px}
+    .header-links a{padding:8px 16px;border-radius:var(--radius);font-size:0.875rem;font-weight:500;color:var(--text-secondary);transition:all 0.15s;text-decoration:none}
+    .header-links a:hover{background:var(--bg);color:var(--text);text-decoration:none}
+    .header-links a.active{color:var(--blue);background:var(--blue-light)}
+    .mobile-toggle{display:none;background:none;border:none;font-size:1.5rem;cursor:pointer;padding:4px;color:var(--text)}
+
+    /* HERO */
+    .hero-risk{background:linear-gradient(135deg,#059669 0%,#047857 100%);padding:40px 20px;text-align:center}
+    .hero-risk h1{font-size:1.8rem;font-weight:700;color:white;margin-bottom:6px}
+    .hero-risk p{color:rgba(255,255,255,0.85);font-size:0.95rem;margin-bottom:24px;max-width:600px;margin-left:auto;margin-right:auto}
+
+    /* MAIN */
+    .risk-main{max-width:1200px;margin:0 auto;padding:24px 20px}
+
+    /* SEARCH */
+    .risk-search{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px;margin-bottom:24px}
+    .risk-search h2{font-size:1.1rem;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+    .search-row{display:grid;grid-template-columns:1fr auto;gap:12px}
+    @media(max-width:640px){.search-row{grid-template-columns:1fr}}
+    .search-row input{padding:14px 18px;border:2px solid var(--border);border-radius:var(--radius);font-size:1rem;font-family:var(--font);outline:none;transition:border-color 0.15s}
+    .search-row input:focus{border-color:var(--green)}
+    .search-row button{padding:14px 32px;background:var(--green);color:white;border:none;border-radius:var(--radius);font-weight:600;font-size:1rem;cursor:pointer;font-family:var(--font);transition:background 0.15s;white-space:nowrap}
+    .search-row button:hover{background:#047857}
+    .search-row button:disabled{opacity:0.6;cursor:not-allowed}
+
+    /* LOADING */
+    .loading-spinner{display:none;text-align:center;padding:40px}
+    .loading-spinner.active{display:block}
+    .spinner{width:40px;height:40px;border:4px solid var(--border);border-top-color:var(--green);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 12px}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .loading-spinner p{color:var(--text-secondary);font-size:0.85rem}
+
+    /* RESULTS */
+    .risk-results{display:none}
+    .risk-results.active{display:block}
+
+    .risk-hero{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px;margin-bottom:20px}
+    .risk-hero-inner{display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:center}
+    @media(max-width:700px){.risk-hero-inner{grid-template-columns:1fr;text-align:center}}
+    .risk-score-circle{width:140px;height:140px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto;flex-shrink:0}
+    .risk-score-circle .rs-value{font-size:2.6rem;font-weight:800}
+    .risk-score-circle .rs-label{font-size:0.7rem;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.5px}
+    .risk-hero-info h2{font-size:1.3rem;font-weight:600;margin-bottom:4px}
+    .risk-hero-info .risk-addr{font-size:0.9rem;color:var(--text-secondary);margin-bottom:8px}
+    .risk-hero-info .risk-niveau{font-size:1rem;padding:8px 20px;border-radius:var(--radius);font-weight:600;display:inline-block;margin-top:4px}
+
+    .risk-map-wrap{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;margin-bottom:20px}
+    .risk-map-wrap h3{font-size:1rem;font-weight:600;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+    .risk-map{height:400px;border-radius:var(--radius);overflow:hidden;border:1px solid var(--border)}
+
+    .risques-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px;margin-bottom:20px}
+    .risk-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px;transition:box-shadow 0.2s}
+    .risk-card:hover{box-shadow:var(--shadow-md)}
+    .risk-card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+    .risk-card-header .rc-label{font-size:0.9rem;font-weight:600;display:flex;align-items:center;gap:8px}
+    .risk-card-header .rc-score{font-size:1.1rem;font-weight:700}
+    .risk-bar{height:8px;background:var(--bg);border-radius:4px;overflow:hidden;margin-bottom:6px}
+    .risk-bar-fill{height:100%;border-radius:4px;transition:width 1s ease}
+    .risk-card-detail{font-size:0.8rem;color:var(--text-secondary);display:flex;justify-content:space-between;flex-wrap:wrap;gap:4px}
+
+    .risk-table-wrap{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px;margin-bottom:20px;overflow-x:auto}
+    .risk-table-wrap h3{font-size:1rem;font-weight:600;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+    table.score-table{width:100%;border-collapse:collapse;font-size:0.85rem}
+    table.score-table th{text-align:left;padding:10px 12px;background:var(--bg);font-weight:500;color:var(--text-secondary);font-size:0.8rem;text-transform:uppercase;letter-spacing:0.3px;border-bottom:1px solid var(--border)}
+    table.score-table td{padding:10px 12px;border-bottom:1px solid var(--border)}
+    table.score-table tr:last-child td{border-bottom:none}
+    table.score-table tr:hover td{background:var(--bg)}
+    table.score-table .td-score{font-weight:700;text-align:center}
+
+    .risk-summary{background:var(--green-light);border:1px solid var(--green);border-radius:var(--radius-lg);padding:24px;margin-bottom:20px;display:none}
+    .risk-summary.active{display:block}
+    .risk-summary h3{font-size:1rem;font-weight:600;margin-bottom:8px;color:var(--green)}
+    .risk-summary p{font-size:0.9rem;color:var(--text-secondary);line-height:1.7}
+
+    .risk-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:24px}
+    .btn-primary{padding:12px 32px;background:var(--green);color:white;border:none;border-radius:var(--radius);font-weight:600;font-size:0.9rem;cursor:pointer;font-family:var(--font);transition:background 0.15s}
+    .btn-primary:hover{background:#047857}
+    .btn-secondary{padding:12px 32px;background:var(--white);color:var(--text-secondary);border:1px solid var(--border);border-radius:var(--radius);font-weight:500;font-size:0.9rem;cursor:pointer;font-family:var(--font);transition:all 0.15s}
+    .btn-secondary:hover{background:var(--bg);border-color:var(--border-hover)}
+
+    .error-msg{background:var(--red-light);border:1px solid var(--red);color:var(--red);padding:20px;border-radius:var(--radius-lg);margin-bottom:20px;display:none;font-size:0.9rem}
+    .error-msg.active{display:block}
+
+    @media(max-width:900px){.risques-grid{grid-template-columns:1fr}}
+    @media(max-width:640px){
+      .mobile-toggle{display:block}
+      .header-links{display:none;position:absolute;top:64px;left:0;right:0;background:var(--white);border-bottom:1px solid var(--border);flex-direction:column;padding:12px;box-shadow:var(--shadow-md)}
+      .header-links.open{display:flex}
+      .header-links a{padding:12px 16px;width:100%}
+      .hero-risk h1{font-size:1.3rem}
+      .risk-score-circle{width:110px;height:110px}
+      .risk-score-circle .rs-value{font-size:2rem}
+      .risk-map{height:280px}
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-inner">
+    <div class="logo" onclick="location.href='index.html'"><img src="assets/icon-192.svg" alt="Immo-Express" style="height:36px;width:36px;border-radius:6px"><span style="font-size:1.2rem;font-weight:800">Immo</span><span style="color:var(--blue);font-size:1.2rem;font-weight:800">Express</span></div>
+    <button class="mobile-toggle" id="menuToggle">☰</button>
+    <div class="header-links" id="headerLinks">
+      <a href="index.html">Accueil</a>
+      <a href="vente.html">💰 Acheter</a>
+      <a href="scoring.html">🔬 Notation</a>
+      <a href="risques.html" class="active">🌍 Risques</a>
+      <a href="location.html">📍 Location</a>
+      <a href="pro.html">🏢 Espace Pro</a>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero-risk">
+  <h1>🌍 Analyse des Risques Géographiques</h1>
+  <p>Évaluez les risques naturels, technologiques et environnementaux de n'importe quel bien immobilier en France — données officielles Géorisques (BRGM)</p>
+</section>
+
+<!-- MAIN -->
+<div class="risk-main">
+
+  <!-- Search -->
+  <div class="risk-search">
+    <h2>📍 Adresse du bien</h2>
+    <div class="search-row">
+      <input type="text" id="rAddress" placeholder="Ex: 15 rue de la République, Lyon 3e, 69003" value="Paris 11e">
+      <button id="rBtn" onclick="searchRisques()">🌍 Analyser</button>
+    </div>
+    <p style="margin-top:10px;font-size:0.8rem;color:var(--text-tertiary)">Appuyez sur <strong>Entrée</strong> pour lancer la recherche</p>
+  </div>
+
+  <!-- Loading -->
+  <div class="loading-spinner" id="loadingSpinner">
+    <div class="spinner"></div>
+    <p>🤖 Interrogation de l'API Géorisques (BRGM)…</p>
+  </div>
+
+  <!-- Error -->
+  <div class="error-msg" id="errorMsg"></div>
+
+  <!-- RESULTS -->
+  <div class="risk-results" id="riskResults">
+
+    <!-- Hero -->
+    <div class="risk-hero">
+      <div class="risk-hero-inner">
+        <div class="risk-score-circle" id="riskScoreCircle" style="background:var(--bg)">
+          <span class="rs-value" id="riskScoreValue">—</span>
+          <span class="rs-label">/100</span>
+        </div>
+        <div class="risk-hero-info">
+          <h2 id="riskResultTitle">Analyse des risques géographiques</h2>
+          <div class="risk-addr" id="riskResultAddr">📍 </div>
+          <div class="risk-niveau" id="riskResultNiveau"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Map -->
+    <div class="risk-map-wrap">
+      <h3>🗺️ Localisation</h3>
+      <div class="risk-map" id="riskMap"></div>
+    </div>
+
+    <!-- Risk Cards -->
+    <div class="risques-grid" id="risquesGrid"></div>
+
+    <!-- Detail Table -->
+    <div class="risk-table-wrap">
+      <h3>📋 Détail des risques par catégorie</h3>
+      <table class="score-table">
+        <thead>
+          <tr><th>Catégorie</th><th>Note</th><th>Pénalité</th><th>Détail</th></tr>
+        </thead>
+        <tbody id="riskTableBody"></tbody>
+        <tfoot id="riskTableFoot"></tfoot>
+      </table>
+    </div>
+
+    <!-- Sources -->
+    <div class="risk-summary" id="riskSummary">
+      <h3>🏛️ Sources officielles</h3>
+      <p id="riskSourceText">Données fournies par l'API Géorisques du BRGM (Bureau de Recherches Géologiques et Minières) — <a href="https://georisques.gouv.fr" target="_blank" style="color:var(--green);font-weight:500">georisques.gouv.fr</a>. Les informations sont données à titre indicatif et ne remplacent pas les diagnostics réglementaires obligatoires (ERNMT, DPE, etc.).</p>
+    </div>
+
+    <div class="risk-actions">
+      <button class="btn-primary" onclick="searchRisques()">🔄 Nouvelle recherche</button>
+      <button class="btn-secondary" onclick="window.location.href='scoring.html'">🔬 Notation complète</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ========== RISQUES GÉOGRAPHIQUES — Script autonome ==========
+
+// Cache
+const geoCache = {};
+
+// Géocodage Nominatim
+async function geocodeAddress(query) {
+  const cacheKey = 'geo_' + query.toLowerCase().trim();
+  if (geoCache[cacheKey]) return geoCache[cacheKey];
+
+  const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&limit=1&countrycodes=fr&addressdetails=1`;
+  const resp = await fetch(url, { headers: { 'User-Agent': 'ImmoExpress/1.0' } });
+  if (!resp.ok) throw new Error('Géocoding échoué');
+  const data = await resp.json();
+  if (!data.length) throw new Error('Adresse introuvable sur OpenStreetMap');
+  const r = data[0];
+  const result = {
+    lat: parseFloat(r.lat), lng: parseFloat(r.lon),
+    displayName: r.display_name,
+    city: r.address?.city || r.address?.town || r.address?.village || '',
+    postcode: r.address?.postcode || '',
+    insee: r.address?.city_code || r.address?.village_code || '',
+    department: r.address?.state || ''
+  };
+  geoCache[cacheKey] = result;
+  return result;
+}
+
+// API Géorisques
+async function fetchRisquesByCommune(codeInsee) {
+  if (!codeInsee) return null;
+  const cacheKey = 'risques_' + codeInsee;
+  if (geoCache[cacheKey]) return geoCache[cacheKey];
+
+  const GEORISQUES_BASE = 'https://georisques.gouv.fr/api/v1';
+  try {
+    const [risques, radon, seisme, argiles, icpe] = await Promise.all([
+      fetch(GEORISQUES_BASE + '/risques?code_insee=' + codeInsee).then(r => r.ok ? r.json() : null),
+      fetch(GEORISQUES_BASE + '/radon?code_insee=' + codeInsee).then(r => r.ok ? r.json() : null),
+      fetch(GEORISQUES_BASE + '/seisme?code_insee=' + codeInsee).then(r => r.ok ? r.json() : null),
+      fetch(GEORISQUES_BASE + '/argiles?code_insee=' + codeInsee).then(r => r.ok ? r.json() : null),
+      fetch(GEORISQUES_BASE + '/icpe?code_insee=' + codeInsee + '&page=1&page_size=1').then(r => r.ok ? r.json() : null)
+    ]);
+    const result = {
+      risques: parseRisques(risques), radon: parseRadon(radon),
+      seisme: parseSeisme(seisme), argiles: parseArgiles(argiles),
+      icpe: parseICPE(icpe)
+    };
+    geoCache[cacheKey] = result;
+    return result;
+  } catch(e) {
+    console.warn('Erreur API Géorisques:', e);
+    return null;
+  }
+}
+
+function parseRisques(data) {
+  if (!data?.data?.length) return null;
+  const risques = data.data;
+  const result = { inondation: null, mouvementTerrain: null, cavites: null, feuxForet: null, submersionMarine: null, avalanche: null, risquesTechno: null, count: 0 };
+  for (const r of risques) {
+    const lib = (r.libelle_risque || '').toLowerCase();
+    if (lib.includes('inondation') || lib.includes('crue')) result.inondation = r;
+    if (lib.includes('mouvement de terrain')) result.mouvementTerrain = r;
+    if (lib.includes('cavité') || lib.includes('cavite')) result.cavites = r;
+    if (lib.includes('feu de forêt') || lib.includes('feu de foret')) result.feuxForet = r;
+    if (lib.includes('submersion')) result.submersionMarine = r;
+    if (lib.includes('avalanche')) result.avalanche = r;
+    if (lib.includes('industriel') || lib.includes('seveso') || lib.includes('icpe')) result.risquesTechno = r;
+    result.count++;
+  }
+  return result;
+}
+function parseRadon(d) { return d?.data?.length ? d.data[0] : null; }
+function parseSeisme(d) { return d?.data?.length ? d.data[0] : null; }
+function parseArgiles(d) { return d?.data?.length ? d.data[0] : null; }
+function parseICPE(d) { if (!d?.data?.length) return null; return { count: d.total_count || d.data.length, etablissements: d.data }; }
+
+// Calcul du score
+function computeGeoRiskScore(geoData) {
+  if (!geoData) return { score: 50, details: {}, niveau: 'Non disponible', couleur: '#6b7280' };
+
+  const details = {};
+  let penalites = 0;
+
+  // Séisme (15 pts)
+  const s = geoData.seisme;
+  if (s) {
+    const zone = parseInt(s.zone_sismique) || 1;
+    const pen = Math.min(15, (zone - 1) * 3.75);
+    penalites += pen;
+    details.seisme = { note: Math.round(15 - pen), penalite: Math.round(pen), zone, label: ['Très faible','Faible','Modéré','Moyen','Fort'][zone-1] || 'Inconnu' };
+  }
+
+  // Argiles (15 pts)
+  const a = geoData.argiles;
+  if (a) {
+    const niv = (a.libelle_alea || a.alea || '').toLowerCase();
+    let pen = 0;
+    if (niv.includes('fort')) pen = 15; else if (niv.includes('moyen')) pen = 10; else if (niv.includes('faible')) pen = 3;
+    penalites += pen;
+    details.argiles = { note: Math.round(15 - pen), penalite: Math.round(pen), niveau: niv || 'NR' };
+  }
+
+  // Inondation (15 pts)
+  const i = geoData.risques?.inondation;
+  if (i) { penalites += 12; details.inondation = { note: 3, penalite: 12, present: true, libelle: i.libelle_risque || 'Zone inondable' }; }
+  else { details.inondation = { note: 15, penalite: 0, present: false }; }
+
+  // Radon (10 pts)
+  const rd = geoData.radon;
+  if (rd) {
+    const cat = parseInt(rd.classe_potentiel) || 1;
+    const pen = [0, 2, 5, 10][cat - 1] || 0;
+    penalites += pen;
+    details.radon = { note: Math.round(10 - pen), penalite: pen, categorie: cat, label: ['Faible','Moyen','Significatif','Élevé'][cat-1] || 'NR' };
+  }
+
+  // Mouvements terrain (10 pts)
+  const mt = geoData.risques?.mouvementTerrain;
+  if (mt) { penalites += 8; details.mouvementTerrain = { note: 2, penalite: 8, present: true }; } else { details.mouvementTerrain = { note: 10, penalite: 0, present: false }; }
+
+  // Cavités (10 pts)
+  const cv = geoData.risques?.cavites;
+  if (cv) { penalites += 8; details.cavites = { note: 2, penalite: 8, present: true }; } else { details.cavites = { note: 10, penalite: 0, present: false }; }
+
+  // Feux forêt (10 pts)
+  const ff = geoData.risques?.feuxForet;
+  if (ff) { penalites += 7; details.feuxForet = { note: 3, penalite: 7, present: true }; } else { details.feuxForet = { note: 10, penalite: 0, present: false }; }
+
+  // Submersion marine (5 pts)
+  const sm = geoData.risques?.submersionMarine;
+  if (sm) { penalites += 5; details.submersionMarine = { note: 0, penalite: 5, present: true }; } else { details.submersionMarine = { note: 5, penalite: 0, present: false }; }
+
+  // ICPE (10 pts)
+  const ic = geoData.icpe;
+  if (ic && ic.count > 0) {
+    const pen = Math.min(10, Math.round(ic.count / 5));
+    penalites += pen;
+    details.icpe = { note: Math.round(10 - pen), penalite: pen, count: ic.count };
+  } else {
+    details.icpe = { note: 10, penalite: 0, count: 0 };
+  }
+
+  const score = Math.max(0, Math.min(100, Math.round(100 - penalites)));
+  let niveau, couleur;
+  if (score >= 85) { niveau = 'Très faible'; couleur = '#059669'; }
+  else if (score >= 70) { niveau = 'Faible'; couleur = '#0d9488'; }
+  else if (score >= 55) { niveau = 'Modéré'; couleur = '#d97706'; }
+  else if (score >= 35) { niveau = 'Élevé'; couleur = '#ea580c'; }
+  else { niveau = 'Très élevé'; couleur = '#dc2626'; }
+
+  return { score, penalites, details, niveau, couleur };
+}
+
+// ========== UI ==========
+let riskMapInstance = null;
+
+function renderRiskMap(lat, lng, label) {
+  const container = document.getElementById('riskMap');
+  container.innerHTML = '';
+  if (riskMapInstance) { riskMapInstance.remove(); riskMapInstance = null; }
+
+  riskMapInstance = L.map('riskMap', { zoomControl: true }).setView([lat, lng], 13);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>', maxZoom: 19
+  }).addTo(riskMapInstance);
+  L.marker([lat, lng]).addTo(riskMapInstance).bindPopup('<b>' + label + '</b>').openPopup();
+  setTimeout(() => riskMapInstance.invalidateSize(), 300);
+}
+
+async function searchRisques() {
+  const address = document.getElementById('rAddress').value.trim();
+  if (!address || address.length < 3) { alert('Veuillez saisir une adresse valide'); return; }
+
+  const query = address + ', France';
+  document.getElementById('loadingSpinner').classList.add('active');
+  document.getElementById('riskResults').classList.remove('active');
+  document.getElementById('errorMsg').classList.remove('active');
+  document.getElementById('rBtn').disabled = true;
+
+  try {
+    // 1. Géocode
+    const geo = await geocodeAddress(query);
+    if (!geo || !geo.insee) throw new Error('Code INSEE introuvable pour cette adresse');
+
+    // 2. Risques
+    const risques = await fetchRisquesByCommune(geo.insee);
+    if (!risques) throw new Error('Données Géorisques non disponibles pour cette commune');
+
+    // 3. Score
+    const score = computeGeoRiskScore(risques);
+
+    // 4. Afficher
+    renderResults(geo, score);
+  } catch (e) {
+    const errEl = document.getElementById('errorMsg');
+    errEl.textContent = '❌ ' + e.message;
+    errEl.classList.add('active');
+    document.getElementById('loadingSpinner').classList.remove('active');
+  } finally {
+    document.getElementById('rBtn').disabled = false;
+  }
+}
+
+function renderResults(geo, score) {
+  document.getElementById('loadingSpinner').classList.remove('active');
+  document.getElementById('riskResults').classList.add('active');
+
+  // Hero
+  document.getElementById('riskScoreValue').textContent = score.score;
+  document.getElementById('riskScoreValue').style.color = score.couleur;
+  const circle = document.getElementById('riskScoreCircle');
+  circle.style.background = `linear-gradient(135deg, ${score.couleur}22, ${score.couleur}44)`;
+  circle.style.border = `3px solid ${score.couleur}`;
+
+  document.getElementById('riskResultTitle').textContent = 'Analyse des risques — ' + geo.city;
+  document.getElementById('riskResultAddr').textContent = '📍 ' + geo.displayName.substring(0, 100);
+  const niveauEl = document.getElementById('riskResultNiveau');
+  niveauEl.textContent = 'Niveau de risque : ' + score.niveau;
+  niveauEl.style.background = `${score.couleur}22`;
+  niveauEl.style.color = score.couleur;
+
+  // Map
+  renderRiskMap(geo.lat, geo.lng, geo.city);
+
+  // Cards
+  const grid = document.getElementById('risquesGrid');
+  grid.innerHTML = '';
+  const riskLabels = { seisme:'Séisme', argiles:'Retrait-gonflement argiles', inondation:'Inondation', radon:'Radon', mouvementTerrain:'Mouvements de terrain', cavites:'Cavités souterraines', feuxForet:'Feux de forêt', submersionMarine:'Submersion marine', icpe:'Risques industriels' };
+  const riskEmojis = { seisme:'🌋', argiles:'🏜️', inondation:'🌊', radon:'☢️', mouvementTerrain:'⛰️', cavites:'🕳️', feuxForet:'🔥', submersionMarine:'🌊', icpe:'🏭' };
+
+  for (const k in score.details) {
+    const d = score.details[k];
+    const note = d.note || 0;
+    const color = note >= 12 ? '#059669' : note >= 8 ? '#d97706' : '#dc2626';
+    let detail = '';
+    if (k === 'seisme' && d.zone) detail = 'Zone ' + d.zone + ' — ' + d.label;
+    else if (k === 'argiles' && d.niveau) detail = 'Aléa ' + d.niveau;
+    else if (k === 'radon' && d.categorie) detail = 'Cat. ' + d.categorie + ' — ' + d.label;
+    else if (k === 'inondation' && d.libelle) detail = d.libelle;
+    else if (k === 'icpe' && d.count !== undefined) detail = d.count + ' installation(s)';
+    else if (d.present) detail = 'Risque présent';
+    else detail = 'Aucun risque';
+    const pen = d.penalite || 0;
+
+    grid.innerHTML += '<div class="risk-card"><div class="risk-card-header"><div class="rc-label"><span>' + (riskEmojis[k]||'⚠️') + '</span> ' + (riskLabels[k]||k) + '</div><div class="rc-score" style="color:' + color + '">' + note + '<span style="font-size:0.7rem;color:var(--text-tertiary)">/15</span></div></div><div class="risk-bar"><div class="risk-bar-fill" style="width:' + Math.round(note/15*100) + '%;background:' + color + '"></div></div><div class="risk-card-detail"><span>' + detail + '</span><span style="font-weight:500;color:' + (pen>0?'#dc2626':'#059669') + '">' + (pen>0?'-'+pen+' pts':'Aucun') + '</span></div></div>';
+  }
+
+  // Table
+  const tbody = document.getElementById('riskTableBody');
+  tbody.innerHTML = '';
+  let totalPen = 0;
+  for (const k in score.details) {
+    const d = score.details[k];
+    const note = d.note || 0;
+    const pen = d.penalite || 0;
+    totalPen += pen;
+    const color = note >= 12 ? '#059669' : note >= 8 ? '#d97706' : '#dc2626';
+    let detail = '';
+    if (k === 'seisme' && d.zone) detail = 'Zone sismique ' + d.zone + ' — ' + d.label;
+    else if (k === 'argiles' && d.niveau) detail = 'Aléa ' + d.niveau;
+    else if (k === 'radon' && d.categorie) detail = 'Catégorie ' + d.categorie + ' — ' + d.label;
+    else if (k === 'inondation' && d.libelle) detail = d.libelle;
+    else if (k === 'icpe' && d.count !== undefined) detail = d.count + ' installation(s) classée(s)';
+    else if (d.present) detail = 'Risque présent';
+    else detail = 'Aucun risque identifié';
+    tbody.innerHTML += '<tr><td><strong>' + (riskEmojis[k]||'⚠️') + ' ' + (riskLabels[k]||k) + '</strong></td><td class="td-score" style="color:' + color + '">' + note + '</td><td class="td-score" style="color:' + (pen>0?'#dc2626':'#059669') + '">' + (pen>0?'-'+pen:'0') + '</td><td style="font-size:0.8rem;color:var(--text-secondary)">' + detail + '</td></tr>';
+  }
+  document.getElementById('riskTableFoot').innerHTML = '<tr style="background:var(--bg);font-weight:600"><td>TOTAL</td><td class="td-score">' + score.score + '</td><td class="td-score" style="color:' + (totalPen>0?'#dc2626':'#059669') + '">' + (totalPen>0?'-'+totalPen:'0') + '</td><td style="font-size:0.8rem;color:var(--text-secondary)">Score final : ' + score.score + '/100 — ' + score.niveau + '</td></tr>';
+
+  // Summary
+  document.getElementById('riskSummary').classList.add('active');
+
+  // Scroll
+  document.getElementById('riskResults').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ========== EVENTS ==========
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('menuToggle').addEventListener('click', function() {
+    document.getElementById('headerLinks').classList.toggle('open');
+  });
+  document.getElementById('rAddress').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') searchRisques();
+  });
+});
+</script>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</body>
+</html>
