@@ -1,212 +1,212 @@
-1|<!DOCTYPE html>
-2|<html lang="fr" data-theme="dark">
-3|<head>
-4|  <meta charset="UTF-8">
-5|  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-6|  <title>Acheter — Immo-Express · NODUS</title>
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Acheter — Immo-Express · NODUS</title>
   <meta name="theme-color" content="#14141a">
-7|  <link rel="icon" href="assets/icon-192.svg" type="image/svg+xml">
-8|  <link rel="stylesheet" href="css/nodus.css">
-9|</head>
-10|<body class="n-page">
-11|
-12|    <header class="n-header">
-13|      <div class="n-header-inner">
-14|        <a href="index.html" class="n-logo">
-15|          <div class="n-logo-icon">IE</div>
-16|          <span>Immo</span><span class="n-cyan">Express</span>
-17|        </a>
-18|        <button class="n-mobile-toggle" onclick="document.querySelector('.n-nav').classList.toggle('open')">☰</button>
-19|        <nav class="n-nav">
-20|          <a href="index.html">🏠 Accueil</a>
-21|          <a href="vente.html" class="active">💰 Acheter</a>
-22|          <a href="location.html">📍 Louer</a>
-23|          <a href="scoring.html">🔬 Scoring</a>
-24|          <a href="risques.html">🌍 Risques</a>
-25|          <a href="pro.html">🏢 Pro</a>
-26|          <a href="dashboard.html">📊 Dashboard</a>
-27|          <a href="profil.html">👤 Profil</a>
-28|          <a href="recherche.html">🔎 Recherche</a>
-29|          <a href="pro.html" class="n-btn-depot">+ Publier</a>
-30|          <button class="n-btn-user" onclick="openAuth()">👤 Connexion</button>
-31|        </nav>
-32|      </div>
-33|    </header>
-34|<section class="n-hero">
-35|  <h1>💰 Acheter <span class="n-hero-accent">un bien</span> <span class="n-hero-cyan">immobilier</span></h1>
-36|  <p>Appartements, maisons, villas — trouvez le bien de vos rêves au meilleur prix</p>
-37|  <div class="n-search-bar">
-38|    <input type="text" id="vSearch" placeholder="Ville, quartier…" oninput="filter()">
-39|    <select id="vType" onchange="filter()">
-40|      <option value="all">Tous types</option>
-41|      <option value="appartement">Appartement</option>
-42|      <option value="maison">Maison</option>
-43|      <option value="villa">Villa</option>
-44|      <option value="studio">Studio</option>
-45|    </select>
-46|    <button onclick="filter()">🔍 Rechercher</button>
-47|  </div>
-48|</section>
-49|
-50|<div class="n-stats n-reveal">
-51|  <div class="n-stats-inner">
-52|    <span class="n-stat-item">🏠 <strong id="statCount">0</strong> biens à vendre</span>
-53|    <span class="n-stat-item">🛡️ <strong>—</strong> annonces vérifiées</span>
-54|    <span class="n-stat-item">📊 <strong>0</strong> analyses IA réalisées</span>
-55|    <span class="n-stat-item">💰 Prix moyen <strong id="statAvg">— €</strong></span>
-56|  </div>
-57|</div>
-58|
-59|<div class="n-layout n-reveal">
-60|  <aside class="n-sidebar" id="sidebar">
-61|    <h3>🔍 Filtrer</h3>
-62|    <div class="n-filter-group">
-63|      <label>Type</label>
-64|      <div class="n-filter-btns" id="typeBtns">
-65|        <button class="active" data-v="all">Tous</button>
-66|        <button data-v="appartement">Appartement</button>
-67|        <button data-v="maison">Maison</button>
-68|        <button data-v="villa">Villa</button>
-69|        <button data-v="studio">Studio</button>
-70|      </div>
-71|    </div>
-72|    <div class="n-filter-group">
-73|      <label>Prix</label>
-74|      <div class="n-price-range">
-75|        <input type="number" id="vMin" placeholder="Min €" oninput="filter()">
-76|        <span>—</span>
-77|        <input type="number" id="vMax" placeholder="Max €" oninput="filter()">
-78|      </div>
-79|    </div>
-80|    <div class="n-filter-group">
-81|      <label>Surface min</label>
-82|      <input type="number" id="vSurf" placeholder="m² min" oninput="filter()">
-83|    </div>
-84|    <div class="n-filter-group">
-85|      <label>Pièces</label>
-86|      <div class="n-filter-btns" id="pieceBtns">
-87|        <button class="active" data-p="all">Tous</button>
-88|        <button data-p="1">1</button>
-89|        <button data-p="2">2</button>
-90|        <button data-p="3">3</button>
-91|        <button data-p="4">4+</button>
-92|      </div>
-93|    </div>
-94|    <div class="n-filter-group">
-95|      <label>DPE min</label>
-96|      <select id="vDpe" onchange="filter()">
-97|        <option value="">Tous</option>
-98|        <option value="A">A</option><option value="B">B</option>
-99|        <option value="C">C</option><option value="D">D</option>
-100|        <option value="E">E</option>
-101|      </select>
-102|    </div>
-103|    <div class="n-filter-group">
-104|      <label>Publié par</label>
-105|      <select id="vPub" onchange="filter()">
-106|        <option value="all">Tous</option>
-107|        <option value="pro">Professionnels</option>
-108|        <option value="particulier">Particuliers</option>
-109|      </select>
-110|    </div>
-111|    <button class="n-btn-reset" onclick="resetFilters()">🔄 Réinitialiser</button>
-112|  </aside>
-113|
-114|  <div class="n-results-area">
-115|    <div class="n-results-header">
-116|      <div class="n-results-count" id="vCount"><strong>0</strong> biens trouvés</div>
-117|      <div class="n-results-tabs">
-118|        <button class="active" data-s="recent" onclick="sortBy('recent')">Récents</button>
-119|        <button data-s="price-asc" onclick="sortBy('price-asc')">Prix ↑</button>
-120|        <button data-s="price-desc" onclick="sortBy('price-desc')">Prix ↓</button>
-121|        <button data-s="surface" onclick="sortBy('surface')">Surface</button>
-122|      </div>
-123|    </div>
-124|    <div class="n-card-grid" id="vGrid"></div>
-125|  </div>
-126|</div>
-127|
-128|<!-- Tools Section -->
-129|<div class="n-layout n-reveal" style="padding-top:0">
-130|  <div style="grid-column:1/-1">
-131|    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:16px">
-132|      <h2 class="n-section-title">🛠️ Outils achat</h2>
-133|      <div style="display:flex;gap:8px;flex-wrap:wrap">
-134|        <button class="n-btn n-btn-primary" onclick="toggleTool('mortgage')">🏦 Simuler un prêt</button>
-135|        <button class="n-btn n-btn-secondary" onclick="toggleTool('notaire')">📜 Frais de notaire</button>
-136|      </div>
-137|    </div>
-138|
-139|    <div id="tp-mortgage" class="n-form" style="display:none;margin-bottom:16px">
-140|      <h3 class="n-section-title">🏦 Simulateur de prêt immobilier</h3>
-141|      <div class="n-form-grid" style="grid-template-columns:repeat(auto-fill,minmax(180px,1fr))">
-142|        <div class="n-form-group"><label>Prix du bien *</label><input type="number" id="mPrice" value="250000"></div>
-143|        <div class="n-form-group"><label>Apport</label><input type="number" id="mDown" value="50000"></div>
-144|        <div class="n-form-group"><label>Taux annuel %</label><input type="number" id="mRate" value="3.5" step="0.1"></div>
-145|        <div class="n-form-group"><label>Durée (ans)</label><select id="mDur"><option value="15">15 ans</option><option value="20" selected>20 ans</option><option value="25">25 ans</option></select></div>
-146|      </div>
-147|      <div style="display:flex;gap:24px;flex-wrap:wrap;justify-content:center;padding:12px 0;margin-bottom:12px">
-148|        <div><div class="n-card-price" id="mMonthly" style="font-size:1.2rem">—</div><div style="font-size:0.75rem;color:var(--n-text-tertiary)">Mensualité</div></div>
-149|        <div><div class="n-card-price" id="mTotal" style="font-size:1.2rem">—</div><div style="font-size:0.75rem;color:var(--n-text-tertiary)">Total à rembourser</div></div>
-150|        <div><div class="n-card-price" id="mInterest" style="font-size:1.2rem">—</div><div style="font-size:0.75rem;color:var(--n-text-tertiary)">Intérêts</div></div>
-151|      </div>
-152|      <div class="n-form-actions">
-153|        <button class="n-btn n-btn-primary" onclick="calcMortgage()">🏦 Calculer</button>
-154|        <button class="n-btn n-btn-secondary" onclick="toggleTool('mortgage')">Fermer</button>
-155|      </div>
-156|    </div>
-157|
-158|    <div id="tp-notaire" class="n-form" style="display:none;margin-bottom:16px">
-159|      <h3 class="n-section-title">📜 Estimateur des frais de notaire</h3>
-160|      <div class="n-form-grid" style="grid-template-columns:repeat(auto-fill,minmax(180px,1fr))">
-161|        <div class="n-form-group"><label>Prix du bien *</label><input type="number" id="nPrice" value="250000"></div>
-162|        <div class="n-form-group"><label>Type</label><select id="nType"><option value="ancien">Ancien</option><option value="neuf">Neuf</option></select></div>
-163|        <div class="n-form-group"><label>Région</label><select id="nRegion"><option value="metro">France métropolitaine</option><option value="corse">Corse</option></select></div>
-164|      </div>
-165|      <div style="display:flex;gap:24px;flex-wrap:wrap;justify-content:center;padding:12px 0;margin-bottom:12px">
-166|        <div><div class="n-card-price" id="nFees" style="font-size:1.2rem">—</div><div style="font-size:0.75rem;color:var(--n-text-tertiary)">Frais de notaire</div></div>
-167|        <div><div class="n-card-price" id="nTotal" style="font-size:1.2rem">—</div><div style="font-size:0.75rem;color:var(--n-text-tertiary)">Total avec frais</div></div>
-168|        <div><div class="n-card-price" id="nPct" style="font-size:1.2rem">—</div><div style="font-size:0.75rem;color:var(--n-text-tertiary)">% du prix</div></div>
-169|      </div>
-170|      <div class="n-form-actions">
-171|        <button class="n-btn n-btn-primary" onclick="calcNotaire()">📜 Calculer</button>
-172|        <button class="n-btn n-btn-secondary" onclick="toggleTool('notaire')">Fermer</button>
-173|      </div>
-174|    </div>
-175|
-176|    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px">
-177|      <div class="n-dash-card">
-178|        <div class="n-dc-icon" style="background:var(--n-cyan-dim)">📐</div>
-179|        <h3 style="font-size:.95rem;font-weight:600;margin-bottom:4px">Calculateur de surface</h3>
-180|        <p style="font-size:.82rem;color:var(--n-text-secondary)">Convertissez et calculez les surfaces : m², pieds carrés, surfaces habitables.</p>
-181|      </div>
-182|      <div class="n-dash-card">
-183|        <div class="n-dc-icon" style="background:rgba(0,230,118,0.15)">🔬</div>
-184|        <h3 style="font-size:.95rem;font-weight:600;margin-bottom:4px">Analyse IA du prix</h3>
-185|        <p style="font-size:.82rem;color:var(--n-text-secondary)">Comparez le prix d'un bien au marché local grâce à notre moteur de notation 8 critères.</p>
-186|        <button class="n-btn n-btn-primary" style="margin-top:10px" onclick="location.href='scoring.html'">🔬 Analyser un bien</button>
-187|      </div>
-188|      <div class="n-dash-card">
-189|        <div class="n-dc-icon" style="background:rgba(255,193,7,0.15)">📋</div>
-190|        <h3 style="font-size:.95rem;font-weight:600;margin-bottom:4px">Checklist achat</h3>
-191|        <p style="font-size:.82rem;color:var(--n-text-secondary)">Documents nécessaires, étapes clés, délais et diagnostics obligatoires.</p>
-192|      </div>
-193|    </div>
-194|  </div>
-195|</div>
-196|
-197|<!-- Modal -->
-198|<div class="n-modal-overlay" id="modalOverlay">
-199|  <div class="n-modal">
-200|    <div class="n-modal-header">
-201|      <h2 id="modalTitle">Détail du bien</h2>
-202|      <button class="n-modal-close" onclick="closeModal()">✕</button>
-203|    </div>
-204|    <div class="n-modal-body" id="modalBody"></div>
-205|  </div>
-206|</div>
-207|
-208|        <footer class="n-footer">
+  <link rel="icon" href="assets/icon-192.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/nodus.css">
+</head>
+<body class="n-page">
+
+    <header class="n-header">
+      <div class="n-header-inner">
+        <a href="index.html" class="n-logo">
+          <div class="n-logo-icon">IE</div>
+          <span>Immo</span><span class="n-cyan">Express</span>
+        </a>
+        <button class="n-mobile-toggle" onclick="document.querySelector('.n-nav').classList.toggle('open')">☰</button>
+        <nav class="n-nav">
+          <a href="index.html">🏠 Accueil</a>
+          <a href="vente.html" class="active">💰 Acheter</a>
+          <a href="location.html">📍 Louer</a>
+          <a href="scoring.html">🔬 Scoring</a>
+          <a href="risques.html">🌍 Risques</a>
+          <a href="pro.html">🏢 Pro</a>
+          <a href="dashboard.html">📊 Dashboard</a>
+          <a href="profil.html">👤 Profil</a>
+          <a href="recherche.html">🔎 Recherche</a>
+          <a href="pro.html" class="n-btn-depot">+ Publier</a>
+          <button class="n-btn-user" onclick="openAuth()">👤 Connexion</button>
+        </nav>
+      </div>
+    </header>
+<section class="n-hero">
+  <h1>💰 Acheter <span class="n-hero-accent">un bien</span> <span class="n-hero-cyan">immobilier</span></h1>
+  <p>Appartements, maisons, villas — trouvez le bien de vos rêves au meilleur prix</p>
+  <div class="n-search-bar">
+    <input type="text" id="vSearch" placeholder="Ville, quartier…" oninput="filter()">
+    <select id="vType" onchange="filter()">
+      <option value="all">Tous types</option>
+      <option value="appartement">Appartement</option>
+      <option value="maison">Maison</option>
+      <option value="villa">Villa</option>
+      <option value="studio">Studio</option>
+    </select>
+    <button onclick="filter()">🔍 Rechercher</button>
+  </div>
+</section>
+
+<div class="n-stats n-reveal">
+  <div class="n-stats-inner">
+    <span class="n-stat-item">🏠 <strong id="statCount">0</strong> biens à vendre</span>
+    <span class="n-stat-item">🛡️ <strong>—</strong> annonces vérifiées</span>
+    <span class="n-stat-item">📊 <strong>0</strong> analyses IA réalisées</span>
+    <span class="n-stat-item">💰 Prix moyen <strong id="statAvg">— €</strong></span>
+  </div>
+</div>
+
+<div class="n-layout n-reveal">
+  <aside class="n-sidebar" id="sidebar">
+    <h3>🔍 Filtrer</h3>
+    <div class="n-filter-group">
+      <label>Type</label>
+      <div class="n-filter-btns" id="typeBtns">
+        <button class="active" data-v="all">Tous</button>
+        <button data-v="appartement">Appartement</button>
+        <button data-v="maison">Maison</button>
+        <button data-v="villa">Villa</button>
+        <button data-v="studio">Studio</button>
+      </div>
+    </div>
+    <div class="n-filter-group">
+      <label>Prix</label>
+      <div class="n-price-range">
+        <input type="number" id="vMin" placeholder="Min €" oninput="filter()">
+        <span>—</span>
+        <input type="number" id="vMax" placeholder="Max €" oninput="filter()">
+      </div>
+    </div>
+    <div class="n-filter-group">
+      <label>Surface min</label>
+      <input type="number" id="vSurf" placeholder="m² min" oninput="filter()">
+    </div>
+    <div class="n-filter-group">
+      <label>Pièces</label>
+      <div class="n-filter-btns" id="pieceBtns">
+        <button class="active" data-p="all">Tous</button>
+        <button data-p="1">1</button>
+        <button data-p="2">2</button>
+        <button data-p="3">3</button>
+        <button data-p="4">4+</button>
+      </div>
+    </div>
+    <div class="n-filter-group">
+      <label>DPE min</label>
+      <select id="vDpe" onchange="filter()">
+        <option value="">Tous</option>
+        <option value="A">A</option><option value="B">B</option>
+        <option value="C">C</option><option value="D">D</option>
+        <option value="E">E</option>
+      </select>
+    </div>
+    <div class="n-filter-group">
+      <label>Publié par</label>
+      <select id="vPub" onchange="filter()">
+        <option value="all">Tous</option>
+        <option value="pro">Professionnels</option>
+        <option value="particulier">Particuliers</option>
+      </select>
+    </div>
+    <button class="n-btn-reset" onclick="resetFilters()">🔄 Réinitialiser</button>
+  </aside>
+
+  <div class="n-results-area">
+    <div class="n-results-header">
+      <div class="n-results-count" id="vCount"><strong>0</strong> biens trouvés</div>
+      <div class="n-results-tabs">
+        <button class="active" data-s="recent" onclick="sortBy('recent')">Récents</button>
+        <button data-s="price-asc" onclick="sortBy('price-asc')">Prix ↑</button>
+        <button data-s="price-desc" onclick="sortBy('price-desc')">Prix ↓</button>
+        <button data-s="surface" onclick="sortBy('surface')">Surface</button>
+      </div>
+    </div>
+    <div class="n-card-grid" id="vGrid"></div>
+  </div>
+</div>
+
+<!-- Tools Section -->
+<div class="n-layout n-reveal" style="padding-top:0">
+  <div style="grid-column:1/-1">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:16px">
+      <h2 class="n-section-title">🛠️ Outils achat</h2>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="n-btn n-btn-primary" onclick="toggleTool('mortgage')">🏦 Simuler un prêt</button>
+        <button class="n-btn n-btn-secondary" onclick="toggleTool('notaire')">📜 Frais de notaire</button>
+      </div>
+    </div>
+
+    <div id="tp-mortgage" class="n-form" style="display:none;margin-bottom:16px">
+      <h3 class="n-section-title">🏦 Simulateur de prêt immobilier</h3>
+      <div class="n-form-grid" style="grid-template-columns:repeat(auto-fill,minmax(180px,1fr))">
+        <div class="n-form-group"><label>Prix du bien *</label><input type="number" id="mPrice" value="250000"></div>
+        <div class="n-form-group"><label>Apport</label><input type="number" id="mDown" value="50000"></div>
+        <div class="n-form-group"><label>Taux annuel %</label><input type="number" id="mRate" value="3.5" step="0.1"></div>
+        <div class="n-form-group"><label>Durée (ans)</label><select id="mDur"><option value="15">15 ans</option><option value="20" selected>20 ans</option><option value="25">25 ans</option></select></div>
+      </div>
+      <div style="display:flex;gap:24px;flex-wrap:wrap;justify-content:center;padding:12px 0;margin-bottom:12px">
+        <div><div class="n-card-price" id="mMonthly" style="font-size:1.2rem">—</div><div style="font-size:0.75rem;color:var(--n-text-tertiary)">Mensualité</div></div>
+        <div><div class="n-card-price" id="mTotal" style="font-size:1.2rem">—</div><div style="font-size:0.75rem;color:var(--n-text-tertiary)">Total à rembourser</div></div>
+        <div><div class="n-card-price" id="mInterest" style="font-size:1.2rem">—</div><div style="font-size:0.75rem;color:var(--n-text-tertiary)">Intérêts</div></div>
+      </div>
+      <div class="n-form-actions">
+        <button class="n-btn n-btn-primary" onclick="calcMortgage()">🏦 Calculer</button>
+        <button class="n-btn n-btn-secondary" onclick="toggleTool('mortgage')">Fermer</button>
+      </div>
+    </div>
+
+    <div id="tp-notaire" class="n-form" style="display:none;margin-bottom:16px">
+      <h3 class="n-section-title">📜 Estimateur des frais de notaire</h3>
+      <div class="n-form-grid" style="grid-template-columns:repeat(auto-fill,minmax(180px,1fr))">
+        <div class="n-form-group"><label>Prix du bien *</label><input type="number" id="nPrice" value="250000"></div>
+        <div class="n-form-group"><label>Type</label><select id="nType"><option value="ancien">Ancien</option><option value="neuf">Neuf</option></select></div>
+        <div class="n-form-group"><label>Région</label><select id="nRegion"><option value="metro">France métropolitaine</option><option value="corse">Corse</option></select></div>
+      </div>
+      <div style="display:flex;gap:24px;flex-wrap:wrap;justify-content:center;padding:12px 0;margin-bottom:12px">
+        <div><div class="n-card-price" id="nFees" style="font-size:1.2rem">—</div><div style="font-size:0.75rem;color:var(--n-text-tertiary)">Frais de notaire</div></div>
+        <div><div class="n-card-price" id="nTotal" style="font-size:1.2rem">—</div><div style="font-size:0.75rem;color:var(--n-text-tertiary)">Total avec frais</div></div>
+        <div><div class="n-card-price" id="nPct" style="font-size:1.2rem">—</div><div style="font-size:0.75rem;color:var(--n-text-tertiary)">% du prix</div></div>
+      </div>
+      <div class="n-form-actions">
+        <button class="n-btn n-btn-primary" onclick="calcNotaire()">📜 Calculer</button>
+        <button class="n-btn n-btn-secondary" onclick="toggleTool('notaire')">Fermer</button>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px">
+      <div class="n-dash-card">
+        <div class="n-dc-icon" style="background:var(--n-cyan-dim)">📐</div>
+        <h3 style="font-size:.95rem;font-weight:600;margin-bottom:4px">Calculateur de surface</h3>
+        <p style="font-size:.82rem;color:var(--n-text-secondary)">Convertissez et calculez les surfaces : m², pieds carrés, surfaces habitables.</p>
+      </div>
+      <div class="n-dash-card">
+        <div class="n-dc-icon" style="background:rgba(0,230,118,0.15)">🔬</div>
+        <h3 style="font-size:.95rem;font-weight:600;margin-bottom:4px">Analyse IA du prix</h3>
+        <p style="font-size:.82rem;color:var(--n-text-secondary)">Comparez le prix d'un bien au marché local grâce à notre moteur de notation 8 critères.</p>
+        <button class="n-btn n-btn-primary" style="margin-top:10px" onclick="location.href='scoring.html'">🔬 Analyser un bien</button>
+      </div>
+      <div class="n-dash-card">
+        <div class="n-dc-icon" style="background:rgba(255,193,7,0.15)">📋</div>
+        <h3 style="font-size:.95rem;font-weight:600;margin-bottom:4px">Checklist achat</h3>
+        <p style="font-size:.82rem;color:var(--n-text-secondary)">Documents nécessaires, étapes clés, délais et diagnostics obligatoires.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="n-modal-overlay" id="modalOverlay">
+  <div class="n-modal">
+    <div class="n-modal-header">
+      <h2 id="modalTitle">Détail du bien</h2>
+      <button class="n-modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="n-modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+        <footer class="n-footer">
       <div class="n-footer-inner">
         <div>
           <div class="n-logo" style="margin-bottom:10px;font-size:1.1rem">
@@ -245,164 +245,164 @@
         <span class="n-footer-eva">⚡ Powered by EVA · NODUS SYSTEMS</span>
       </div>
     </footer>
-248|<script>
-249|const listings = [];
-250|
-251|function scoreBadge(s) { if(!s) return ""; const c = s >= 80 ? "n-score-high" : s >= 60 ? "n-score-mid" : "n-score-low"; return "<span class=\"n-card-score " + c + "\">\u2b50 " + s + "</span>"; }
-252|
-253|const state = { search: "", type: "all", minPrice: "", maxPrice: "", minSurface: "", pieces: "all", dpe: "", publisher: "all", sort: "recent" };
-254|
-255|document.querySelectorAll("#typeBtns button").forEach(b => b.addEventListener("click", function() {
-256|  document.querySelectorAll("#typeBtns button").forEach(x => x.classList.remove("active"));
-257|  this.classList.add("active"); state.type = this.dataset.v; render();
-258|}));
-259|document.querySelectorAll("#pieceBtns button").forEach(b => b.addEventListener("click", function() {
-260|  document.querySelectorAll("#pieceBtns button").forEach(x => x.classList.remove("active"));
-261|  this.classList.add("active"); state.pieces = this.dataset.p; render();
-262|}));
-263|
-264|function filter() {
-265|  state.search = document.getElementById("vSearch").value;
-266|  state.minPrice = document.getElementById("vMin").value;
-267|  state.maxPrice = document.getElementById("vMax").value;
-268|  state.minSurface = document.getElementById("vSurf").value;
-269|  state.dpe = document.getElementById("vDpe").value;
-270|  state.publisher = document.getElementById("vPub").value;
-271|  render();
-272|}
-273|function sortBy(s) {
-274|  state.sort = s;
-275|  document.querySelectorAll(".n-results-tabs button").forEach(b => b.classList.toggle("active", b.dataset.s === s));
-276|  render();
-277|}
-278|function resetFilters() {
-279|  Object.assign(state, { search: "", type: "all", minPrice: "", maxPrice: "", minSurface: "", pieces: "all", dpe: "", publisher: "all", sort: "recent" });
-280|  document.getElementById("vSearch").value = "";
-281|  document.getElementById("vMin").value = "";
-282|  document.getElementById("vMax").value = "";
-283|  document.getElementById("vSurf").value = "";
-284|  document.getElementById("vDpe").value = "";
-285|  document.getElementById("vPub").value = "all";
-286|  document.querySelectorAll(".n-filter-btns button").forEach(b => b.classList.remove("active"));
-287|  document.querySelectorAll("[data-v=\"all\"],[data-p=\"all\"]").forEach(b => b.classList.add("active"));
-288|  document.getElementById("vType").value = "all";
-289|  render();
-290|}
-291|
-292|function render() {
-293|  const grid = document.getElementById("vGrid");
-294|  const count = document.getElementById("vCount");
-295|  let f = listings.filter(p => {
-296|    if (state.type !== "all" && p.type !== state.type) return false;
-297|    if (state.pieces !== "all") { const n = parseInt(state.pieces); if (state.pieces === "4" ? p.pieces < 4 : p.pieces !== n) return false; }
-298|    if (state.dpe && (p.dpe || " ") > state.dpe) return false;
-299|    if (state.minPrice && p.price < Number(state.minPrice)) return false;
-300|    if (state.maxPrice && p.price > Number(state.maxPrice)) return false;
-301|    if (state.minSurface && p.surface < Number(state.minSurface)) return false;
-302|    if (state.publisher !== "all" && p.publisher !== state.publisher) return false;
-303|    if (state.search) { const q = state.search.toLowerCase(); if (!p.title.toLowerCase().includes(q) && !p.location.toLowerCase().includes(q)) return false; }
-304|    return true;
-305|  }).sort((a, b) => { switch (state.sort) { case "price-asc": return a.price - b.price; case "price-desc": return b.price - a.price; case "surface": return b.surface - a.surface; default: return b.id - a.id; } });
-306|  count.innerHTML = "<strong>" + f.length + "</strong> bien" + (f.length > 1 ? "s" : "") + " trouv\u00e9" + (f.length > 1 ? "s" : "");
-307|  document.getElementById("statCount").textContent = f.length;
-308|  const avg = f.length ? Math.round(f.reduce((s, p) => s + p.price, 0) / f.length) : 0;
-309|  document.getElementById("statAvg").textContent = avg ? avg.toLocaleString("fr-FR") + " \u20ac" : "\u2014 \u20ac";
-310|  if (!f.length) { grid.innerHTML = "<div class=\"n-no-results\"><div class=\"n-icon\">\ud83d\udd0d</div><h3>Aucun bien trouv\u00e9</h3><p>Essayez de modifier vos filtres.</p></div>"; return; }
-311|  grid.innerHTML = f.map(p => {
-312|    const cl = p.publisher === "pro" ? "n-pub-pro" : "n-pub-particulier";
-313|    const lb = p.publisher === "pro" ? "Pro" : "Particulier";
-314|    return "<div class=\"n-card\" onclick=\"openModal(" + p.id + ')\">' +
-315|      "<div class=\"n-card-img\" style=\"background:" + p.bg + '\">' +
-316|        "<span class=\"n-badge n-badge-sale\">Vente</span>" +
-317|        (p.reduc ? "<span class=\"n-badge n-badge-reduction\">-5%</span>" : "") +
-318|        (p.verified ? "<span class=\"n-badge n-badge-verified\">\u2713 V\u00e9rifi\u00e9</span>" : "") +
-319|        p.emoji +
-320|      "</div>" +
-321|      "<div class=\"n-card-info\">" +
-322|        "<div class=\"n-card-price\">" + p.pl + scoreBadge(p.score) + "</div>" +
-323|        '<div class=\"n-card-price-sub\">' + (p.dpe ? "DPE " + p.dpe + " \u00b7 " : "") + Math.round(p.price / p.surface).toLocaleString("fr") + " \u20ac/m\u00b2</div>" +
-324|        "<div class=\"n-card-title\">" + p.title + "</div>" +
-325|        "<div class=\"n-card-location\">\ud83d\udccd " + p.location + "</div>" +
-326|        "<div class=\"n-card-tags\">" +
-327|          "<span class=\"n-card-tag\">\ud83d\udcd0 <strong>" + p.surface + " m\u00b2</strong></span>" +
-328|          "<span class=\"n-card-tag\">\ud83d\udecf\ufe0f <strong>" + p.pieces + "</strong> pi\u00e8ces</span>" +
-329|          (p.marketAvg ? "<span class=\"n-card-tag\" style=\"color:" + (p.price > p.marketAvg ? "var(--n-warning)" : "var(--n-success)") + '\">' + (p.price > p.marketAvg ? "\ud83d\udcc8 +" : "\ud83d\udcc9 ") + Math.round(Math.abs((p.price / p.marketAvg - 1) * 100)) + "% vs march\u00e9</span>" : "") +
-330|        "</div>" +
-331|        "<div class=\"n-card-footer\">" +
-332|          "<div class=\"n-card-publisher\"><span class=\"n-pub-type " + cl + '\">' + lb + "</span>" + p.pubName + "</div>" +
-333|          "<div class=\"n-card-date\">" + p.date + "</div>" +
-334|        "</div>" +
-335|      "</div>" +
-336|    "</div>";
-337|  }).join("");
-338|}
-339|
-340|function openModal(id) {
-341|  const p = listings.find(x => x.id === id); if (!p) return;
-342|  const cl = p.publisher === "pro" ? "n-pub-pro" : "n-pub-particulier";
-343|  const lb = p.publisher === "pro" ? "Pro" : "Particulier";
-344|  document.getElementById("modalTitle").textContent = p.title;
-345|  const diff = p.marketAvg ? Math.round((p.price - p.marketAvg) / p.marketAvg * 100) : 0;
-346|  document.getElementById("modalBody").innerHTML =
-347|    "<div class=\"n-card-img\" style=\"background:" + p.bg + ";font-size:4.5rem;min-height:220px;border-radius:var(--n-radius);margin-bottom:16px\">" + p.emoji + "</div>" +
-348|    "<div style=\"display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px\"><span class=\"n-badge n-badge-sale\" style=\"position:static;font-size:.64rem\">Vente</span></div>" +
-349|    "<div class=\"n-card-price\" style=\"font-size:1.6rem\">" + p.pl + "</div>" +
-350|    '<div style=\"font-size:.85rem;color:var(--n-text-secondary);margin-bottom:12px\">\ud83d\udccd ' + p.location + " \u00b7 " + Math.round(p.price / p.surface).toLocaleString("fr") + " \u20ac/m\u00b2 \u00b7 DPE " + (p.dpe || "N/C") + " \u00b7 " + lb + " " + p.pubName + "</div>" +
-351|    "<div style=\"display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px\">" +
-352|      '<div class=\"n-innov-block\" style=\"padding:12px 14px;margin:0;display:flex;align-items:center;gap:8px;font-size:.82rem\">\ud83d\udcd0 <strong>' + p.surface + " m\u00b2</strong></div>" +
-353|      '<div class=\"n-innov-block\" style=\"padding:12px 14px;margin:0;display:flex;align-items:center;gap:8px;font-size:.82rem\">\ud83d\udecf\ufe0f <strong>' + p.pieces + "</strong> pi\u00e8ces</div>" +
-354|      '<div class=\"n-innov-block\" style=\"padding:12px 14px;margin:0;display:flex;align-items:center;gap:8px;font-size:.82rem\">\ud83d\udd0b DPE <strong>' + (p.dpe || "N/C") + "</strong></div>" +
-355|      '<div class=\"n-innov-block\" style=\"padding:12px 14px;margin:0;display:flex;align-items:center;gap:8px;font-size:.82rem\">\ud83d\udcc5 En ligne <strong>' + p.date + "</strong></div>" +
-356|    "</div>" +
-357|    '<div style=\"font-size:.85rem;color:var(--n-text-secondary);line-height:1.7;margin-bottom:14px\">' + p.desc + "</div>" +
-358|    (p.score ? '<div class=\"n-innov-block\" style=\"display:flex;justify-content:space-between;align-items:center;padding:14px 16px\"><span style=\"font-size:.85rem;font-weight:500\">\ud83d\udee1\ufe0f Score de confiance</span><span style=\"font-weight:700;font-family:var(--n-mono);color:' + (p.score >= 80 ? "var(--n-success)" : p.score >= 60 ? "var(--n-warning)" : "var(--n-error)") + '\">' + p.score + "/100</span></div>" : "") +
-359|    (p.marketAvg ? '<div class=\"n-innov-block\" style=\"padding:14px 16px\">' +
-360|      '<div style=\"display:flex;justify-content:space-between;font-size:.82rem;margin-bottom:6px\"><span>\ud83d\udcca Prix vs march\u00e9</span><span style=\"font-weight:600;color:' + (diff > 5 ? "var(--n-warning)" : "var(--n-success)") + '\">' + (diff > 0 ? "+" + diff : diff) + "%</span></div>" +
-361|      '<div style=\"height:6px;background:var(--n-bg-hover);border-radius:3px;overflow:hidden\"><div style=\"height:100%;width:' + Math.min(100, 50 + diff * 2) + '%;background:' + (diff > 5 ? "var(--n-warning)" : "var(--n-success)") + ";border-radius:3px\"></div></div>" +
-362|      '<div style=\"display:flex;justify-content:space-between;font-size:.75rem;color:var(--n-text-tertiary);margin-top:4px\"><span>' + p.pl + "</span><span>Moyenne: " + (p.marketAvg || 0).toLocaleString("fr-FR") + " \u20ac</span></div>" +
-363|    "</div>" : "") +
-364|    '<div style=\"display:flex;gap:10px;margin-top:16px;flex-wrap:wrap\">' +
-365|      '<button class=\"n-btn n-btn-primary\" onclick=\"alert(\'\ud83d\udce8 Message envoy\u00e9 \u00e0 ' + p.pubName + " !\')\">\u2709\ufe0f Contacter le vendeur</button>" +
-366|      "<button class=\"n-btn n-btn-secondary\" onclick=\"location.href=\'scoring.html\'\">\ud83d\udd2c Analyser ce bien</button>" +
-367|    "</div>";
-368|  document.getElementById("modalOverlay").classList.add("open");
-369|}
-370|function closeModal() { document.getElementById("modalOverlay").classList.remove("open"); }
-371|document.getElementById("modalOverlay").addEventListener("click", function(e) { if (e.target === this) closeModal(); });
-372|
-373|function toggleTool(id) {
-374|  const p = document.getElementById("tp-" + id);
-375|  ["mortgage", "notaire"].forEach(a => {
-376|    const el = document.getElementById("tp-" + a);
-377|    if (a === id) el.style.display = el.style.display === "none" ? "block" : "none";
-378|    else el.style.display = "none";
-379|  });
-380|}
-381|function calcMortgage() {
-382|  const price = parseFloat(document.getElementById("mPrice").value) || 0;
-383|  const down = parseFloat(document.getElementById("mDown").value) || 0;
-384|  const rate = parseFloat(document.getElementById("mRate").value) || 3.5;
-385|  const years = parseInt(document.getElementById("mDur").value) || 20;
-386|  const loan = price - down; const mr = rate / 100 / 12; const n = years * 12;
-387|  if (loan <= 0) { document.getElementById("mMonthly").textContent = "0 \u20ac"; return; }
-388|  const monthly = loan * mr * Math.pow(1 + mr, n) / (Math.pow(1 + mr, n) - 1);
-389|  const total = monthly * n; const interest = total - loan;
-390|  document.getElementById("mMonthly").textContent = Math.round(monthly).toLocaleString("fr-FR") + " \u20ac/mois";
-391|  document.getElementById("mTotal").textContent = Math.round(total).toLocaleString("fr-FR") + " \u20ac";
-392|  document.getElementById("mInterest").textContent = Math.round(interest).toLocaleString("fr-FR") + " \u20ac";
-393|}
-394|function calcNotaire() {
-395|  const price = parseFloat(document.getElementById("nPrice").value) || 0;
-396|  const type = document.getElementById("nType").value;
-397|  const pct = type === "neuf" ? 3 : 8; const fees = Math.round(price * pct / 100);
-398|  document.getElementById("nFees").textContent = fees.toLocaleString("fr-FR") + " \u20ac";
-399|  document.getElementById("nTotal").textContent = (price + fees).toLocaleString("fr-FR") + " \u20ac";
-400|  document.getElementById("nPct").textContent = pct + "%";
-401|}
-402|
-403|render();
-404|</script>
-405|
+<script>
+const listings = [];
+
+function scoreBadge(s) { if(!s) return ""; const c = s >= 80 ? "n-score-high" : s >= 60 ? "n-score-mid" : "n-score-low"; return "<span class=\"n-card-score " + c + "\">\u2b50 " + s + "</span>"; }
+
+const state = { search: "", type: "all", minPrice: "", maxPrice: "", minSurface: "", pieces: "all", dpe: "", publisher: "all", sort: "recent" };
+
+document.querySelectorAll("#typeBtns button").forEach(b => b.addEventListener("click", function() {
+  document.querySelectorAll("#typeBtns button").forEach(x => x.classList.remove("active"));
+  this.classList.add("active"); state.type = this.dataset.v; render();
+}));
+document.querySelectorAll("#pieceBtns button").forEach(b => b.addEventListener("click", function() {
+  document.querySelectorAll("#pieceBtns button").forEach(x => x.classList.remove("active"));
+  this.classList.add("active"); state.pieces = this.dataset.p; render();
+}));
+
+function filter() {
+  state.search = document.getElementById("vSearch").value;
+  state.minPrice = document.getElementById("vMin").value;
+  state.maxPrice = document.getElementById("vMax").value;
+  state.minSurface = document.getElementById("vSurf").value;
+  state.dpe = document.getElementById("vDpe").value;
+  state.publisher = document.getElementById("vPub").value;
+  render();
+}
+function sortBy(s) {
+  state.sort = s;
+  document.querySelectorAll(".n-results-tabs button").forEach(b => b.classList.toggle("active", b.dataset.s === s));
+  render();
+}
+function resetFilters() {
+  Object.assign(state, { search: "", type: "all", minPrice: "", maxPrice: "", minSurface: "", pieces: "all", dpe: "", publisher: "all", sort: "recent" });
+  document.getElementById("vSearch").value = "";
+  document.getElementById("vMin").value = "";
+  document.getElementById("vMax").value = "";
+  document.getElementById("vSurf").value = "";
+  document.getElementById("vDpe").value = "";
+  document.getElementById("vPub").value = "all";
+  document.querySelectorAll(".n-filter-btns button").forEach(b => b.classList.remove("active"));
+  document.querySelectorAll("[data-v=\"all\"],[data-p=\"all\"]").forEach(b => b.classList.add("active"));
+  document.getElementById("vType").value = "all";
+  render();
+}
+
+function render() {
+  const grid = document.getElementById("vGrid");
+  const count = document.getElementById("vCount");
+  let f = listings.filter(p => {
+    if (state.type !== "all" && p.type !== state.type) return false;
+    if (state.pieces !== "all") { const n = parseInt(state.pieces); if (state.pieces === "4" ? p.pieces < 4 : p.pieces !== n) return false; }
+    if (state.dpe && (p.dpe || " ") > state.dpe) return false;
+    if (state.minPrice && p.price < Number(state.minPrice)) return false;
+    if (state.maxPrice && p.price > Number(state.maxPrice)) return false;
+    if (state.minSurface && p.surface < Number(state.minSurface)) return false;
+    if (state.publisher !== "all" && p.publisher !== state.publisher) return false;
+    if (state.search) { const q = state.search.toLowerCase(); if (!p.title.toLowerCase().includes(q) && !p.location.toLowerCase().includes(q)) return false; }
+    return true;
+  }).sort((a, b) => { switch (state.sort) { case "price-asc": return a.price - b.price; case "price-desc": return b.price - a.price; case "surface": return b.surface - a.surface; default: return b.id - a.id; } });
+  count.innerHTML = "<strong>" + f.length + "</strong> bien" + (f.length > 1 ? "s" : "") + " trouv\u00e9" + (f.length > 1 ? "s" : "");
+  document.getElementById("statCount").textContent = f.length;
+  const avg = f.length ? Math.round(f.reduce((s, p) => s + p.price, 0) / f.length) : 0;
+  document.getElementById("statAvg").textContent = avg ? avg.toLocaleString("fr-FR") + " \u20ac" : "\u2014 \u20ac";
+  if (!f.length) { grid.innerHTML = "<div class=\"n-no-results\"><div class=\"n-icon\">\ud83d\udd0d</div><h3>Aucun bien trouv\u00e9</h3><p>Essayez de modifier vos filtres.</p></div>"; return; }
+  grid.innerHTML = f.map(p => {
+    const cl = p.publisher === "pro" ? "n-pub-pro" : "n-pub-particulier";
+    const lb = p.publisher === "pro" ? "Pro" : "Particulier";
+    return "<div class=\"n-card\" onclick=\"openModal(" + p.id + ')\">' +
+      "<div class=\"n-card-img\" style=\"background:" + p.bg + '\">' +
+        "<span class=\"n-badge n-badge-sale\">Vente</span>" +
+        (p.reduc ? "<span class=\"n-badge n-badge-reduction\">-5%</span>" : "") +
+        (p.verified ? "<span class=\"n-badge n-badge-verified\">\u2713 V\u00e9rifi\u00e9</span>" : "") +
+        p.emoji +
+      "</div>" +
+      "<div class=\"n-card-info\">" +
+        "<div class=\"n-card-price\">" + p.pl + scoreBadge(p.score) + "</div>" +
+        '<div class=\"n-card-price-sub\">' + (p.dpe ? "DPE " + p.dpe + " \u00b7 " : "") + Math.round(p.price / p.surface).toLocaleString("fr") + " \u20ac/m\u00b2</div>" +
+        "<div class=\"n-card-title\">" + p.title + "</div>" +
+        "<div class=\"n-card-location\">\ud83d\udccd " + p.location + "</div>" +
+        "<div class=\"n-card-tags\">" +
+          "<span class=\"n-card-tag\">\ud83d\udcd0 <strong>" + p.surface + " m\u00b2</strong></span>" +
+          "<span class=\"n-card-tag\">\ud83d\udecf\ufe0f <strong>" + p.pieces + "</strong> pi\u00e8ces</span>" +
+          (p.marketAvg ? "<span class=\"n-card-tag\" style=\"color:" + (p.price > p.marketAvg ? "var(--n-warning)" : "var(--n-success)") + '\">' + (p.price > p.marketAvg ? "\ud83d\udcc8 +" : "\ud83d\udcc9 ") + Math.round(Math.abs((p.price / p.marketAvg - 1) * 100)) + "% vs march\u00e9</span>" : "") +
+        "</div>" +
+        "<div class=\"n-card-footer\">" +
+          "<div class=\"n-card-publisher\"><span class=\"n-pub-type " + cl + '\">' + lb + "</span>" + p.pubName + "</div>" +
+          "<div class=\"n-card-date\">" + p.date + "</div>" +
+        "</div>" +
+      "</div>" +
+    "</div>";
+  }).join("");
+}
+
+function openModal(id) {
+  const p = listings.find(x => x.id === id); if (!p) return;
+  const cl = p.publisher === "pro" ? "n-pub-pro" : "n-pub-particulier";
+  const lb = p.publisher === "pro" ? "Pro" : "Particulier";
+  document.getElementById("modalTitle").textContent = p.title;
+  const diff = p.marketAvg ? Math.round((p.price - p.marketAvg) / p.marketAvg * 100) : 0;
+  document.getElementById("modalBody").innerHTML =
+    "<div class=\"n-card-img\" style=\"background:" + p.bg + ";font-size:4.5rem;min-height:220px;border-radius:var(--n-radius);margin-bottom:16px\">" + p.emoji + "</div>" +
+    "<div style=\"display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px\"><span class=\"n-badge n-badge-sale\" style=\"position:static;font-size:.64rem\">Vente</span></div>" +
+    "<div class=\"n-card-price\" style=\"font-size:1.6rem\">" + p.pl + "</div>" +
+    '<div style=\"font-size:.85rem;color:var(--n-text-secondary);margin-bottom:12px\">\ud83d\udccd ' + p.location + " \u00b7 " + Math.round(p.price / p.surface).toLocaleString("fr") + " \u20ac/m\u00b2 \u00b7 DPE " + (p.dpe || "N/C") + " \u00b7 " + lb + " " + p.pubName + "</div>" +
+    "<div style=\"display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px\">" +
+      '<div class=\"n-innov-block\" style=\"padding:12px 14px;margin:0;display:flex;align-items:center;gap:8px;font-size:.82rem\">\ud83d\udcd0 <strong>' + p.surface + " m\u00b2</strong></div>" +
+      '<div class=\"n-innov-block\" style=\"padding:12px 14px;margin:0;display:flex;align-items:center;gap:8px;font-size:.82rem\">\ud83d\udecf\ufe0f <strong>' + p.pieces + "</strong> pi\u00e8ces</div>" +
+      '<div class=\"n-innov-block\" style=\"padding:12px 14px;margin:0;display:flex;align-items:center;gap:8px;font-size:.82rem\">\ud83d\udd0b DPE <strong>' + (p.dpe || "N/C") + "</strong></div>" +
+      '<div class=\"n-innov-block\" style=\"padding:12px 14px;margin:0;display:flex;align-items:center;gap:8px;font-size:.82rem\">\ud83d\udcc5 En ligne <strong>' + p.date + "</strong></div>" +
+    "</div>" +
+    '<div style=\"font-size:.85rem;color:var(--n-text-secondary);line-height:1.7;margin-bottom:14px\">' + p.desc + "</div>" +
+    (p.score ? '<div class=\"n-innov-block\" style=\"display:flex;justify-content:space-between;align-items:center;padding:14px 16px\"><span style=\"font-size:.85rem;font-weight:500\">\ud83d\udee1\ufe0f Score de confiance</span><span style=\"font-weight:700;font-family:var(--n-mono);color:' + (p.score >= 80 ? "var(--n-success)" : p.score >= 60 ? "var(--n-warning)" : "var(--n-error)") + '\">' + p.score + "/100</span></div>" : "") +
+    (p.marketAvg ? '<div class=\"n-innov-block\" style=\"padding:14px 16px\">' +
+      '<div style=\"display:flex;justify-content:space-between;font-size:.82rem;margin-bottom:6px\"><span>\ud83d\udcca Prix vs march\u00e9</span><span style=\"font-weight:600;color:' + (diff > 5 ? "var(--n-warning)" : "var(--n-success)") + '\">' + (diff > 0 ? "+" + diff : diff) + "%</span></div>" +
+      '<div style=\"height:6px;background:var(--n-bg-hover);border-radius:3px;overflow:hidden\"><div style=\"height:100%;width:' + Math.min(100, 50 + diff * 2) + '%;background:' + (diff > 5 ? "var(--n-warning)" : "var(--n-success)") + ";border-radius:3px\"></div></div>" +
+      '<div style=\"display:flex;justify-content:space-between;font-size:.75rem;color:var(--n-text-tertiary);margin-top:4px\"><span>' + p.pl + "</span><span>Moyenne: " + (p.marketAvg || 0).toLocaleString("fr-FR") + " \u20ac</span></div>" +
+    "</div>" : "") +
+    '<div style=\"display:flex;gap:10px;margin-top:16px;flex-wrap:wrap\">' +
+      '<button class=\"n-btn n-btn-primary\" onclick=\"alert(\'\ud83d\udce8 Message envoy\u00e9 \u00e0 ' + p.pubName + " !\')\">\u2709\ufe0f Contacter le vendeur</button>" +
+      "<button class=\"n-btn n-btn-secondary\" onclick=\"location.href=\'scoring.html\'\">\ud83d\udd2c Analyser ce bien</button>" +
+    "</div>";
+  document.getElementById("modalOverlay").classList.add("open");
+}
+function closeModal() { document.getElementById("modalOverlay").classList.remove("open"); }
+document.getElementById("modalOverlay").addEventListener("click", function(e) { if (e.target === this) closeModal(); });
+
+function toggleTool(id) {
+  const p = document.getElementById("tp-" + id);
+  ["mortgage", "notaire"].forEach(a => {
+    const el = document.getElementById("tp-" + a);
+    if (a === id) el.style.display = el.style.display === "none" ? "block" : "none";
+    else el.style.display = "none";
+  });
+}
+function calcMortgage() {
+  const price = parseFloat(document.getElementById("mPrice").value) || 0;
+  const down = parseFloat(document.getElementById("mDown").value) || 0;
+  const rate = parseFloat(document.getElementById("mRate").value) || 3.5;
+  const years = parseInt(document.getElementById("mDur").value) || 20;
+  const loan = price - down; const mr = rate / 100 / 12; const n = years * 12;
+  if (loan <= 0) { document.getElementById("mMonthly").textContent = "0 \u20ac"; return; }
+  const monthly = loan * mr * Math.pow(1 + mr, n) / (Math.pow(1 + mr, n) - 1);
+  const total = monthly * n; const interest = total - loan;
+  document.getElementById("mMonthly").textContent = Math.round(monthly).toLocaleString("fr-FR") + " \u20ac/mois";
+  document.getElementById("mTotal").textContent = Math.round(total).toLocaleString("fr-FR") + " \u20ac";
+  document.getElementById("mInterest").textContent = Math.round(interest).toLocaleString("fr-FR") + " \u20ac";
+}
+function calcNotaire() {
+  const price = parseFloat(document.getElementById("nPrice").value) || 0;
+  const type = document.getElementById("nType").value;
+  const pct = type === "neuf" ? 3 : 8; const fees = Math.round(price * pct / 100);
+  document.getElementById("nFees").textContent = fees.toLocaleString("fr-FR") + " \u20ac";
+  document.getElementById("nTotal").textContent = (price + fees).toLocaleString("fr-FR") + " \u20ac";
+  document.getElementById("nPct").textContent = pct + "%";
+}
+
+render();
+</script>
+
 <script>
 /* ========== NODUS SCROLL REVEAL ========== */
 (function() {
@@ -438,5 +438,44 @@
   }
 })();
 </script>
+<footer class="n-footer" style="margin-top:60px">
+  <div class="n-footer-inner">
+    <div>
+      <div class="n-logo" style="margin-bottom:10px;font-size:1.1rem">
+        <div class="n-logo-icon" style="width:30px;height:30px;font-size:0.8rem">IE</div>
+        <span>Immo</span><span class="n-cyan">Express</span>
+      </div>
+      <p>La plateforme immobilière intelligente. Annonces vérifiées, analyses IA, mise en relation directe.</p>
+    </div>
+    <div>
+      <h4>Annonces</h4>
+      <ul>
+        <li><a href="vente.html">💰 Acheter</a></li>
+        <li><a href="location.html">📍 Louer</a></li>
+        <li><a href="scoring.html">🔬 Score de confiance</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Outils</h4>
+      <ul>
+        <li><a href="scoring.html">📊 Analyse IA</a></li>
+        <li><a href="risques.html">🌍 Risques géographiques</a></li>
+        <li><a href="recherche.html">🔍 Recherche avancée</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>EVA · NODUS</h4>
+      <ul>
+        <li><a href="pro.html">🏢 Espace Pro</a></li>
+        <li><a href="dashboard.html">⚙️ Administration</a></li>
+        <li><a href="profil.html">👤 Mon profil</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="n-footer-bottom">
+    <span>© 2026 Immo-Express — Plateforme immobilière intelligente</span>
+    <span class="n-footer-eva">⚡ Powered by EVA · NODUS SYSTEMS</span>
+  </div>
+</footer>
 </body>
-406|</html>
+</html>
