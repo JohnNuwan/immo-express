@@ -1,218 +1,254 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard — Immo-Express · NODUS</title>
-  <link rel="icon" href="assets/icon-192.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="css/nodus.css">
-  <style>
-    .n-table { width:100%; border-collapse: collapse; font-size:.85rem; }
-    .n-table th { text-align:left; padding:10px 12px; background:var(--n-bg); font-weight:500; color:var(--n-text-secondary); font-size:.8rem; text-transform:uppercase; letter-spacing:.3px; border-bottom:1px solid var(--n-border); }
-    .n-table td { padding:10px 12px; border-bottom:1px solid var(--n-border); }
-    .n-table tr:last-child td { border-bottom:none; }
-    .n-table tr:hover td { background:var(--n-bg); }
-  </style>
-</head>
-<body>
-
-    <header class="n-header">
-      <div class="n-header-inner">
-        <a href="index.html" class="n-logo">
-          <div class="n-logo-icon">IE</div>
-          <span>Immo</span><span class="n-cyan">Express</span>
-        </a>
-        <button class="n-mobile-toggle" onclick="document.querySelector('.n-nav').classList.toggle('open')">☰</button>
-        <nav class="n-nav">
-          <a href="index.html">🏠 Accueil</a>
-          <a href="vente.html">💰 Acheter</a>
-          <a href="location.html">📍 Louer</a>
-          <a href="scoring.html">🔬 Scoring</a>
-          <a href="risques.html">🌍 Risques</a>
-          <a href="pro.html">🏢 Pro</a>
-          <a href="dashboard.html" class="active">📊 Dashboard</a>
-          <a href="profil.html">👤 Profil</a>
-          <a href="recherche.html">🔎 Recherche</a>
-          <a href="pro.html" class="n-btn-depot">+ Publier</a>
-          <button class="n-btn-user" onclick="openAuth()">👤 Connexion</button>
-        </nav>
-      </div>
-    </header>
-
-<section class="n-hero" style="background:linear-gradient(135deg,#1a1a2e 0%,#16213e 100%)">
-  <h1>📊 <span class="n-hero-accent">Dashboard</span> <span class="n-hero-cyan">Administrateur</span></h1>
-  <p>Vue d'ensemble de la plateforme Immo-Express</p>
-</section>
-
-<div class="n-layout">
-  <aside class="n-sidebar" style="padding:12px;position:sticky;top:92px">
-    <h3 style="font-size:.85rem;font-weight:600;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--n-border)">📊 Administration</h3>
-    <button class="n-btn n-btn-ghost active" style="display:flex;align-items:center;gap:10px;width:100%;padding:12px 14px;border:none;border-radius:var(--n-radius);font-size:.85rem;font-weight:500;cursor:pointer;text-align:left;margin-bottom:4px;background:var(--n-cyan-dim);color:var(--n-cyan)" onclick="showDashSection('overview', this)">
-      <span style="font-size:1.1rem;width:24px;text-align:center">📈</span> Aperçu
-    </button>
-    <button class="n-btn n-btn-ghost" style="display:flex;align-items:center;gap:10px;width:100%;padding:12px 14px;border:none;border-radius:var(--n-radius);font-size:.85rem;font-weight:500;cursor:pointer;text-align:left;margin-bottom:4px" onclick="showDashSection('users', this)">
-      <span style="font-size:1.1rem;width:24px;text-align:center">👥</span> Utilisateurs
-    </button>
-    <button class="n-btn n-btn-ghost" style="display:flex;align-items:center;gap:10px;width:100%;padding:12px 14px;border:none;border-radius:var(--n-radius);font-size:.85rem;font-weight:500;cursor:pointer;text-align:left;margin-bottom:4px" onclick="showDashSection('properties', this)">
-      <span style="font-size:1.1rem;width:24px;text-align:center">🏠</span> Biens
-    </button>
-    <button class="n-btn n-btn-ghost" style="display:flex;align-items:center;gap:10px;width:100%;padding:12px 14px;border:none;border-radius:var(--n-radius);font-size:.85rem;font-weight:500;cursor:pointer;text-align:left" onclick="showDashSection('activity', this)">
-      <span style="font-size:1.1rem;width:24px;text-align:center">📋</span> Activité
-    </button>
-  </aside>
-
-  <div class="n-results-area" style="min-height:500px">
-    <!-- Overview -->
-    <div id="dsec-overview" class="pro-section active">
-      <div class="n-dash-grid">
-        <div class="n-dash-card"><div class="n-dc-icon" style="background:var(--n-cyan-dim)">👥</div><div class="n-dc-num">1,247</div><div class="n-dc-label">Utilisateurs inscrits</div><div class="n-dc-change" style="color:var(--n-success)">+12% ce mois</div></div>
-        <div class="n-dash-card"><div class="n-dc-icon" style="background:rgba(0,230,118,0.15)">🏠</div><div class="n-dc-num">384</div><div class="n-dc-label">Annonces actives</div><div class="n-dc-change" style="color:var(--n-success)">+24 cette semaine</div></div>
-        <div class="n-dash-card"><div class="n-dc-icon" style="background:rgba(255,193,7,0.15)">💬</div><div class="n-dc-num">892</div><div class="n-dc-label">Messages envoyés</div><div class="n-dc-change" style="color:var(--n-warning)">+8% vs mois dernier</div></div>
-        <div class="n-dash-card"><div class="n-dc-icon" style="background:rgba(255,82,82,0.15)">👁️</div><div class="n-dc-num">12,458</div><div class="n-dc-label">Vues totales</div><div class="n-dc-change" style="color:var(--n-success)">+31%</div></div>
-      </div>
-
-      <h2 class="n-section-title">📈 Statistiques rapides</h2>
-      <div class="n-dash-card" style="padding:24px">
-        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:20px">
-          <div><div style="font-size:.75rem;color:var(--n-text-tertiary);text-transform:uppercase;letter-spacing:.3px;margin-bottom:4px">Taux de conversion</div><div style="font-size:1.5rem;font-weight:700;color:var(--n-cyan);font-family:var(--n-mono)">3.2%</div></div>
-          <div><div style="font-size:.75rem;color:var(--n-text-tertiary);text-transform:uppercase;letter-spacing:.3px;margin-bottom:4px">Durée moyenne</div><div style="font-size:1.5rem;font-weight:700;color:var(--n-cyan);font-family:var(--n-mono)">12j</div></div>
-          <div><div style="font-size:.75rem;color:var(--n-text-tertiary);text-transform:uppercase;letter-spacing:.3px;margin-bottom:4px">Prix moyen</div><div style="font-size:1.5rem;font-weight:700;color:var(--n-cyan);font-family:var(--n-mono)">285k €</div></div>
-          <div><div style="font-size:.75rem;color:var(--n-text-tertiary);text-transform:uppercase;letter-spacing:.3px;margin-bottom:4px">Scoring moyen</div><div style="font-size:1.5rem;font-weight:700;color:var(--n-cyan);font-family:var(--n-mono)">72/100</div></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Users -->
-    <div id="dsec-users" class="pro-section">
-      <h2 class="n-section-title">👥 Gestion des utilisateurs</h2>
-      <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap">
-        <input type="text" placeholder="Rechercher un utilisateur..." style="flex:1;min-width:200px;padding:10px 14px;border:1px solid var(--n-border);border-radius:var(--n-radius-sm);font-size:.85rem;font-family:var(--n-font);background:var(--n-bg);color:var(--n-text)">
-        <button class="n-btn n-btn-primary">🔍 Rechercher</button>
-      </div>
-      <div class="n-dash-card" style="padding:0;overflow-x:auto">
-        <table class="n-table">
-          <thead><tr><th>ID</th><th>Nom</th><th>Email</th><th>Rôle</th><th>Inscrit le</th><th>Status</th><th>Actions</th></tr></thead>
-          <tbody>
-            <tr><td>#1247</td><td>Jean Dupont</td><td>jean@email.com</td><td><span class="n-pub-type n-pub-particulier" style="font-size:.65rem">Particulier</span></td><td>01/08/2025</td><td><span class="n-badge n-badge-verified" style="position:static;font-size:.65rem">Actif</span></td><td><button class="n-btn n-btn-ghost" style="padding:4px 10px;font-size:.72rem">✏️</button> <button class="n-btn n-btn-danger" style="padding:4px 10px;font-size:.72rem">🚫</button></td></tr>
-            <tr><td>#1246</td><td>Marie Martin</td><td>marie@agence.fr</td><td><span class="n-pub-type n-pub-pro" style="font-size:.65rem">Pro</span></td><td>28/07/2025</td><td><span class="n-badge n-badge-verified" style="position:static;font-size:.65rem">Actif</span></td><td><button class="n-btn n-btn-ghost" style="padding:4px 10px;font-size:.72rem">✏️</button> <button class="n-btn n-btn-danger" style="padding:4px 10px;font-size:.72rem">🚫</button></td></tr>
-            <tr><td>#1245</td><td>Pierre Durand</td><td>pierre@email.com</td><td><span class="n-pub-type n-pub-particulier" style="font-size:.65rem">Particulier</span></td><td>25/07/2025</td><td><span class="n-badge n-badge-sale" style="position:static;font-size:.65rem">Inactif</span></td><td><button class="n-btn n-btn-ghost" style="padding:4px 10px;font-size:.72rem">✏️</button> <button class="n-btn n-btn-danger" style="padding:4px 10px;font-size:.72rem">🚫</button></td></tr>
-            <tr><td>#1244</td><td>Sophie Petit</td><td>sophie@email.com</td><td><span class="n-pub-type n-pub-particulier" style="font-size:.65rem">Particulier</span></td><td>20/07/2025</td><td><span class="n-badge n-badge-verified" style="position:static;font-size:.65rem">Actif</span></td><td><button class="n-btn n-btn-ghost" style="padding:4px 10px;font-size:.72rem">✏️</button> <button class="n-btn n-btn-danger" style="padding:4px 10px;font-size:.72rem">🚫</button></td></tr>
-            <tr><td>#1243</td><td>Lucas Bernard</td><td>lucas@agence-immo.fr</td><td><span class="n-pub-type n-pub-pro" style="font-size:.65rem">Pro</span></td><td>18/07/2025</td><td><span class="n-badge n-badge-verified" style="position:static;font-size:.65rem">Actif</span></td><td><button class="n-btn n-btn-ghost" style="padding:4px 10px;font-size:.72rem">✏️</button> <button class="n-btn n-btn-danger" style="padding:4px 10px;font-size:.72rem">🚫</button></td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- Properties -->
-    <div id="dsec-properties" class="pro-section">
-      <h2 class="n-section-title">🏠 Gestion des biens</h2>
-      <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap">
-        <input type="text" placeholder="Rechercher un bien..." style="flex:1;min-width:200px;padding:10px 14px;border:1px solid var(--n-border);border-radius:var(--n-radius-sm);font-size:.85rem;font-family:var(--n-font);background:var(--n-bg);color:var(--n-text)">
-        <button class="n-btn n-btn-primary">🔍 Rechercher</button>
-      </div>
-      <div class="n-dash-card" style="padding:0;overflow-x:auto">
-        <table class="n-table">
-          <thead><tr><th>ID</th><th>Titre</th><th>Type</th><th>Prix</th><th>Publié par</th><th>Status</th><th>Score</th><th>Actions</th></tr></thead>
-          <tbody>
-            <tr><td>#384</td><td>Appartement Paris 11e</td><td>Vente</td><td class="n-mono">395 000 €</td><td>Agence Pro</td><td><span class="n-badge n-badge-verified" style="position:static;font-size:.65rem">✓ Vérifié</span></td><td class="n-td-score" style="color:var(--n-success);font-weight:700">82</td><td><button class="n-btn n-btn-ghost" style="padding:4px 10px;font-size:.72rem">✏️</button> <button class="n-btn n-btn-danger" style="padding:4px 10px;font-size:.72rem">🗑️</button></td></tr>
-            <tr><td>#383</td><td>Maison Lyon 3e</td><td>Vente</td><td class="n-mono">520 000 €</td><td>Particulier</td><td><span class="n-badge n-badge-verified" style="position:static;font-size:.65rem;background:var(--n-warning);color:var(--n-bg)">⏳ En attente</span></td><td class="n-td-score" style="color:var(--n-warning);font-weight:700">65</td><td><button class="n-btn n-btn-ghost" style="padding:4px 10px;font-size:.72rem">✏️</button> <button class="n-btn n-btn-danger" style="padding:4px 10px;font-size:.72rem">🗑️</button></td></tr>
-            <tr><td>#382</td><td>Studio Bordeaux</td><td>Location</td><td class="n-mono">650 €/mois</td><td>Agence Pro</td><td><span class="n-badge n-badge-verified" style="position:static;font-size:.65rem">✓ Vérifié</span></td><td class="n-td-score" style="color:var(--n-success);font-weight:700">78</td><td><button class="n-btn n-btn-ghost" style="padding:4px 10px;font-size:.72rem">✏️</button> <button class="n-btn n-btn-danger" style="padding:4px 10px;font-size:.72rem">🗑️</button></td></tr>
-            <tr><td>#381</td><td>Villa Nice</td><td>Vente</td><td class="n-mono">890 000 €</td><td>Particulier</td><td><span class="n-badge n-badge-verified" style="position:static;font-size:.65rem">✓ Vérifié</span></td><td class="n-td-score" style="color:var(--n-error);font-weight:700">45</td><td><button class="n-btn n-btn-ghost" style="padding:4px 10px;font-size:.72rem">✏️</button> <button class="n-btn n-btn-danger" style="padding:4px 10px;font-size:.72rem">🗑️</button></td></tr>
-            <tr><td>#380</td><td>Appartement Lille</td><td>Location</td><td class="n-mono">450 €/mois</td><td>Agence Pro</td><td><span class="n-badge n-badge-sale" style="position:static;font-size:.65rem">Expiré</span></td><td class="n-td-score" style="color:var(--n-text-tertiary);font-weight:700">—</td><td><button class="n-btn n-btn-ghost" style="padding:4px 10px;font-size:.72rem">✏️</button> <button class="n-btn n-btn-danger" style="padding:4px 10px;font-size:.72rem">🗑️</button></td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- Activity -->
-    <div id="dsec-activity" class="pro-section">
-      <h2 class="n-section-title">📋 Activité récente</h2>
-      <div class="n-dash-card" style="padding:0">
-        <div class="activity-item" style="display:flex;align-items:center;gap:14px;padding:14px 18px;border-bottom:1px solid var(--n-border);font-size:.85rem">
-          <div style="width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0;background:var(--n-cyan-dim)">👤</div>
-          <div style="flex:1"><strong>Nouvel utilisateur</strong> inscrit : Jean Dupont</div>
-          <div style="font-size:.75rem;color:var(--n-text-tertiary);white-space:nowrap">Il y a 2h</div>
-        </div>
-        <div class="activity-item" style="display:flex;align-items:center;gap:14px;padding:14px 18px;border-bottom:1px solid var(--n-border);font-size:.85rem">
-          <div style="width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0;background:rgba(0,230,118,0.15)">🏠</div>
-          <div style="flex:1"><strong>Nouveau bien</strong> publié : Appartement Paris 11e</div>
-          <div style="font-size:.75rem;color:var(--n-text-tertiary);white-space:nowrap">Il y a 5h</div>
-        </div>
-        <div class="activity-item" style="display:flex;align-items:center;gap:14px;padding:14px 18px;border-bottom:1px solid var(--n-border);font-size:.85rem">
-          <div style="width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0;background:rgba(255,193,7,0.15)">🔬</div>
-          <div style="flex:1"><strong>Analyse IA</strong> réalisée pour Villa Nice (score: 45)</div>
-          <div style="font-size:.75rem;color:var(--n-text-tertiary);white-space:nowrap">Il y a 8h</div>
-        </div>
-        <div class="activity-item" style="display:flex;align-items:center;gap:14px;padding:14px 18px;border-bottom:1px solid var(--n-border);font-size:.85rem">
-          <div style="width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0;background:rgba(255,82,82,0.15)">💬</div>
-          <div style="flex:1"><strong>Message</strong> de contact pour Maison Lyon 3e</div>
-          <div style="font-size:.75rem;color:var(--n-text-tertiary);white-space:nowrap">Il y a 1j</div>
-        </div>
-        <div class="activity-item" style="display:flex;align-items:center;gap:14px;padding:14px 18px;font-size:.85rem">
-          <div style="width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0;background:var(--n-cyan-dim)">📊</div>
-          <div style="flex:1"><strong>Rapport mensuel</strong> généré (Juillet 2025)</div>
-          <div style="font-size:.75rem;color:var(--n-text-tertiary);white-space:nowrap">Il y a 2j</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-    <footer class="n-footer">
+1|<!DOCTYPE html>
+2|<html lang="fr" data-theme="dark">
+3|<head>
+4|  <meta charset="UTF-8">
+5|  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+6|  <title>Dashboard — Immo-Express · NODUS</title>
+  <meta name="theme-color" content="#14141a">
+7|  <link rel="icon" href="assets/icon-192.svg" type="image/svg+xml">
+8|  <link rel="stylesheet" href="css/nodus.css">
+9|  <style>
+10|    .n-table { width:100%; border-collapse: collapse; font-size:.85rem; }
+11|    .n-table th { text-align:left; padding:10px 12px; background:var(--n-bg); font-weight:500; color:var(--n-text-secondary); font-size:.8rem; text-transform:uppercase; letter-spacing:.3px; border-bottom:1px solid var(--n-border); }
+12|    .n-table td { padding:10px 12px; border-bottom:1px solid var(--n-border); }
+13|    .n-table tr:last-child td { border-bottom:none; }
+14|    .n-table tr:hover td { background:var(--n-bg); }
+15|  </style>
+16|</head>
+17|<body class="n-page">
+18|
+19|    <header class="n-header">
+20|      <div class="n-header-inner">
+21|        <a href="index.html" class="n-logo">
+22|          <div class="n-logo-icon">IE</div>
+23|          <span>Immo</span><span class="n-cyan">Express</span>
+24|        </a>
+25|        <button class="n-mobile-toggle" onclick="document.querySelector('.n-nav').classList.toggle('open')">☰</button>
+26|        <nav class="n-nav">
+27|          <a href="index.html">🏠 Accueil</a>
+28|          <a href="vente.html">💰 Acheter</a>
+29|          <a href="location.html">📍 Louer</a>
+30|          <a href="scoring.html">🔬 Scoring</a>
+31|          <a href="risques.html">🌍 Risques</a>
+32|          <a href="pro.html">🏢 Pro</a>
+33|          <a href="dashboard.html" class="active">📊 Dashboard</a>
+34|          <a href="profil.html">👤 Profil</a>
+35|          <a href="recherche.html">🔎 Recherche</a>
+36|          <a href="pro.html" class="n-btn-depot">+ Publier</a>
+37|          <button class="n-btn-user" onclick="openAuth()">👤 Connexion</button>
+38|        </nav>
+39|      </div>
+40|    </header>
+41|
+42|<section class="n-hero" style="background:linear-gradient(135deg,#1a1a2e 0%,#16213e 100%)">
+43|  <h1>📊 <span class="n-hero-accent">Dashboard</span> <span class="n-hero-cyan">Administrateur</span></h1>
+44|  <p>Vue d'ensemble de la plateforme Immo-Express</p>
+45|</section>
+46|
+47|<div class="n-layout n-reveal">
+48|  <aside class="n-sidebar" style="padding:12px;position:sticky;top:92px">
+49|    <h3 style="font-size:.85rem;font-weight:600;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--n-border)">📊 Administration</h3>
+50|    <button class="n-btn n-btn-ghost active" style="display:flex;align-items:center;gap:10px;width:100%;padding:12px 14px;border:none;border-radius:var(--n-radius);font-size:.85rem;font-weight:500;cursor:pointer;text-align:left;margin-bottom:4px;background:var(--n-cyan-dim);color:var(--n-cyan)" onclick="showDashSection('overview', this)">
+51|      <span style="font-size:1.1rem;width:24px;text-align:center">📈</span> Aperçu
+52|    </button>
+53|    <button class="n-btn n-btn-ghost" style="display:flex;align-items:center;gap:10px;width:100%;padding:12px 14px;border:none;border-radius:var(--n-radius);font-size:.85rem;font-weight:500;cursor:pointer;text-align:left;margin-bottom:4px" onclick="showDashSection('users', this)">
+54|      <span style="font-size:1.1rem;width:24px;text-align:center">👥</span> Utilisateurs
+55|    </button>
+56|    <button class="n-btn n-btn-ghost" style="display:flex;align-items:center;gap:10px;width:100%;padding:12px 14px;border:none;border-radius:var(--n-radius);font-size:.85rem;font-weight:500;cursor:pointer;text-align:left;margin-bottom:4px" onclick="showDashSection('properties', this)">
+57|      <span style="font-size:1.1rem;width:24px;text-align:center">🏠</span> Biens
+58|    </button>
+59|    <button class="n-btn n-btn-ghost" style="display:flex;align-items:center;gap:10px;width:100%;padding:12px 14px;border:none;border-radius:var(--n-radius);font-size:.85rem;font-weight:500;cursor:pointer;text-align:left" onclick="showDashSection('activity', this)">
+60|      <span style="font-size:1.1rem;width:24px;text-align:center">📋</span> Activité
+61|    </button>
+62|  </aside>
+63|
+64|  <div class="n-results-area" style="min-height:500px">
+65|    <!-- Overview -->
+66|    <div id="dsec-overview" class="pro-section active">
+67|      <div class="n-dash-grid">
+68|        <div class="n-dash-card"><div class="n-dc-icon" style="background:var(--n-cyan-dim)">👥</div><div class="n-dc-num">1,247</div><div class="n-dc-label">Utilisateurs inscrits</div><div class="n-dc-change" style="color:var(--n-success)">+12% ce mois</div></div>
+69|        <div class="n-dash-card"><div class="n-dc-icon" style="background:rgba(0,230,118,0.15)">🏠</div><div class="n-dc-num">384</div><div class="n-dc-label">Annonces actives</div><div class="n-dc-change" style="color:var(--n-success)">+24 cette semaine</div></div>
+70|        <div class="n-dash-card"><div class="n-dc-icon" style="background:rgba(255,193,7,0.15)">💬</div><div class="n-dc-num">892</div><div class="n-dc-label">Messages envoyés</div><div class="n-dc-change" style="color:var(--n-warning)">+8% vs mois dernier</div></div>
+71|        <div class="n-dash-card"><div class="n-dc-icon" style="background:rgba(255,82,82,0.15)">👁️</div><div class="n-dc-num">12,458</div><div class="n-dc-label">Vues totales</div><div class="n-dc-change" style="color:var(--n-success)">+31%</div></div>
+72|      </div>
+73|
+74|      <h2 class="n-section-title">📈 Statistiques rapides</h2>
+75|      <div class="n-dash-card" style="padding:24px">
+76|        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:20px">
+77|          <div><div style="font-size:.75rem;color:var(--n-text-tertiary);text-transform:uppercase;letter-spacing:.3px;margin-bottom:4px">Taux de conversion</div><div style="font-size:1.5rem;font-weight:700;color:var(--n-cyan);font-family:var(--n-mono)">3.2%</div></div>
+78|          <div><div style="font-size:.75rem;color:var(--n-text-tertiary);text-transform:uppercase;letter-spacing:.3px;margin-bottom:4px">Durée moyenne</div><div style="font-size:1.5rem;font-weight:700;color:var(--n-cyan);font-family:var(--n-mono)">12j</div></div>
+79|          <div><div style="font-size:.75rem;color:var(--n-text-tertiary);text-transform:uppercase;letter-spacing:.3px;margin-bottom:4px">Prix moyen</div><div style="font-size:1.5rem;font-weight:700;color:var(--n-cyan);font-family:var(--n-mono)">285k €</div></div>
+80|          <div><div style="font-size:.75rem;color:var(--n-text-tertiary);text-transform:uppercase;letter-spacing:.3px;margin-bottom:4px">Scoring moyen</div><div style="font-size:1.5rem;font-weight:700;color:var(--n-cyan);font-family:var(--n-mono)">72/100</div></div>
+81|        </div>
+82|      </div>
+83|    </div>
+84|
+85|    <!-- Users -->
+86|    <div id="dsec-users" class="pro-section">
+87|      <h2 class="n-section-title">👥 Gestion des utilisateurs</h2>
+88|      <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap">
+89|        <input type="text" placeholder="Rechercher un utilisateur..." style="flex:1;min-width:200px;padding:10px 14px;border:1px solid var(--n-border);border-radius:var(--n-radius-sm);font-size:.85rem;font-family:var(--n-font);background:var(--n-bg);color:var(--n-text)">
+90|        <button class="n-btn n-btn-primary">🔍 Rechercher</button>
+91|      </div>
+92|      <div class="n-dash-card" style="padding:0;overflow-x:auto">
+93|        <table class="n-table">
+94|          <thead><tr><th>ID</th><th>Nom</th><th>Email</th><th>Rôle</th><th>Inscrit le</th><th>Status</th><th>Actions</th></tr></thead>
+95|          <tbody>
+96|            <tr><td>#1247</td><td>Jean Dupont</td><td>jean@email.com</td><td><span class="n-pub-type n-pub-particulier" style="font-size:.65rem">Particulier</span></td><td>01/08/2025</td><td><span class="n-badge n-badge-verified" style="position:static;font-size:.65rem">Actif</span></td><td><button class="n-btn n-btn-ghost" style="padding:4px 10px;font-size:.72rem">✏️</button> <button class="n-btn n-btn-danger" style="padding:4px 10px;font-size:.72rem">🚫</button></td></tr>
+97|            <tr><td>#1246</td><td>Marie Martin</td><td>marie@agence.fr</td><td><span class="n-pub-type n-pub-pro" style="font-size:.65rem">Pro</span></td><td>28/07/2025</td><td><span class="n-badge n-badge-verified" style="position:static;font-size:.65rem">Actif</span></td><td><button class="n-btn n-btn-ghost" style="padding:4px 10px;font-size:.72rem">✏️</button> <button class="n-btn n-btn-danger" style="padding:4px 10px;font-size:.72rem">🚫</button></td></tr>
+98|            <tr><td>#1245</td><td>Pierre Durand</td><td>pierre@email.com</td><td><span class="n-pub-type n-pub-particulier" style="font-size:.65rem">Particulier</span></td><td>25/07/2025</td><td><span class="n-badge n-badge-sale" style="position:static;font-size:.65rem">Inactif</span></td><td><button class="n-btn n-btn-ghost" style="padding:4px 10px;font-size:.72rem">✏️</button> <button class="n-btn n-btn-danger" style="padding:4px 10px;font-size:.72rem">🚫</button></td></tr>
+99|            <tr><td>#1244</td><td>Sophie Petit</td><td>sophie@email.com</td><td><span class="n-pub-type n-pub-particulier" style="font-size:.65rem">Particulier</span></td><td>20/07/2025</td><td><span class="n-badge n-badge-verified" style="position:static;font-size:.65rem">Actif</span></td><td><button class="n-btn n-btn-ghost" style="padding:4px 10px;font-size:.72rem">✏️</button> <button class="n-btn n-btn-danger" style="padding:4px 10px;font-size:.72rem">🚫</button></td></tr>
+100|            <tr><td>#1243</td><td>Lucas Bernard</td><td>lucas@agence-immo.fr</td><td><span class="n-pub-type n-pub-pro" style="font-size:.65rem">Pro</span></td><td>18/07/2025</td><td><span class="n-badge n-badge-verified" style="position:static;font-size:.65rem">Actif</span></td><td><button class="n-btn n-btn-ghost" style="padding:4px 10px;font-size:.72rem">✏️</button> <button class="n-btn n-btn-danger" style="padding:4px 10px;font-size:.72rem">🚫</button></td></tr>
+101|          </tbody>
+102|        </table>
+103|      </div>
+104|    </div>
+105|
+106|    <!-- Properties -->
+107|    <div id="dsec-properties" class="pro-section">
+108|      <h2 class="n-section-title">🏠 Gestion des biens</h2>
+109|      <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap">
+110|        <input type="text" placeholder="Rechercher un bien..." style="flex:1;min-width:200px;padding:10px 14px;border:1px solid var(--n-border);border-radius:var(--n-radius-sm);font-size:.85rem;font-family:var(--n-font);background:var(--n-bg);color:var(--n-text)">
+111|        <button class="n-btn n-btn-primary">🔍 Rechercher</button>
+112|      </div>
+113|      <div class="n-dash-card" style="padding:0;overflow-x:auto">
+114|        <table class="n-table">
+115|          <thead><tr><th>ID</th><th>Titre</th><th>Type</th><th>Prix</th><th>Publié par</th><th>Status</th><th>Score</th><th>Actions</th></tr></thead>
+116|          <tbody>
+117|            <tr><td>#384</td><td>Appartement Paris 11e</td><td>Vente</td><td class="n-mono">395 000 €</td><td>Agence Pro</td><td><span class="n-badge n-badge-verified" style="position:static;font-size:.65rem">✓ Vérifié</span></td><td class="n-td-score" style="color:var(--n-success);font-weight:700">82</td><td><button class="n-btn n-btn-ghost" style="padding:4px 10px;font-size:.72rem">✏️</button> <button class="n-btn n-btn-danger" style="padding:4px 10px;font-size:.72rem">🗑️</button></td></tr>
+118|            <tr><td>#383</td><td>Maison Lyon 3e</td><td>Vente</td><td class="n-mono">520 000 €</td><td>Particulier</td><td><span class="n-badge n-badge-verified" style="position:static;font-size:.65rem;background:var(--n-warning);color:var(--n-bg)">⏳ En attente</span></td><td class="n-td-score" style="color:var(--n-warning);font-weight:700">65</td><td><button class="n-btn n-btn-ghost" style="padding:4px 10px;font-size:.72rem">✏️</button> <button class="n-btn n-btn-danger" style="padding:4px 10px;font-size:.72rem">🗑️</button></td></tr>
+119|            <tr><td>#382</td><td>Studio Bordeaux</td><td>Location</td><td class="n-mono">650 €/mois</td><td>Agence Pro</td><td><span class="n-badge n-badge-verified" style="position:static;font-size:.65rem">✓ Vérifié</span></td><td class="n-td-score" style="color:var(--n-success);font-weight:700">78</td><td><button class="n-btn n-btn-ghost" style="padding:4px 10px;font-size:.72rem">✏️</button> <button class="n-btn n-btn-danger" style="padding:4px 10px;font-size:.72rem">🗑️</button></td></tr>
+120|            <tr><td>#381</td><td>Villa Nice</td><td>Vente</td><td class="n-mono">890 000 €</td><td>Particulier</td><td><span class="n-badge n-badge-verified" style="position:static;font-size:.65rem">✓ Vérifié</span></td><td class="n-td-score" style="color:var(--n-error);font-weight:700">45</td><td><button class="n-btn n-btn-ghost" style="padding:4px 10px;font-size:.72rem">✏️</button> <button class="n-btn n-btn-danger" style="padding:4px 10px;font-size:.72rem">🗑️</button></td></tr>
+121|            <tr><td>#380</td><td>Appartement Lille</td><td>Location</td><td class="n-mono">450 €/mois</td><td>Agence Pro</td><td><span class="n-badge n-badge-sale" style="position:static;font-size:.65rem">Expiré</span></td><td class="n-td-score" style="color:var(--n-text-tertiary);font-weight:700">—</td><td><button class="n-btn n-btn-ghost" style="padding:4px 10px;font-size:.72rem">✏️</button> <button class="n-btn n-btn-danger" style="padding:4px 10px;font-size:.72rem">🗑️</button></td></tr>
+122|          </tbody>
+123|        </table>
+124|      </div>
+125|    </div>
+126|
+127|    <!-- Activity -->
+128|    <div id="dsec-activity" class="pro-section">
+129|      <h2 class="n-section-title">📋 Activité récente</h2>
+130|      <div class="n-dash-card" style="padding:0">
+131|        <div class="activity-item" style="display:flex;align-items:center;gap:14px;padding:14px 18px;border-bottom:1px solid var(--n-border);font-size:.85rem">
+132|          <div style="width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0;background:var(--n-cyan-dim)">👤</div>
+133|          <div style="flex:1"><strong>Nouvel utilisateur</strong> inscrit : Jean Dupont</div>
+134|          <div style="font-size:.75rem;color:var(--n-text-tertiary);white-space:nowrap">Il y a 2h</div>
+135|        </div>
+136|        <div class="activity-item" style="display:flex;align-items:center;gap:14px;padding:14px 18px;border-bottom:1px solid var(--n-border);font-size:.85rem">
+137|          <div style="width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0;background:rgba(0,230,118,0.15)">🏠</div>
+138|          <div style="flex:1"><strong>Nouveau bien</strong> publié : Appartement Paris 11e</div>
+139|          <div style="font-size:.75rem;color:var(--n-text-tertiary);white-space:nowrap">Il y a 5h</div>
+140|        </div>
+141|        <div class="activity-item" style="display:flex;align-items:center;gap:14px;padding:14px 18px;border-bottom:1px solid var(--n-border);font-size:.85rem">
+142|          <div style="width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0;background:rgba(255,193,7,0.15)">🔬</div>
+143|          <div style="flex:1"><strong>Analyse IA</strong> réalisée pour Villa Nice (score: 45)</div>
+144|          <div style="font-size:.75rem;color:var(--n-text-tertiary);white-space:nowrap">Il y a 8h</div>
+145|        </div>
+146|        <div class="activity-item" style="display:flex;align-items:center;gap:14px;padding:14px 18px;border-bottom:1px solid var(--n-border);font-size:.85rem">
+147|          <div style="width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0;background:rgba(255,82,82,0.15)">💬</div>
+148|          <div style="flex:1"><strong>Message</strong> de contact pour Maison Lyon 3e</div>
+149|          <div style="font-size:.75rem;color:var(--n-text-tertiary);white-space:nowrap">Il y a 1j</div>
+150|        </div>
+151|        <div class="activity-item" style="display:flex;align-items:center;gap:14px;padding:14px 18px;font-size:.85rem">
+152|          <div style="width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0;background:var(--n-cyan-dim)">📊</div>
+153|          <div style="flex:1"><strong>Rapport mensuel</strong> généré (Juillet 2025)</div>
+154|          <div style="font-size:.75rem;color:var(--n-text-tertiary);white-space:nowrap">Il y a 2j</div>
+155|        </div>
+156|      </div>
+157|    </div>
+158|  </div>
+159|</div>
+160|
+161|        <footer class="n-footer">
       <div class="n-footer-inner">
         <div>
-          <div class="n-logo" style="margin-bottom:8px">
-            <div class="n-logo-icon" style="width:28px;height:28px;font-size:.8rem">IE</div>
-            <span style="font-size:1rem">Immo</span><span class="n-cyan" style="font-size:1rem">Express</span>
+          <div class="n-logo" style="margin-bottom:10px;font-size:1.1rem">
+            <div class="n-logo-icon" style="width:30px;height:30px;font-size:0.8rem">IE</div>
+            <span>Immo</span><span class="n-cyan">Express</span>
           </div>
-          <p>Plateforme immobilière intelligente. Achat, vente, location, notation IA.</p>
+          <p>La plateforme immobilière intelligente. Annonces vérifiées, analyses IA, mise en relation directe.</p>
         </div>
         <div>
-          <h4>Marché</h4>
+          <h4>Annonces</h4>
           <ul>
             <li><a href="vente.html">💰 Acheter</a></li>
             <li><a href="location.html">📍 Louer</a></li>
-            <li><a href="recherche.html">🔎 Recherche</a></li>
-            <li><a href="scoring.html">🔬 Scoring</a></li>
+            <li><a href="scoring.html">🔬 Score de confiance</a></li>
           </ul>
         </div>
         <div>
           <h4>Outils</h4>
           <ul>
-            <li><a href="risques.html">🌍 Risques</a></li>
-            <li><a href="dashboard.html">📊 Dashboard</a></li>
-            <li><a href="profil.html">👤 Profil</a></li>
+            <li><a href="scoring.html">📊 Analyse IA</a></li>
+            <li><a href="risques.html">🌍 Risques géographiques</a></li>
+            <li><a href="recherche.html">🔍 Recherche avancée</a></li>
           </ul>
         </div>
         <div>
-          <h4>Pro</h4>
+          <h4>EVA · NODUS</h4>
           <ul>
             <li><a href="pro.html">🏢 Espace Pro</a></li>
-            <li><a href="pro.html#plans">Abonnements</a></li>
+            <li><a href="dashboard.html">⚙️ Administration</a></li>
+            <li><a href="profil.html">👤 Mon profil</a></li>
           </ul>
         </div>
       </div>
       <div class="n-footer-bottom">
-        <span>© 2025 Immo-Express</span>
-        <span class="n-footer-eva">Powered by EVA · NODUS SYSTEMS</span>
-        <span>CGU · Confidentialité</span>
+        <span>© 2026 Immo-Express — Plateforme immobilière intelligente</span>
+        <span class="n-footer-eva">⚡ Powered by EVA · NODUS SYSTEMS</span>
       </div>
     </footer>
+201|<script>
+202|function showDashSection(id, btn) {
+203|  document.querySelectorAll('.pro-section').forEach(s => s.classList.remove('active'));
+204|  document.getElementById('dsec-' + id).classList.add('active');
+205|  document.querySelectorAll('.n-sidebar button').forEach(b => {
+206|    b.classList.remove('active');
+207|    b.style.background = 'transparent';
+208|    b.style.color = '';
+209|  });
+210|  if (btn) {
+211|    btn.classList.add('active');
+212|    btn.style.background = 'var(--n-cyan-dim)';
+213|    btn.style.color = 'var(--n-cyan)';
+214|  }
+215|}
+216|</script>
+217|
 <script>
-function showDashSection(id, btn) {
-  document.querySelectorAll('.pro-section').forEach(s => s.classList.remove('active'));
-  document.getElementById('dsec-' + id).classList.add('active');
-  document.querySelectorAll('.n-sidebar button').forEach(b => {
-    b.classList.remove('active');
-    b.style.background = 'transparent';
-    b.style.color = '';
+/* ========== NODUS SCROLL REVEAL ========== */
+(function() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.n-reveal, .n-reveal-left, .n-reveal-right, .n-reveal-scale, .n-stagger').forEach(el => {
+      observer.observe(el);
+    });
   });
-  if (btn) {
-    btn.classList.add('active');
-    btn.style.background = 'var(--n-cyan-dim)';
-    btn.style.color = 'var(--n-cyan)';
+  
+  // Re-run on dynamic content
+  const origRender = window.render;
+  const observeAfterRender = () => {
+    setTimeout(() => {
+      document.querySelectorAll('.n-reveal, .n-reveal-left, .n-reveal-right, .n-reveal-scale, .n-stagger').forEach(el => {
+        observer.observe(el);
+      });
+    }, 100);
+  };
+  if (window.render) {
+    const orig = window.render;
+    window.render = function() {
+      orig.apply(this, arguments);
+      observeAfterRender();
+    };
   }
-}
+})();
 </script>
 </body>
-</html>
+218|</html>

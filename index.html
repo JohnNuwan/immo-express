@@ -98,7 +98,7 @@
     .n-plan-card ul li .n-check { color: var(--n-success); font-weight: 700; }
   </style>
 </head>
-<body>
+<body class="n-page">
 
 <!-- HEADER -->
 <header class="n-header">
@@ -648,6 +648,40 @@ function toggleChat(){const p=document.getElementById('chatPanel');const t=docum
 render();
 Auth.init();
 document.addEventListener('DOMContentLoaded', () => Auth.init());
+</script>
+
+<script>
+/* ========== NODUS SCROLL REVEAL ========== */
+(function() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.n-reveal, .n-reveal-left, .n-reveal-right, .n-reveal-scale, .n-stagger').forEach(el => {
+      observer.observe(el);
+    });
+  });
+  
+  const observeAfterRender = () => {
+    setTimeout(() => {
+      document.querySelectorAll('.n-reveal, .n-reveal-left, .n-reveal-right, .n-reveal-scale, .n-stagger').forEach(el => {
+        observer.observe(el);
+      });
+    }, 100);
+  };
+  if (window.render) {
+    const orig = window.render;
+    window.render = function() {
+      orig.apply(this, arguments);
+      observeAfterRender();
+    };
+  }
+})();
 </script>
 </body>
 </html>

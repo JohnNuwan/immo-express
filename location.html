@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" data-theme="dark">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#14141a">
   <title>Louer — Immo-Express · NODUS</title>
   <link rel="icon" href="assets/icon-192.svg" type="image/svg+xml">
   <link rel="stylesheet" href="css/nodus.css">
 </head>
-<body>
+<body class="n-page">
 
     <header class="n-header">
       <div class="n-header-inner">
@@ -46,7 +47,7 @@
   </div>
 </section>
 
-<div class="n-stats">
+<div class="n-stats n-reveal">
   <div class="n-stats-inner">
     <span class="n-stat-item">🏠 <strong id="statCount">0</strong> biens à louer</span>
     <span class="n-stat-item">🛡️ <strong>—</strong> annonces vérifiées</span>
@@ -55,7 +56,7 @@
   </div>
 </div>
 
-<div class="n-layout">
+<div class="n-layout n-reveal">
   <aside class="n-sidebar" id="sidebar">
     <h3>🔍 Filtrer</h3>
     <div class="n-filter-group">
@@ -217,44 +218,43 @@
   </div>
 </div>
 
-    <footer class="n-footer">
+        <footer class="n-footer">
       <div class="n-footer-inner">
         <div>
-          <div class="n-logo" style="margin-bottom:8px">
-            <div class="n-logo-icon" style="width:28px;height:28px;font-size:.8rem">IE</div>
-            <span style="font-size:1rem">Immo</span><span class="n-cyan" style="font-size:1rem">Express</span>
+          <div class="n-logo" style="margin-bottom:10px;font-size:1.1rem">
+            <div class="n-logo-icon" style="width:30px;height:30px;font-size:0.8rem">IE</div>
+            <span>Immo</span><span class="n-cyan">Express</span>
           </div>
-          <p>Plateforme immobilière intelligente. Achat, vente, location, notation IA.</p>
+          <p>La plateforme immobilière intelligente. Annonces vérifiées, analyses IA, mise en relation directe.</p>
         </div>
         <div>
-          <h4>Marché</h4>
+          <h4>Annonces</h4>
           <ul>
             <li><a href="vente.html">💰 Acheter</a></li>
             <li><a href="location.html">📍 Louer</a></li>
-            <li><a href="recherche.html">🔎 Recherche</a></li>
-            <li><a href="scoring.html">🔬 Scoring</a></li>
+            <li><a href="scoring.html">🔬 Score de confiance</a></li>
           </ul>
         </div>
         <div>
           <h4>Outils</h4>
           <ul>
-            <li><a href="risques.html">🌍 Risques</a></li>
-            <li><a href="dashboard.html">📊 Dashboard</a></li>
-            <li><a href="profil.html">👤 Profil</a></li>
+            <li><a href="scoring.html">📊 Analyse IA</a></li>
+            <li><a href="risques.html">🌍 Risques géographiques</a></li>
+            <li><a href="recherche.html">🔍 Recherche avancée</a></li>
           </ul>
         </div>
         <div>
-          <h4>Pro</h4>
+          <h4>EVA · NODUS</h4>
           <ul>
             <li><a href="pro.html">🏢 Espace Pro</a></li>
-            <li><a href="pro.html#plans">Abonnements</a></li>
+            <li><a href="dashboard.html">⚙️ Administration</a></li>
+            <li><a href="profil.html">👤 Mon profil</a></li>
           </ul>
         </div>
       </div>
       <div class="n-footer-bottom">
-        <span>© 2025 Immo-Express</span>
-        <span class="n-footer-eva">Powered by EVA · NODUS SYSTEMS</span>
-        <span>CGU · Confidentialité</span>
+        <span>© 2026 Immo-Express — Plateforme immobilière intelligente</span>
+        <span class="n-footer-eva">⚡ Powered by EVA · NODUS SYSTEMS</span>
       </div>
     </footer>
 <script>
@@ -410,6 +410,40 @@ function calcYield() {
 }
 
 render();
+</script>
+
+<script>
+/* ========== NODUS SCROLL REVEAL ========== */
+(function() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.n-reveal, .n-reveal-left, .n-reveal-right, .n-reveal-scale, .n-stagger').forEach(el => {
+      observer.observe(el);
+    });
+  });
+  
+  const observeAfterRender = () => {
+    setTimeout(() => {
+      document.querySelectorAll('.n-reveal, .n-reveal-left, .n-reveal-right, .n-reveal-scale, .n-stagger').forEach(el => {
+        observer.observe(el);
+      });
+    }, 100);
+  };
+  if (window.render) {
+    const orig = window.render;
+    window.render = function() {
+      orig.apply(this, arguments);
+      observeAfterRender();
+    };
+  }
+})();
 </script>
 </body>
 </html>

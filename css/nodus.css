@@ -1355,3 +1355,245 @@ body {
 .n-innov-block .n-stat-row strong {
   color: var(--n-text);
 }
+
+/* ========== AWARD-WINNING NODUS ANIMATIONS ========== */
+
+/* Scroll Reveal */
+.n-reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.n-reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.n-reveal-left {
+  opacity: 0;
+  transform: translateX(-30px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.n-reveal-left.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.n-reveal-right {
+  opacity: 0;
+  transform: translateX(30px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.n-reveal-right.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.n-reveal-scale {
+  opacity: 0;
+  transform: scale(0.92);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.n-reveal-scale.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Enhanced Card Hover */
+.n-card {
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.n-card:hover {
+  transform: translateY(-4px) scale(1.01);
+  border-color: var(--n-cyan);
+  box-shadow: 0 8px 32px rgba(0, 240, 255, 0.12), 0 0 0 1px rgba(0, 240, 255, 0.15);
+}
+
+/* Feature Card Enhanced Hover */
+.n-feature-card {
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.n-feature-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--n-cyan);
+  box-shadow: 0 8px 32px rgba(0, 240, 255, 0.1);
+}
+
+/* Plan Card Enhanced Hover */
+.n-plan-card {
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.n-plan-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+}
+
+.n-plan-card.popular:hover {
+  box-shadow: 0 12px 40px rgba(0, 240, 255, 0.15);
+}
+
+/* Dash Card Enhanced Hover */
+.n-dash-card {
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.n-dash-card:hover {
+  transform: translateY(-2px);
+}
+
+/* Button Enhanced Transitions */
+.n-btn {
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.n-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%);
+  opacity: 0;
+  transition: opacity 0.25s;
+}
+
+.n-btn:hover::after {
+  opacity: 1;
+}
+
+.n-btn:active {
+  transform: scale(0.97);
+}
+
+/* Hero Pulse Animation */
+.n-hero-glow {
+  animation: nHeroPulse 4s ease-in-out infinite;
+}
+
+@keyframes nHeroPulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+/* Gradient Text Animation */
+.n-gradient-text {
+  background: var(--n-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  background-size: 200% 200%;
+  animation: nGradientShift 4s ease-in-out infinite;
+}
+
+@keyframes nGradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Shimmer Loading Effect */
+.n-shimmer {
+  background: linear-gradient(90deg, var(--n-bg-card) 25%, var(--n-bg-hover) 50%, var(--n-bg-card) 75%);
+  background-size: 200% 100%;
+  animation: nShimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes nShimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Floating Animation for CTA */
+.n-float {
+  animation: nFloat 3s ease-in-out infinite;
+}
+
+@keyframes nFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+/* Scale badge animation */
+.n-badge {
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.n-badge:hover {
+  transform: scale(1.05);
+}
+
+/* Stagger Children Reveal */
+.n-stagger > * {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.n-stagger.visible > * {
+  animation: nStaggerFadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.n-stagger.visible > *:nth-child(1) { animation-delay: 0s; }
+.n-stagger.visible > *:nth-child(2) { animation-delay: 0.08s; }
+.n-stagger.visible > *:nth-child(3) { animation-delay: 0.16s; }
+.n-stagger.visible > *:nth-child(4) { animation-delay: 0.24s; }
+.n-stagger.visible > *:nth-child(5) { animation-delay: 0.32s; }
+.n-stagger.visible > *:nth-child(6) { animation-delay: 0.40s; }
+.n-stagger.visible > *:nth-child(7) { animation-delay: 0.48s; }
+.n-stagger.visible > *:nth-child(8) { animation-delay: 0.56s; }
+
+@keyframes nStaggerFadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Typing indicator for chat */
+.n-typing-dots span {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--n-text-tertiary);
+  margin: 0 2px;
+  animation: nTyping 1.4s ease-in-out infinite;
+}
+
+.n-typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+.n-typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes nTyping {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+  30% { transform: translateY(-8px); opacity: 1; }
+}
+
+/* Pricing badge animation */
+.n-popular-badge {
+  animation: nPulse 2s ease-in-out infinite;
+}
+
+@keyframes nPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(0, 240, 255, 0.4); }
+  50% { box-shadow: 0 0 0 8px rgba(0, 240, 255, 0); }
+}
+
+/* Score circle animation */
+.n-score-fill {
+  transition: stroke-dashoffset 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Smooth Page Load */
+.n-page {
+  animation: nPageIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes nPageIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
