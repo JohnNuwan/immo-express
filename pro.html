@@ -3,621 +3,306 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Espace Pro — Immo-Express</title>
+  <title>Espace Pro — Immo-Express · NODUS</title>
   <link rel="icon" href="assets/icon-192.svg" type="image/svg+xml">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/nodus.css">
   <style>
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--white:#fff;--bg:#f3f4f6;--bg-card:#fff;--border:#e5e7eb;--border-hover:#d1d5db;--text:#111827;--text-secondary:#6b7280;--text-tertiary:#9ca3af;--blue:#2563eb;--blue-light:#eff6ff;--blue-dark:#1d4ed8;--green:#059669;--green-light:#ecfdf5;--orange:#d97706;--orange-light:#fef3c7;--red:#dc2626;--red-light:#fef2f2;--purple:#7c3aed;--purple-light:#f5f3ff;--teal:#0d9488;--shadow-sm:0 1px 2px rgba(0,0,0,0.05);--shadow:0 1px 3px rgba(0,0,0,0.1);--shadow-md:0 4px 12px rgba(0,0,0,0.08);--radius-sm:6px;--radius:8px;--radius-lg:12px;--font:'Inter',-apple-system,sans-serif}
-    body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.5;min-height:100vh}
-    a{color:var(--blue);text-decoration:none}
-    /* HEADER */
-    .header{background:var(--white);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
-    .header-inner{max-width:1200px;margin:0 auto;padding:0 20px;height:64px;display:flex;align-items:center;justify-content:space-between}
-    .logo{font-size:1.35rem;font-weight:800;display:flex;align-items:center;gap:8px;cursor:pointer}
-    .logo-icon{width:32px;height:32px;background:var(--blue);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;color:white;font-size:1rem;font-weight:700}
-    .logo span{color:var(--blue)}
-    .header-links{display:flex;align-items:center;gap:4px}
-    .header-links a{padding:8px 16px;border-radius:var(--radius);font-size:0.875rem;font-weight:500;color:var(--text-secondary);transition:all 0.15s;text-decoration:none}
-    .header-links a:hover{background:var(--bg);color:var(--text)}
-    .header-links a.active{color:var(--blue);background:var(--blue-light)}
-    .mobile-toggle{display:none;background:none;border:none;font-size:1.5rem;cursor:pointer;padding:4px;color:var(--text)}
-    .header-right{display:flex;align-items:center;gap:10px}
-    .btn-pro-plan{background:var(--orange);color:white!important;padding:7px 18px!important;border-radius:50px!important;font-size:0.8rem!important;font-weight:600!important}
-    .btn-pro-plan:hover{background:#b45309!important}
-
-    /* HERO */
-    .pro-hero{background:linear-gradient(135deg,#1e3a5f 0%,var(--blue) 100%);padding:36px 20px;color:white}
-    .pro-hero-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
-    .pro-hero h1{font-size:1.5rem;font-weight:700;display:flex;align-items:center;gap:10px}
-    .pro-hero h1 .badge{font-size:0.65rem;background:rgba(255,255,255,0.2);padding:4px 12px;border-radius:50px;font-weight:500}
-    .pro-hero p{color:rgba(255,255,255,0.8);font-size:0.9rem;margin-top:4px}
-    .pro-hero-stats{display:flex;gap:20px}
-    .phs-item{text-align:center}
-    .phs-item .num{font-size:1.6rem;font-weight:700}
-    .phs-item .label{font-size:0.7rem;opacity:0.7;text-transform:uppercase;letter-spacing:0.5px}
-
-    /* LAYOUT */
-    .pro-layout{max-width:1200px;margin:0 auto;padding:24px 20px;display:grid;grid-template-columns:220px 1fr;gap:24px}
-    @media(max-width:800px){.pro-layout{grid-template-columns:1fr}}
-
-    /* SIDENAV */
-    .pro-sidenav{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:12px;height:fit-content;position:sticky;top:88px}
-    .pro-sidenav button{display:flex;align-items:center;gap:10px;width:100%;padding:12px 14px;border:none;background:transparent;border-radius:var(--radius);font-size:0.85rem;font-weight:500;color:var(--text-secondary);cursor:pointer;font-family:var(--font);text-align:left;transition:all 0.15s}
-    .pro-sidenav button:hover{background:var(--bg);color:var(--text)}
-    .pro-sidenav button.active{background:var(--blue-light);color:var(--blue);font-weight:600}
-    .pro-sidenav button .sn-icon{font-size:1.1rem;width:24px;text-align:center}
-    .pro-sidenav .sn-divider{height:1px;background:var(--border);margin:8px 12px}
-
-    /* CONTENT */
-    .pro-content{min-height:500px}
-    .pro-section{display:none}
-    .pro-section.active{display:block}
-
-    /* DASHBOARD CARDS */
-    .dash-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;margin-bottom:24px}
-    .dash-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px}
-    .dash-card .dc-icon{width:44px;height:44px;border-radius:var(--radius);display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin-bottom:12px}
-    .dash-card .dc-num{font-size:1.8rem;font-weight:700}
-    .dash-card .dc-label{font-size:0.8rem;color:var(--text-secondary);margin-top:2px}
-    .dash-card .dc-change{font-size:0.75rem;margin-top:6px;font-weight:500}
-
-    /* RECENT ACTIVITY */
-    .section-title{font-size:1rem;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:8px}
-    .activity-list{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden}
-    .activity-item{display:flex;align-items:center;gap:14px;padding:14px 18px;border-bottom:1px solid var(--border);font-size:0.85rem}
-    .activity-item:last-child{border-bottom:none}
-    .activity-item .ai-icon{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.9rem;flex-shrink:0}
-    .activity-item .ai-text{flex:1}
-    .activity-item .ai-text strong{font-weight:600}
-    .activity-item .ai-time{font-size:0.75rem;color:var(--text-tertiary);white-space:nowrap}
-
-    /* ANNONCES */
-    .pro-actions{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}
-    .pro-actions .btn-add{background:var(--blue);color:white;border:none;padding:10px 24px;border-radius:var(--radius);font-weight:600;font-size:0.85rem;cursor:pointer;font-family:var(--font);transition:background 0.15s}
-    .pro-actions .btn-add:hover{background:var(--blue-dark)}
-    .pro-actions .btn-filter{padding:10px 16px;border:1px solid var(--border);border-radius:var(--radius);background:var(--white);font-size:0.8rem;cursor:pointer;font-family:var(--font);color:var(--text-secondary);transition:all 0.15s}
-    .pro-actions .btn-filter:hover{border-color:var(--blue);color:var(--blue)}
-    .pro-actions .btn-filter.active{background:var(--blue-light);border-color:var(--blue);color:var(--blue)}
-    .pro-listing-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);display:grid;grid-template-columns:140px 1fr;overflow:hidden;margin-bottom:12px;transition:box-shadow 0.15s}
-    .pro-listing-card:hover{border-color:var(--border-hover);box-shadow:var(--shadow-md)}
-    .pro-listing-img{display:flex;align-items:center;justify-content:center;font-size:2.5rem;min-height:120px}
-    .pro-listing-info{padding:14px 16px;display:flex;flex-direction:column}
-    .pro-listing-info .pli-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
-    .pro-listing-info .pli-title{font-weight:600;font-size:0.9rem}
-    .pro-listing-info .pli-sub{font-size:0.77rem;color:var(--text-secondary);margin:4px 0}
-    .pro-listing-info .pli-tags{display:flex;gap:8px;flex-wrap:wrap;margin:4px 0 8px}
-    .pro-listing-info .pli-tag{font-size:0.7rem;padding:2px 8px;border-radius:4px;background:var(--bg);color:var(--text-secondary)}
-    .pro-listing-info .pli-tag.pro-pub{background:var(--blue-light);color:var(--blue)}
-    .pro-listing-info .pli-tag.pro-draft{background:var(--orange-light);color:var(--orange)}
-    .pro-listing-info .pli-actions{display:flex;gap:8px;margin-top:auto;padding-top:8px}
-    .pro-listing-info .pli-actions button{padding:5px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--white);font-size:0.75rem;cursor:pointer;font-family:var(--font);color:var(--text-secondary);transition:all 0.15s}
-    .pro-listing-info .pli-actions button:hover{border-color:var(--blue);color:var(--blue)}
-    .pro-listing-info .pli-actions .btn-danger{color:var(--red);border-color:var(--red-light)}
-    .pro-listing-info .pli-actions .btn-danger:hover{background:var(--red-light)}
-    .pli-stats{display:flex;gap:16px;font-size:0.75rem;color:var(--text-tertiary)}
-    .pli-stats span{display:flex;align-items:center;gap:4px}
-
-    /* LEADS */
-    .lead-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:10px;display:flex;align-items:center;gap:14px}
-    .lead-avatar{width:40px;height:40px;border-radius:50%;background:var(--blue-light);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--blue);font-size:0.9rem;flex-shrink:0}
-    .lead-info{flex:1;min-width:0}
-    .lead-info .lead-name{font-weight:600;font-size:0.9rem}
-    .lead-info .lead-msg{font-size:0.82rem;color:var(--text-secondary);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .lead-info .lead-date{font-size:0.72rem;color:var(--text-tertiary);margin-top:4px}
-    .lead-actions{display:flex;gap:6px}
-    .lead-actions button{padding:6px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--white);font-size:0.75rem;cursor:pointer;font-family:var(--font);color:var(--text-secondary);transition:all 0.15s}
-    .lead-actions button:hover{border-color:var(--blue);color:var(--blue)}
-
-    /* ABONNEMENTS */
-    .plans-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-bottom:24px}
-    .plan-card{background:var(--white);border:2px solid var(--border);border-radius:var(--radius-lg);padding:28px 24px;position:relative;transition:all 0.2s}
-    .plan-card:hover{border-color:var(--border-hover);box-shadow:var(--shadow-md)}
-    .plan-card.popular{border-color:var(--blue);box-shadow:0 0 0 1px var(--blue)}
-    .plan-card .popular-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--blue);color:white;padding:4px 20px;border-radius:50px;font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.5px}
-    .plan-card h3{font-size:1.1rem;font-weight:700;margin-bottom:4px}
-    .plan-card .plan-price{font-size:2rem;font-weight:800;color:var(--blue);margin:12px 0 4px}
-    .plan-card .plan-price span{font-size:0.9rem;font-weight:400;color:var(--text-tertiary)}
-    .plan-card .plan-desc{font-size:0.82rem;color:var(--text-secondary);margin-bottom:16px}
-    .plan-card ul{list-style:none;margin-bottom:20px}
-    .plan-card ul li{font-size:0.82rem;padding:6px 0;display:flex;align-items:center;gap:8px;color:var(--text)}
-    .plan-card ul li .check{color:var(--green);font-weight:700}
-    .plan-card .btn-plan{width:100%;padding:12px;border-radius:var(--radius);font-weight:600;font-size:0.85rem;cursor:pointer;font-family:var(--font);transition:all 0.15s;border:none}
-    .plan-card .btn-plan.btn-outline{background:transparent;border:2px solid var(--border);color:var(--text)}
-    .plan-card .btn-plan.btn-outline:hover{border-color:var(--blue);color:var(--blue)}
-    .plan-card .btn-plan.btn-primary{background:var(--blue);color:white}
-    .plan-card .btn-plan.btn-primary:hover{background:var(--blue-dark)}
-    .plan-card.current .btn-plan{background:var(--green-light);color:var(--green);border:2px solid var(--green);cursor:default}
-
-    /* PROFIL */
-    .profil-form{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px;max-width:600px}
-    .profil-form .pf-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
-    .profil-form .pf-group{display:flex;flex-direction:column;gap:4px}
-    .profil-form .pf-group label{font-size:0.78rem;font-weight:500;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.3px}
-    .profil-form .pf-group input,.profil-form .pf-group select,.profil-form .pf-group textarea{padding:10px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:0.85rem;font-family:var(--font);outline:none;transition:border-color 0.15s}
-    .profil-form .pf-group input:focus,.profil-form .pf-group select:focus,.profil-form .pf-group textarea:focus{border-color:var(--blue)}
-    .profil-form .pf-group textarea{resize:vertical;min-height:80px}
-    .profil-form .pf-actions{padding-top:16px;border-top:1px solid var(--border);display:flex;gap:12px;justify-content:flex-end}
-    .profil-form .pf-actions button{padding:10px 28px;border-radius:var(--radius);font-weight:600;font-size:0.85rem;cursor:pointer;font-family:var(--font);transition:all 0.15s}
-    .profil-form .pf-actions .btn-save{background:var(--blue);color:white;border:none}
-    .profil-form .pf-actions .btn-save:hover{background:var(--blue-dark)}
-    .profil-form .pf-actions .btn-cancel{background:var(--white);color:var(--text-secondary);border:1px solid var(--border)}
-
-    /* EMPTY STATE */
-    .empty-state{text-align:center;padding:60px 20px;background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg)}
-    .empty-state .big-icon{font-size:3rem;margin-bottom:12px}
-    .empty-state h3{font-size:1rem;font-weight:600;margin-bottom:6px}
-    .empty-state p{font-size:0.85rem;color:var(--text-secondary);margin-bottom:16px}
-
-    /* CHART BAR simple */
-    .chart-bar{display:flex;align-items:end;gap:8px;height:120px;padding:16px 0}
-    .chart-bar .cb-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
-    .chart-bar .cb-item .cb-col{width:100%;background:var(--blue);border-radius:4px 4px 0 0;min-width:20px;transition:height 0.5s;max-width:40px;margin:0 auto}
-    .chart-bar .cb-item .cb-label{font-size:0.65rem;color:var(--text-tertiary);text-align:center;white-space:nowrap}
-
-    /* RESPONSIVE */
-    @media(max-width:800px){
-      .header-links{display:none;position:absolute;top:64px;left:0;right:0;background:var(--white);flex-direction:column;padding:12px;box-shadow:var(--shadow-md);border-bottom:1px solid var(--border)}
-      .header-links.open{display:flex}
-      .header-links a{padding:12px 16px;width:100%}
-      .pro-hero-stats{gap:12px}
-      .dash-grid{grid-template-columns:repeat(2,1fr)}
-    }
-    @media(max-width:640px){
-      .pro-listing-card{grid-template-columns:1fr}
-      .pro-listing-info .pli-top{flex-direction:column}
-      .lead-card{flex-direction:column;align-items:flex-start}
-      .lead-actions{width:100%;justify-content:flex-end}
-      .profil-form .pf-row{grid-template-columns:1fr}
-      .plans-grid{grid-template-columns:1fr}
-    }
+    .n-table { width:100%; border-collapse: collapse; font-size:.85rem; }
+    .n-table th { text-align:left; padding:10px 12px; background:var(--n-bg); font-weight:500; color:var(--n-text-secondary); font-size:.8rem; text-transform:uppercase; letter-spacing:.3px; border-bottom:1px solid var(--n-border); }
+    .n-table td { padding:10px 12px; border-bottom:1px solid var(--n-border); }
+    .n-table tr:last-child td { border-bottom:none; }
+    .n-table tr:hover td { background:var(--n-bg); }
+    .n-td-score { font-weight:700; text-align:center; }
   </style>
 </head>
 <body>
 
-<!-- HEADER -->
-<header class="header">
-  <div class="header-inner">
-    <div class="logo" onclick="location.href='index.html'"><img src="assets/icon-192.svg" alt="Immo-Express" style="height:36px;width:36px;border-radius:6px"><span style="font-size:1.2rem;font-weight:800">Immo</span><span style="color:var(--blue);font-size:1.2rem;font-weight:800">Express</span></div>
-    <button class="mobile-toggle" id="menuToggle">☰</button>
-    <div class="header-links" id="headerLinks">
-      <a href="index.html">Accueil</a>
-            <a href="vente.html">💰 Acheter</a>
-            <a href="scoring.html">🔬 Notation</a>
-            <a href="risques.html">🌍 Risques</a>
-            <a href="location.html">📍 Location</a>
-            <a href="pro.html" class="active">🏢 Espace Pro</a>
-    </div>
-  </div>
-</header>
+    <header class="n-header">
+      <div class="n-header-inner">
+        <a href="index.html" class="n-logo">
+          <div class="n-logo-icon">IE</div>
+          <span>Immo</span><span class="n-cyan">Express</span>
+        </a>
+        <button class="n-mobile-toggle" onclick="document.querySelector('.n-nav').classList.toggle('open')">☰</button>
+        <nav class="n-nav">
+          <a href="index.html">🏠 Accueil</a>
+          <a href="vente.html">💰 Acheter</a>
+          <a href="location.html">📍 Louer</a>
+          <a href="scoring.html">🔬 Scoring</a>
+          <a href="risques.html">🌍 Risques</a>
+          <a href="pro.html" class="active">🏢 Pro</a>
+          <a href="dashboard.html">📊 Dashboard</a>
+          <a href="profil.html">👤 Profil</a>
+          <a href="recherche.html">🔎 Recherche</a>
+          <a href="pro.html" class="n-btn-depot">+ Publier</a>
+          <button class="n-btn-user" onclick="openAuth()">👤 Connexion</button>
+        </nav>
+      </div>
+    </header>
 
-<!-- HERO -->
-<section class="pro-hero">
-  <div class="pro-hero-inner">
+<section class="n-hero" style="background:linear-gradient(135deg,#1e3a5f 0%,#2563eb 100%);text-align:left;padding:36px 24px">
+  <div style="max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px">
     <div>
-      <h1>🏢 Espace Professionnel <span class="badge" id="planBadge">Plan Starter</span></h1>
-      <p id="agencyName">Agence Duval Immobilier</p>
+      <h1 style="font-size:1.5rem;font-weight:700;display:flex;align-items:center;gap:10px">🏢 Espace Professionnel <span class="n-badge n-badge-verified" style="font-size:.65rem;position:static">AGENCE</span></h1>
+      <p style="color:rgba(255,255,255,0.8);font-size:.9rem;margin-top:4px">Gérez vos annonces, suivez vos leads et développez votre activité</p>
     </div>
-    <div class="pro-hero-stats">
-      <div class="phs-item"><div class="num" id="statListings">0</div><div class="label">Annonces</div></div>
-            <div class="phs-item"><div class="num" id="statViews">0</div><div class="label">Vues</div></div>
-            <div class="phs-item"><div class="num" id="statLeads">0</div><div class="label">Contacts</div></div>
-            <div class="phs-item"><div class="num" id="statScore">0</div><div class="label">Score moy.</div></div>
+    <div style="display:flex;gap:20px">
+      <div style="text-align:center"><div style="font-size:1.6rem;font-weight:700;font-family:var(--n-mono)">12</div><div style="font-size:.7rem;opacity:.7;text-transform:uppercase;letter-spacing:.5px">Biens</div></div>
+      <div style="text-align:center"><div style="font-size:1.6rem;font-weight:700;font-family:var(--n-mono)">8</div><div style="font-size:.7rem;opacity:.7;text-transform:uppercase;letter-spacing:.5px">Leads</div></div>
+      <div style="text-align:center"><div style="font-size:1.6rem;font-weight:700;font-family:var(--n-mono)">342</div><div style="font-size:.7rem;opacity:.7;text-transform:uppercase;letter-spacing:.5px">Vues</div></div>
     </div>
   </div>
 </section>
 
-<!-- LAYOUT -->
-<div class="pro-layout">
-  <!-- Sidenav -->
-  <nav class="pro-sidenav" id="proSidenav">
-    <button class="active" data-section="dashboard" onclick="switchSection('dashboard')"><span class="sn-icon">📊</span> Dashboard</button>
-    <button data-section="annonces" onclick="switchSection('annonces')"><span class="sn-icon">🏠</span> Mes annonces</button>
-    <button data-section="leads" onclick="switchSection('leads')"><span class="sn-icon">📨</span> Contacts</button>
-    <button data-section="abonnements" onclick="switchSection('abonnements')"><span class="sn-icon">⭐</span> Abonnement</button>
-    <div class="sn-divider"></div>
-    <button data-section="profil" onclick="switchSection('profil')"><span class="sn-icon">👤</span> Profil agence</button>
-  </nav>
+<div class="n-layout" style="grid-template-columns:220px 1fr">
+  <aside class="n-sidebar" style="padding:12px;position:sticky;top:92px">
+    <button class="n-btn n-btn-ghost active" style="display:flex;align-items:center;gap:10px;width:100%;padding:12px 14px;border:none;border-radius:var(--n-radius);font-size:.85rem;font-weight:500;cursor:pointer;text-align:left;margin-bottom:4px;background:var(--n-cyan-dim);color:var(--n-cyan)" onclick="showSection('dashboard', this)">
+      <span style="font-size:1.1rem;width:24px;text-align:center">📊</span> Tableau de bord
+    </button>
+    <button class="n-btn n-btn-ghost" style="display:flex;align-items:center;gap:10px;width:100%;padding:12px 14px;border:none;border-radius:var(--n-radius);font-size:.85rem;font-weight:500;cursor:pointer;text-align:left;margin-bottom:4px" onclick="showSection('listings', this)">
+      <span style="font-size:1.1rem;width:24px;text-align:center">🏠</span> Mes annonces
+    </button>
+    <button class="n-btn n-btn-ghost" style="display:flex;align-items:center;gap:10px;width:100%;padding:12px 14px;border:none;border-radius:var(--n-radius);font-size:.85rem;font-weight:500;cursor:pointer;text-align:left;margin-bottom:4px" onclick="showSection('leads', this)">
+      <span style="font-size:1.1rem;width:24px;text-align:center">👥</span> Leads / Contacts
+    </button>
+    <button class="n-btn n-btn-ghost" style="display:flex;align-items:center;gap:10px;width:100%;padding:12px 14px;border:none;border-radius:var(--n-radius);font-size:.85rem;font-weight:500;cursor:pointer;text-align:left;margin-bottom:4px" onclick="showSection('plans', this)">
+      <span style="font-size:1.1rem;width:24px;text-align:center">💎</span> Abonnements
+    </button>
+    <button class="n-btn n-btn-ghost" style="display:flex;align-items:center;gap:10px;width:100%;padding:12px 14px;border:none;border-radius:var(--n-radius);font-size:.85rem;font-weight:500;cursor:pointer;text-align:left" onclick="showSection('profile', this)">
+      <span style="font-size:1.1rem;width:24px;text-align:center">🏢</span> Profil agence
+    </button>
+    <div style="height:1px;background:var(--n-border);margin:8px 12px"></div>
+    <button class="n-btn n-btn-ghost" style="display:flex;align-items:center;gap:10px;width:100%;padding:12px 14px;border:none;border-radius:var(--n-radius);font-size:.85rem;font-weight:500;cursor:pointer;text-align:left;color:var(--n-error)" onclick="alert('Déconnexion...')">
+      <span style="font-size:1.1rem;width:24px;text-align:center">🚪</span> Déconnexion
+    </button>
+  </aside>
 
-  <!-- Content -->
-  <div class="pro-content">
+  <div class="n-results-area" style="min-height:500px">
 
-    <!-- ===== DASHBOARD ===== -->
-    <section class="pro-section active" id="sec-dashboard">
-      <div class="dash-grid">
-        <div class="dash-card"><div class="dc-icon" style="background:var(--blue-light)">🏠</div><div class="dc-num" id="dashListings">12</div><div class="dc-label">Annonces actives</div><div class="dc-change" style="color:var(--green)">↑ +3 cette semaine</div></div>
-        <div class="dash-card"><div class="dc-icon" style="background:var(--purple-light)">👁️</div><div class="dc-num" id="dashViews">847</div><div class="dc-label">Vues totales</div><div class="dc-change" style="color:var(--green)">↑ +12% vs mois dernier</div></div>
-        <div class="dash-card"><div class="dc-icon" style="background:var(--green-light)">📨</div><div class="dc-num" id="dashLeads">23</div><div class="dc-label">Contacts reçus</div><div class="dc-change" style="color:var(--green)">↑ +5 cette semaine</div></div>
-        <div class="dash-card"><div class="dc-icon" style="background:var(--orange-light)">📊</div><div class="dc-num" id="dashScore">82</div><div class="dc-label">Score confiance moyen</div><div class="dc-change" style="color:var(--green)">↑ +4 pts</div></div>
-        <div class="dash-card"><div class="dc-icon" style="background:#f0fdfa">📈</div><div class="dc-num" id="dashRendement">5.8%</div><div class="dc-label">Rendement locatif moy.</div><div class="dc-change" style="color:var(--text-tertiary)">→ Stable</div></div>
-        <div class="dash-card"><div class="dc-icon" style="background:#fff7ed">⚡</div><div class="dc-num" id="dashTaux">92%</div><div class="dc-label">Taux de réponse</div><div class="dc-change" style="color:var(--green)">↑ Excellent</div></div>
+    <!-- Dashboard Section -->
+    <div id="sec-dashboard" class="pro-section active">
+      <div class="n-dash-grid">
+        <div class="n-dash-card"><div class="n-dc-icon" style="background:var(--n-cyan-dim)">🏠</div><div class="n-dc-num">12</div><div class="n-dc-label">Mes annonces</div><div class="n-dc-change" style="color:var(--n-success)">+2 ce mois</div></div>
+        <div class="n-dash-card"><div class="n-dc-icon" style="background:rgba(0,230,118,0.15)">👥</div><div class="n-dc-num">8</div><div class="n-dc-label">Nouveaux leads</div><div class="n-dc-change" style="color:var(--n-success)">+3 cette semaine</div></div>
+        <div class="n-dash-card"><div class="n-dc-icon" style="background:rgba(255,193,7,0.15)">👁️</div><div class="n-dc-num">342</div><div class="n-dc-label">Vues totales</div><div class="n-dc-change" style="color:var(--n-warning)">+12% vs mois dernier</div></div>
+        <div class="n-dash-card"><div class="n-dc-icon" style="background:rgba(255,82,82,0.15)">⭐</div><div class="n-dc-num">4.8</div><div class="n-dc-label">Note moyenne</div><div class="n-dc-change" style="color:var(--n-success)">Excellent</div></div>
       </div>
 
-      <div class="section-title">📈 Vues — 7 derniers jours</div>
-      <div class="activity-list" id="dashChartContainer">
-        <div class="chart-bar" id="dashChart"></div>
+      <h2 class="n-section-title">📈 Activité récente</h2>
+      <div class="n-dash-card" style="padding:0">
+        <div class="activity-item" style="display:flex;align-items:center;gap:14px;padding:14px 18px;border-bottom:1px solid var(--n-border);font-size:.85rem">
+          <div style="width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0;background:var(--n-cyan-dim)">👁️</div>
+          <div style="flex:1"><strong>Visite</strong> pour Appartement Paris 11e</div>
+          <div style="font-size:.75rem;color:var(--n-text-tertiary);white-space:nowrap">Il y a 2h</div>
+        </div>
+        <div class="activity-item" style="display:flex;align-items:center;gap:14px;padding:14px 18px;border-bottom:1px solid var(--n-border);font-size:.85rem">
+          <div style="width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0;background:rgba(0,230,118,0.15)">📩</div>
+          <div style="flex:1"><strong>Nouveau message</strong> de Jean Dupont</div>
+          <div style="font-size:.75rem;color:var(--n-text-tertiary);white-space:nowrap">Il y a 5h</div>
+        </div>
+        <div class="activity-item" style="display:flex;align-items:center;gap:14px;padding:14px 18px;font-size:.85rem">
+          <div style="width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0;background:rgba(255,193,7,0.15)">📋</div>
+          <div style="flex:1"><strong>Annonce mise à jour</strong> Maison Lyon 3e</div>
+          <div style="font-size:.75rem;color:var(--n-text-tertiary);white-space:nowrap">Il y a 1j</div>
+        </div>
       </div>
+    </div>
 
-      <div class="section-title" style="margin-top:24px">🕐 Activité récente</div>
-      <div class="activity-list" id="activityList"></div>
-    </section>
-
-    <!-- ===== ANNONCES ===== -->
-    <section class="pro-section" id="sec-annonces">
-      <div class="pro-actions">
-        <button class="btn-add">+ Nouvelle annonce</button>
-        <button class="btn-filter active" data-filter="all" onclick="filterProAnnonces('all')">Toutes</button>
-        <button class="btn-filter" data-filter="active" onclick="filterProAnnonces('active')">Actives</button>
-        <button class="btn-filter" data-filter="draft" onclick="filterProAnnonces('draft')">Brouillons</button>
+    <!-- Listings Section -->
+    <div id="sec-listings" class="pro-section">
+      <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap">
+        <button class="n-btn n-btn-primary">➕ Nouvelle annonce</button>
+        <button class="n-btn n-btn-secondary active" onclick="document.querySelectorAll('.pli-tag').forEach(t=>t.style.display='inline')">📋 Toutes</button>
+        <button class="n-btn n-btn-secondary" onclick="alert('Filtre : Publiées')">📤 Publiées</button>
+        <button class="n-btn n-btn-secondary" onclick="alert('Filtre : Brouillons')">📝 Brouillons</button>
       </div>
-      <div id="proAnnoncesList"></div>
-    </section>
-
-    <!-- ===== LEADS ===== -->
-    <section class="pro-section" id="sec-leads">
-      <div class="section-title">📨 Contacts reçus <span style="font-weight:400;color:var(--text-secondary)">(23)</span></div>
-      <div id="leadsList"></div>
-    </section>
-
-    <!-- ===== ABONNEMENTS ===== -->
-        <section class="pro-section" id="sec-abonnements">
-
-          <!-- Bannière promo -->
-          <div style="background:linear-gradient(135deg,#1e3a5f,var(--blue));border-radius:var(--radius-lg);padding:24px 28px;margin-bottom:24px;color:white;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px">
-            <div>
-              <div style="font-size:1.1rem;font-weight:700;margin-bottom:4px">🎉 Lancement Immo-Express</div>
-              <div style="font-size:0.85rem;opacity:0.9">Les <strong>5 premiers comptes Pro</strong> sont offerts — 1 mois gratuit sans engagement</div>
-            </div>
-            <div style="background:rgba(255,255,255,0.15);border-radius:var(--radius);padding:10px 20px;text-align:center">
-              <div style="font-size:1.6rem;font-weight:800" id="freeSlots">5</div>
-              <div style="font-size:0.7rem;opacity:0.8;text-transform:uppercase;letter-spacing:0.5px">Places restantes</div>
-            </div>
+      <div class="pro-listing-card" style="background:var(--n-bg-card);border:1px solid var(--n-border);border-radius:var(--n-radius-lg);display:grid;grid-template-columns:140px 1fr;overflow:hidden;margin-bottom:12px">
+        <div style="display:flex;align-items:center;justify-content:center;font-size:2.5rem;min-height:120px;background:var(--n-bg-hover)">🏠</div>
+        <div style="padding:14px 16px;display:flex;flex-direction:column">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">
+            <div><div style="font-weight:600;font-size:.9rem">Appartement Paris 11e</div><div style="font-size:.77rem;color:var(--n-text-secondary);margin:4px 0">📍 Paris 11e · 65 m² · 3 pièces</div></div>
+            <div style="text-align:right"><div style="font-size:1.1rem;font-weight:700;color:var(--n-cyan);font-family:var(--n-mono)">395 000 €</div><div style="font-size:.7rem;color:var(--n-text-tertiary)">Vente</div></div>
           </div>
-
-          <div class="section-title">⭐ Choisissez votre formule</div>
-          <div class="plans-grid">
-            <div class="plan-card" id="plan-starter">
-              <h3>Starter</h3>
-              <div class="plan-price">29<span>€/mois</span></div>
-              <div class="plan-desc">Pour les agents indépendants qui débutent.</div>
-              <ul>
-                <li><span class="check">✓</span> Jusqu'à 5 annonces</li>
-                <li><span class="check">✓</span> Score de confiance IA</li>
-                <li><span class="check">✓</span> Analyse de prix IA</li>
-                <li><span class="check">✓</span> Statistiques de base</li>
-                <li class="na" style="color:var(--text-tertiary)"><span style="color:var(--red)">✗</span> Notification leads temps réel</li>
-                <li class="na" style="color:var(--text-tertiary)"><span style="color:var(--red)">✗</span> Mise en avant des annonces</li>
-              </ul>
-              <button class="btn-plan" onclick="selectPlan('starter')">Mon forfait actuel</button>
-            </div>
-            <div class="plan-card popular" id="plan-pro">
-              <div class="popular-badge">⭐ Le + choisi</div>
-              <h3>Pro</h3>
-              <div class="plan-price" style="display:flex;align-items:baseline;gap:8px">
-                <span style="font-size:1rem;color:var(--text-tertiary);text-decoration:line-through">99€</span>
-                59<span>€/mois</span>
-              </div>
-              <div class="plan-desc">Pour les agences avec un volume modéré. <strong style="color:var(--green)">-40% lancement</strong></div>
-              <ul>
-                <li><span class="check">✓</span> Jusqu'à 20 annonces</li>
-                <li><span class="check">✓</span> Score de confiance IA</li>
-                <li><span class="check">✓</span> Analyse de prix IA</li>
-                <li><span class="check">✓</span> Statistiques avancées</li>
-                <li><span class="check">✓</span> Notification leads temps réel</li>
-                <li style="color:var(--text-tertiary)"><span style="color:var(--orange)">⚠️</span> Mise en avant (supplément 15€/mois)</li>
-              </ul>
-              <button class="btn-plan btn-primary" onclick="selectPlan('pro')">Choisir Pro</button>
-            </div>
-            <div class="plan-card" id="plan-premium">
-              <h3>Premium</h3>
-              <div class="plan-price" style="display:flex;align-items:baseline;gap:8px">
-                <span style="font-size:1rem;color:var(--text-tertiary);text-decoration:line-through">199€</span>
-                119<span>€/mois</span>
-              </div>
-              <div class="plan-desc">Pour les grandes agences. <strong style="color:var(--green)">-40% lancement</strong></div>
-              <ul>
-                <li><span class="check">✓</span> Annonces illimitées</li>
-                <li><span class="check">✓</span> Score de confiance IA</li>
-                <li><span class="check">✓</span> Analyse de prix IA</li>
-                <li><span class="check">✓</span> Statistiques premium + export</li>
-                <li><span class="check">✓</span> Notification leads temps réel</li>
-                <li><span class="check">✓</span> Mise en avant des annonces incluse</li>
-                <li><span class="check">✓</span> API d'intégration</li>
-                <li><span class="check">✓</span> Support prioritaire 24/7</li>
-              </ul>
-              <button class="btn-plan btn-outline" onclick="selectPlan('premium')">Choisir Premium</button>
-            </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin:4px 0 8px">
+            <span class="pli-tag" style="font-size:.7rem;padding:2px 8px;border-radius:4px;background:var(--n-bg);color:var(--n-text-secondary)">DPE C</span>
+            <span class="pli-tag pro-pub" style="font-size:.7rem;padding:2px 8px;border-radius:4px;background:var(--n-cyan-dim);color:var(--n-cyan)">Publiée</span>
           </div>
-          <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;font-size:0.85rem;color:var(--text-secondary)">
-            💡 <strong>Vous êtes actuellement :</strong> <span id="currentPlanDisplay">Plan Starter</span> · 
-            Prochain renouvellement le <span id="nextRenewal">01/09/2026</span> · 
-            <a href="#" onclick="alert('Pour résilier, contactez le support à support@immo-express.fr')">Résilier ?</a>
+          <div style="display:flex;gap:16px;font-size:.75rem;color:var(--n-text-tertiary);margin-bottom:8px">
+            <span>👁️ 142 vues</span>
+            <span>💬 5 messages</span>
+            <span>⭐ Score 82</span>
           </div>
-        </section>
-
-    <!-- ===== PROFIL ===== -->
-    <section class="pro-section" id="sec-profil">
-      <div class="profil-form">
-        <div class="pf-row">
-          <div class="pf-group"><label>Nom de l'agence *</label><input type="text" id="pfName" value="Agence Duval Immobilier"></div>
-          <div class="pf-group"><label>SIRET</label><input type="text" id="pfSiret" value="824 937 561 00028"></div>
-        </div>
-        <div class="pf-row">
-          <div class="pf-group"><label>Email *</label><input type="email" id="pfEmail" value="contact@duval-immo.fr"></div>
-          <div class="pf-group"><label>Téléphone *</label><input type="tel" id="pfPhone" value="01 42 37 65 00"></div>
-        </div>
-        <div class="pf-row">
-          <div class="pf-group" style="grid-column:1/-1"><label>Adresse</label><input type="text" id="pfAddress" value="15 Rue de la Paix, 75002 Paris"></div>
-        </div>
-        <div class="pf-row">
-          <div class="pf-group"><label>Ville</label><input type="text" id="pfCity" value="Paris"></div>
-          <div class="pf-group"><label>Site web</label><input type="url" id="pfWeb" value="https://www.duval-immo.fr"></div>
-        </div>
-        <div class="pf-row">
-          <div class="pf-group" style="grid-column:1/-1"><label>Description</label><textarea id="pfDesc" rows="3">Agence immobilière familiale depuis 1985. Spécialistes de l'immobilier parisien haut de gamme. 120+ biens vendus par an.</textarea></div>
-        </div>
-        <div class="pf-actions">
-          <button class="btn-cancel" onclick="alert('Modifications annulées')">Annuler</button>
-          <button class="btn-save" onclick="saveProfil()">💾 Enregistrer</button>
+          <div style="display:flex;gap:8px;margin-top:auto;padding-top:8px">
+            <button class="n-btn n-btn-ghost" style="padding:5px 14px;font-size:.75rem">✏️ Modifier</button>
+            <button class="n-btn n-btn-ghost" style="padding:5px 14px;font-size:.75rem">📊 Stats</button>
+            <button class="n-btn n-btn-danger" style="padding:5px 14px;font-size:.75rem">🗑️ Supprimer</button>
+          </div>
         </div>
       </div>
-      <div style="margin-top:16px;font-size:0.8rem;color:var(--text-tertiary);background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:16px">
-        🔒 Vos données sont confidentielles. Conformément au RGPD, vous pouvez demander leur suppression à tout moment.
+      <div class="pro-listing-card" style="background:var(--n-bg-card);border:1px solid var(--n-border);border-radius:var(--n-radius-lg);display:grid;grid-template-columns:140px 1fr;overflow:hidden;margin-bottom:12px">
+        <div style="display:flex;align-items:center;justify-content:center;font-size:2.5rem;min-height:120px;background:var(--n-bg-hover)">🏡</div>
+        <div style="padding:14px 16px;display:flex;flex-direction:column">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">
+            <div><div style="font-weight:600;font-size:.9rem">Maison Lyon 3e</div><div style="font-size:.77rem;color:var(--n-text-secondary);margin:4px 0">📍 Lyon 3e · 120 m² · 5 pièces</div></div>
+            <div style="text-align:right"><div style="font-size:1.1rem;font-weight:700;color:var(--n-cyan);font-family:var(--n-mono)">520 000 €</div><div style="font-size:.7rem;color:var(--n-text-tertiary)">Vente</div></div>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin:4px 0 8px">
+            <span class="pli-tag" style="font-size:.7rem;padding:2px 8px;border-radius:4px;background:var(--n-bg);color:var(--n-text-secondary)">DPE B</span>
+            <span class="pli-tag pro-draft" style="font-size:.7rem;padding:2px 8px;border-radius:4px;background:rgba(255,193,7,0.15);color:var(--n-warning)">Brouillon</span>
+          </div>
+          <div style="display:flex;gap:16px;font-size:.75rem;color:var(--n-text-tertiary);margin-bottom:8px">
+            <span>👁️ 0 vues</span>
+            <span>💬 0 messages</span>
+            <span>⭐ —</span>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:auto;padding-top:8px">
+            <button class="n-btn n-btn-ghost" style="padding:5px 14px;font-size:.75rem">✏️ Modifier</button>
+            <button class="n-btn n-btn-primary" style="padding:5px 14px;font-size:.75rem">📤 Publier</button>
+            <button class="n-btn n-btn-danger" style="padding:5px 14px;font-size:.75rem">🗑️ Supprimer</button>
+          </div>
+        </div>
       </div>
-    </section>
+    </div>
+
+    <!-- Leads Section -->
+    <div id="sec-leads" class="pro-section">
+      <h2 class="n-section-title">👥 Leads / Contacts</h2>
+      <div class="n-dash-card" style="padding:0;overflow:hidden">
+        <table class="n-table">
+          <thead><tr><th>Nom</th><th>Email</th><th>Téléphone</th><th>Bien</th><th>Date</th><th>Statut</th></tr></thead>
+          <tbody>
+            <tr><td>Jean Dupont</td><td>jean@email.com</td><td>06 12 34 56 78</td><td>Appartement Paris 11e</td><td>02/08/2025</td><td><span class="n-badge n-badge-verified" style="position:static;font-size:.65rem">📩 Contacté</span></td></tr>
+            <tr><td>Marie Martin</td><td>marie@email.com</td><td>06 98 76 54 32</td><td>Maison Lyon 3e</td><td>01/08/2025</td><td><span class="n-badge n-badge-verified" style="position:static;font-size:.65rem;background:var(--n-warning);color:var(--n-bg)">⏳ En attente</span></td></tr>
+            <tr><td>Pierre Durand</td><td>pierre@email.com</td><td>07 54 32 10 98</td><td>Studio Bordeaux</td><td>30/07/2025</td><td><span class="n-badge n-badge-sale" style="position:static;font-size:.65rem">✅ Visite faite</span></td></tr>
+            <tr><td>Sophie Petit</td><td>sophie@email.com</td><td>06 45 67 89 01</td><td>Villa Nice</td><td>28/07/2025</td><td><span class="n-badge n-badge-verified" style="position:static;font-size:.65rem">📩 Contacté</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Plans Section -->
+    <div id="sec-plans" class="pro-section">
+      <h2 class="n-section-title">💎 Nos abonnements</h2>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px">
+        <div class="n-dash-card" style="text-align:center;padding:32px 24px">
+          <div style="font-size:2rem;margin-bottom:8px">🚀</div>
+          <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:4px">Starter</h3>
+          <p style="font-size:.82rem;color:var(--n-text-secondary);margin-bottom:16px">Pour les agents indépendants</p>
+          <div style="font-size:2.2rem;font-weight:700;color:var(--n-cyan);font-family:var(--n-mono);margin-bottom:16px">9<span style="font-size:1rem;font-weight:400;color:var(--n-text-tertiary)">€/mois</span></div>
+          <ul style="list-style:none;padding:0;text-align:left;margin-bottom:20px">
+            <li style="padding:6px 0;font-size:.85rem;color:var(--n-text-secondary)">✅ Jusqu'à 5 annonces</li>
+            <li style="padding:6px 0;font-size:.85rem;color:var(--n-text-secondary)">✅ Statistiques de base</li>
+            <li style="padding:6px 0;font-size:.85rem;color:var(--n-text-secondary)">✅ Support email</li>
+          </ul>
+          <button class="n-btn n-btn-primary" style="width:100%">Choisir Starter</button>
+        </div>
+        <div class="n-dash-card" style="text-align:center;padding:32px 24px;border-color:var(--n-cyan);position:relative">
+          <span class="n-badge n-badge-verified" style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);font-size:.65rem">POPULAIRE</span>
+          <div style="font-size:2rem;margin-bottom:8px">💼</div>
+          <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:4px">Pro</h3>
+          <p style="font-size:.82rem;color:var(--n-text-secondary);margin-bottom:16px">Pour les agences en croissance</p>
+          <div style="font-size:2.2rem;font-weight:700;color:var(--n-cyan);font-family:var(--n-mono);margin-bottom:16px">29<span style="font-size:1rem;font-weight:400;color:var(--n-text-tertiary)">€/mois</span></div>
+          <ul style="list-style:none;padding:0;text-align:left;margin-bottom:20px">
+            <li style="padding:6px 0;font-size:.85rem;color:var(--n-text-secondary)">✅ Annonces illimitées</li>
+            <li style="padding:6px 0;font-size:.85rem;color:var(--n-text-secondary)">✅ Statistiques avancées</li>
+            <li style="padding:6px 0;font-size:.85rem;color:var(--n-text-secondary)">✅ Scoring IA illimité</li>
+            <li style="padding:6px 0;font-size:.85rem;color:var(--n-text-secondary)">✅ Support prioritaire</li>
+          </ul>
+          <button class="n-btn n-btn-primary" style="width:100%">Choisir Pro</button>
+        </div>
+        <div class="n-dash-card" style="text-align:center;padding:32px 24px">
+          <div style="font-size:2rem;margin-bottom:8px">🏆</div>
+          <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:4px">Premium</h3>
+          <p style="font-size:.82rem;color:var(--n-text-secondary);margin-bottom:16px">Pour les grandes agences</p>
+          <div style="font-size:2.2rem;font-weight:700;color:var(--n-cyan);font-family:var(--n-mono);margin-bottom:16px">79<span style="font-size:1rem;font-weight:400;color:var(--n-text-tertiary)">€/mois</span></div>
+          <ul style="list-style:none;padding:0;text-align:left;margin-bottom:20px">
+            <li style="padding:6px 0;font-size:.85rem;color:var(--n-text-secondary)">✅ Tout le plan Pro</li>
+            <li style="padding:6px 0;font-size:.85rem;color:var(--n-text-secondary)">✅ API dédiée</li>
+            <li style="padding:6px 0;font-size:.85rem;color:var(--n-text-secondary)">✅ Analyse des risques illimitée</li>
+            <li style="padding:6px 0;font-size:.85rem;color:var(--n-text-secondary)">✅ Accompagnement dédié</li>
+          </ul>
+          <button class="n-btn n-btn-primary" style="width:100%">Choisir Premium</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Agency Profile Section -->
+    <div id="sec-profile" class="pro-section">
+      <h2 class="n-section-title">🏢 Profil agence</h2>
+      <form class="n-form" onsubmit="alert('Profil mis à jour !');return false">
+        <div class="n-form-grid">
+          <div class="n-form-group"><label>Nom de l'agence</label><input type="text" value="Agence Immo-Express Pro"></div>
+          <div class="n-form-group"><label>SIRET</label><input type="text" value="123 456 789 00012"></div>
+          <div class="n-form-group"><label>Email</label><input type="email" value="contact@agence-immo-express.fr"></div>
+          <div class="n-form-group"><label>Téléphone</label><input type="tel" value="01 23 45 67 89"></div>
+          <div class="n-form-group"><label>Adresse</label><input type="text" value="15 Rue de la Paix, 75002 Paris"></div>
+          <div class="n-form-group"><label>Site web</label><input type="url" value="https://agence-immo-express.fr"></div>
+        </div>
+        <div class="n-form-actions">
+          <button type="submit" class="n-btn n-btn-primary">💾 Enregistrer</button>
+          <button type="reset" class="n-btn n-btn-secondary">Annuler</button>
+        </div>
+      </form>
+    </div>
+
   </div>
 </div>
 
-<script>
-// ========== DATA ==========
-const proData = {
-  agency: {
-    name: 'Agence Duval Immobilier',
-    plan: 'pro',
-    email: 'contact@duval-immo.fr',
-    phone: '01 42 37 65 00',
-    siret: '824 937 561 00028',
-    address: '15 Rue de la Paix, 75002 Paris',
-    city: 'Paris',
-    web: 'https://www.duval-immo.fr',
-    desc: "Agence immobilière familiale depuis 1985. Spécialistes de l'immobilier parisien haut de gamme. 120+ biens vendus par an."
-  },
-  annonces: [],
-  activity: [],
-  leads: [],
-  chartData: [45,62,58,73,81,65,90]
-};
-const weekDays = ['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
-const monthNames = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
-
-// ========== STATE ==========
-let currentSection = 'dashboard';
-let currentAnnonceFilter = 'all';
-
-// ========== INIT ==========
-function init() {
-  loadState();
-  renderAll();
-  addEventListeners();
-}
-function loadState() {
-  const saved = localStorage.getItem('immo-pro-plan');
-  if(saved) proData.agency.plan = saved;
-}
-function savePlan(plan) {
-  proData.agency.plan = plan;
-  localStorage.setItem('immo-pro-plan', plan);
-  renderAll();
-}
-function saveProfil() {
-  const fields = ['pfName','pfSiret','pfEmail','pfPhone','pfAddress','pfCity','pfWeb','pfDesc'];
-  const labels = ['name','siret','email','phone','address','city','web','desc'];
-  fields.forEach((f,i) => {
-    const el = document.getElementById(f);
-    if(el) proData.agency[labels[i]] = el.value;
-  });
-  renderAll();
-  document.getElementById('agencyName').textContent = proData.agency.name;
-  alert('✅ Profil mis à jour !');
-}
-
-// ========== RENDER ==========
-function renderAll() {
-  renderHero();
-  renderDashboard();
-  renderAnnonces();
-  renderLeads();
-  renderPlans();
-  renderActivity();
-}
-
-function renderHero() {
-  const planLabels = {starter:'Plan Starter',pro:'Plan Pro',premium:'Plan Premium'};
-  document.getElementById('planBadge').textContent = planLabels[proData.agency.plan] || 'Plan Starter';
-  document.getElementById('agencyName').textContent = proData.agency.name;
-
-  const totalViews = proData.annonces.reduce((s,a)=>s+a.views,0);
-  const totalLeads = proData.annonces.reduce((s,a)=>s+a.leads,0);
-  const scores = proData.annonces.filter(a=>a.score).map(a=>a.score);
-  const avgScore = scores.length ? Math.round(scores.reduce((s,v)=>s+v,0)/scores.length) : 0;
-  document.getElementById('statListings').textContent = proData.annonces.filter(a=>a.status==='active').length;
-  document.getElementById('statViews').textContent = totalViews;
-  document.getElementById('statLeads').textContent = totalLeads;
-  document.getElementById('statScore').textContent = avgScore;
-}
-
-function renderDashboard() {
-  const totalViews = proData.annonces.reduce((s,a)=>s+a.views,0);
-  const totalLeads = proData.annonces.reduce((s,a)=>s+a.leads,0);
-  const scores = proData.annonces.filter(a=>a.score).map(a=>a.score);
-  const avgScore = scores.length ? Math.round(scores.reduce((s,v)=>s+v,0)/scores.length) : 0;
-  const activeCount = proData.annonces.filter(a=>a.status==='active').length;
-
-  document.getElementById('dashListings').textContent = activeCount;
-  document.getElementById('dashViews').textContent = totalViews;
-  document.getElementById('dashLeads').textContent = totalLeads;
-  document.getElementById('dashScore').textContent = avgScore;
-
-  // Chart
-  const data = proData.chartData;
-  const max = Math.max(...data);
-  const chart = document.getElementById('dashChart');
-  chart.innerHTML = data.map((v,i) => {
-    const h = Math.max(8, (v/max)*90);
-    return `<div class="cb-item"><div class="cb-col" style="height:${h}px;background:var(--blue)"></div><div class="cb-label">${weekDays[i]||''}</div></div>`;
-  }).join('');
-}
-
-function renderActivity() {
-  const list = document.getElementById('activityList');
-  list.innerHTML = proData.activity.map(a => `
-    <div class="activity-item">
-      <div class="ai-icon" style="background:${a.color}">${a.icon}</div>
-      <div class="ai-text">${a.text}</div>
-      <div class="ai-time">${a.time}</div>
-    </div>
-  `).join('');
-}
-
-function renderAnnonces(filter) {
-  filter = filter || currentAnnonceFilter;
-  const list = document.getElementById('proAnnoncesList');
-  const items = filter === 'all' ? proData.annonces : proData.annonces.filter(a => a.status === filter);
-  if(items.length === 0){
-    const draft = filter === 'draft';
-    list.innerHTML = `<div class="empty-state"><div class="big-icon">${draft?'📝':'🏠'}</div><h3>${draft?'Aucun brouillon':'Aucune annonce'}</h3><p>${draft?'Créez une nouvelle annonce pour commencer.':'Publiez votre première annonce pour apparaître dans les recherches.'}</p></div>`;
-    return;
-  }
-  list.innerHTML = items.map(a => {
-    const catLabel = a.cat==='vente'?'Vente':'Location';
-    const catClass = a.cat==='vente'?'badge-sale':'badge-rent';
-    const statusTag = a.status==='draft' ? '<span class="pli-tag pro-draft">📝 Brouillon</span>' : '';
-    const viewsStr = a.views > 0 ? `<span>👁️ ${a.views}</span>` : '';
-    const leadsStr = a.leads > 0 ? `<span>📨 ${a.leads}</span>` : '';
-    const scoreStr = a.score ? `<span class="listing-score ${a.score>=80?'score-high':a.score>=60?'score-mid':'score-low'}">⭐ ${a.score}/100</span>` : '';
-    return `<div class="pro-listing-card">
-      <div class="pro-listing-img" style="background:${a.bg}">${a.emoji}</div>
-      <div class="pro-listing-info">
-        <div class="pli-top">
-          <div>
-            <div class="pli-title">${a.title} ${scoreStr}</div>
-            <div class="pli-sub">📍 ${a.price} · ${a.surface} m² · ${a.pieces} pièces</div>
+    <footer class="n-footer">
+      <div class="n-footer-inner">
+        <div>
+          <div class="n-logo" style="margin-bottom:8px">
+            <div class="n-logo-icon" style="width:28px;height:28px;font-size:.8rem">IE</div>
+            <span style="font-size:1rem">Immo</span><span class="n-cyan" style="font-size:1rem">Express</span>
           </div>
+          <p>Plateforme immobilière intelligente. Achat, vente, location, notation IA.</p>
         </div>
-        <div class="pli-tags">
-          <span class="pli-tag pro-pub">${catLabel}</span>
-          ${statusTag}
+        <div>
+          <h4>Marché</h4>
+          <ul>
+            <li><a href="vente.html">💰 Acheter</a></li>
+            <li><a href="location.html">📍 Louer</a></li>
+            <li><a href="recherche.html">🔎 Recherche</a></li>
+            <li><a href="scoring.html">🔬 Scoring</a></li>
+          </ul>
         </div>
-        <div class="pli-stats">${viewsStr} ${leadsStr} <span>📅 ${a.date}</span></div>
-        <div class="pli-actions">
-          <button>✏️ Modifier</button>
-          <button>📊 Stats</button>
-          ${a.status==='draft'?'<button style="background:var(--blue);color:white;border-color:var(--blue)">✅ Publier</button>':'<button>⏸️ Désactiver</button>'}
-          <button class="btn-danger">🗑️</button>
+        <div>
+          <h4>Outils</h4>
+          <ul>
+            <li><a href="risques.html">🌍 Risques</a></li>
+            <li><a href="dashboard.html">📊 Dashboard</a></li>
+            <li><a href="profil.html">👤 Profil</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Pro</h4>
+          <ul>
+            <li><a href="pro.html">🏢 Espace Pro</a></li>
+            <li><a href="pro.html#plans">Abonnements</a></li>
+          </ul>
         </div>
       </div>
-    </div>`;
-  }).join('');
-}
-
-function filterProAnnonces(filter) {
-  currentAnnonceFilter = filter;
-  document.querySelectorAll('.pro-actions .btn-filter').forEach(b => b.classList.toggle('active', b.dataset.filter===filter));
-  renderAnnonces(filter);
-}
-
-function renderLeads() {
-  const list = document.getElementById('leadsList');
-  if(proData.leads.length === 0){
-    list.innerHTML = `<div class="empty-state"><div class="big-icon">📨</div><h3>Aucun contact pour le moment</h3><p>Les personnes intéressées par vos annonces apparaîtront ici.</p></div>`;
-    return;
-  }
-  list.innerHTML = proData.leads.map(l => `
-    <div class="lead-card">
-      <div class="lead-avatar">${l.initial}</div>
-      <div class="lead-info">
-        <div class="lead-name">${l.name}</div>
-        <div class="lead-msg">${l.msg}</div>
-        <div class="lead-date">📌 ${l.annonce} · ${l.date}</div>
+      <div class="n-footer-bottom">
+        <span>© 2025 Immo-Express</span>
+        <span class="n-footer-eva">Powered by EVA · NODUS SYSTEMS</span>
+        <span>CGU · Confidentialité</span>
       </div>
-      <div class="lead-actions">
-        <button>✉️ Répondre</button>
-        <button>📞 Appeler</button>
-      </div>
-    </div>
-  `).join('');
-}
-
-function renderPlans() {
-  const current = proData.agency.plan;
-  const plans = ['starter','pro','premium'];
-  const labels = {starter:'Starter',pro:'Pro',premium:'Premium'};
-  // Compteur de places gratuites (stocké dans localStorage)
-  let freeSlots = parseInt(localStorage.getItem('immo-free-slots') || '5');
-  if(freeSlots < 0) freeSlots = 0;
-  if(freeSlots > 5) freeSlots = 5;
-  document.getElementById('freeSlots').textContent = freeSlots;
-  plans.forEach(p => {
-    const card = document.getElementById(`plan-${p}`);
-    const btn = card.querySelector('.btn-plan');
-    if(p === current) {
-      card.classList.add('current');
-      btn.textContent = '✅ Mon forfait actuel';
-      btn.className = 'btn-plan';
-    } else {
-      card.classList.remove('current');
-      btn.textContent = p==='pro'?'Choisir Pro':p==='premium'?'Choisir Premium':'Choisir Starter';
-      btn.className = `btn-plan ${p==='pro'?'btn-primary':'btn-outline'}`;
-    }
-  });
-  document.getElementById('currentPlanDisplay').textContent = `Plan ${labels[current]}`;
-  const d = new Date();
-  d.setMonth(d.getMonth()+1);
-  document.getElementById('nextRenewal').textContent = `01/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
-}
-
-function selectPlan(plan) {
-  if(plan === proData.agency.plan) {
-    alert('Vous êtes déjà sur ce forfait.');
-    return;
-  }
-  const labels = {starter:'Starter 29€/mois',pro:'Pro 59€/mois',premium:'Premium 119€/mois'};
-  let priceLabel = labels[plan];
-  let freeSlots = parseInt(localStorage.getItem('immo-free-slots') || '5');
-  if(freeSlots > 0) {
-    if(confirm(`🎉 Lancement — plus que ${freeSlots} place${freeSlots>1?'s':''} gratuite${freeSlots>1?'s':''} !\n\nPasser au forfait ${labels[plan]} offert pour 1 mois ?`)){
-      freeSlots--;
-      localStorage.setItem('immo-free-slots', freeSlots);
-      savePlan(plan);
-      if(freeSlots > 0){
-        alert(`✅ Félicitations ! Vous êtes sur ${labels[plan]} — 1er mois offert.\n\nPlus que ${freeSlots} place${freeSlots>1?'s':''} gratuite${freeSlots>1?'s':''} pour d'autres agences !`);
-      } else {
-        alert(`✅ Félicitations ! Vous êtes sur ${labels[plan]} — 1er mois offert.\n\nToutes les places gratuites sont prises !`);
-      }
-    }
-  } else {
-    if(confirm(`Passer au forfait ${priceLabel} ?`)){
-      savePlan(plan);
-      alert(`✅ Vous êtes maintenant sur le forfait ${priceLabel} !`);
-    }
-  }
-}
-
-// ========== NAVIGATION ==========
-function switchSection(section) {
-  currentSection = section;
+    </footer>
+<script>
+function showSection(id, btn) {
   document.querySelectorAll('.pro-section').forEach(s => s.classList.remove('active'));
-  document.getElementById(`sec-${section}`).classList.add('active');
-  document.querySelectorAll('.pro-sidenav button').forEach(b => b.classList.toggle('active', b.dataset.section===section));
-}
-
-function addEventListeners() {
-  document.getElementById('menuToggle').addEventListener('click', () => {
-    document.getElementById('headerLinks').classList.toggle('open');
+  document.getElementById('sec-' + id).classList.add('active');
+  document.querySelectorAll('.n-sidebar button').forEach(b => {
+    b.classList.remove('active');
+    b.style.background = 'transparent';
+    b.style.color = '';
   });
+  if (btn) {
+    btn.classList.add('active');
+    btn.style.background = 'var(--n-cyan-dim)';
+    btn.style.color = 'var(--n-cyan)';
+  }
 }
-
-document.addEventListener('DOMContentLoaded', init);
 </script>
 </body>
 </html>

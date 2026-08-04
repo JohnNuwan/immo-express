@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recherche Avancée — Immo-Express · NODUS</title>
+  <link rel="icon" href="assets/icon-192.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/nodus.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    .search-map { height:400px; border-radius:var(--n-radius); overflow:hidden; border:1px solid var(--n-border); }
+    .n-table { width:100%; border-collapse: collapse; font-size:.85rem; }
+    .n-table th { text-align:left; padding:10px 12px; background:var(--n-bg); font-weight:500; color:var(--n-text-secondary); font-size:.8rem; text-transform:uppercase; letter-spacing:.3px; border-bottom:1px solid var(--n-border); }
+    .n-table td { padding:10px 12px; border-bottom:1px solid var(--n-border); }
+    .n-table tr:last-child td { border-bottom:none; }
+    .n-table tr:hover td { background:var(--n-bg); }
+  </style>
+</head>
+<body>
+
+    <header class="n-header">
+      <div class="n-header-inner">
+        <a href="index.html" class="n-logo">
+          <div class="n-logo-icon">IE</div>
+          <span>Immo</span><span class="n-cyan">Express</span>
+        </a>
+        <button class="n-mobile-toggle" onclick="document.querySelector('.n-nav').classList.toggle('open')">☰</button>
+        <nav class="n-nav">
+          <a href="index.html">🏠 Accueil</a>
+          <a href="vente.html">💰 Acheter</a>
+          <a href="location.html">📍 Louer</a>
+          <a href="scoring.html">🔬 Scoring</a>
+          <a href="risques.html">🌍 Risques</a>
+          <a href="pro.html">🏢 Pro</a>
+          <a href="dashboard.html">📊 Dashboard</a>
+          <a href="profil.html">👤 Profil</a>
+          <a href="recherche.html" class="active">🔎 Recherche</a>
+          <a href="pro.html" class="n-btn-depot">+ Publier</a>
+          <button class="n-btn-user" onclick="openAuth()">👤 Connexion</button>
+        </nav>
+      </div>
+    </header>
+
+<section class="n-hero">
+  <h1>🔎 <span class="n-hero-accent">Recherche</span> <span class="n-hero-cyan">Avancée</span></h1>
+  <p>Trouvez le bien immobilier parfait avec tous nos critères de recherche</p>
+  <div class="n-search-bar">
+    <input type="text" id="advSearch" placeholder="Ville, quartier, code postal..." oninput="doSearch()">
+    <select id="advType" onchange="doSearch()">
+      <option value="all">Achat & Location</option>
+      <option value="vente">Achat</option>
+      <option value="location">Location</option>
+    </select>
+    <button onclick="doSearch()">🔍 Rechercher</button>
+  </div>
+</section>
+
+<div class="n-layout" style="grid-template-columns:1fr">
+  <div style="grid-column:1/-1;display:grid;grid-template-columns:280px 1fr;gap:24px">
+    <!-- Filters Panel -->
+    <div>
+      <aside class="n-sidebar" id="searchFilters">
+        <h3>🔍 Filtres avancés</h3>
+        
+        <div class="n-filter-group">
+          <label>Type de bien</label>
+          <div class="n-filter-btns" id="advTypeBtns">
+            <button class="active" data-v="all">Tous</button>
+            <button data-v="appartement">Appartement</button>
+            <button data-v="maison">Maison</button>
+            <button data-v="villa">Villa</button>
+            <button data-v="studio">Studio</button>
+          </div>
+        </div>
+
+        <div class="n-filter-group">
+          <label>Budget</label>
+          <div class="n-price-range">
+            <input type="number" id="advMin" placeholder="Min €" oninput="doSearch()">
+            <span>—</span>
+            <input type="number" id="advMax" placeholder="Max €" oninput="doSearch()">
+          </div>
+        </div>
+
+        <div class="n-filter-group">
+          <label>Surface (m²)</label>
+          <div class="n-price-range">
+            <input type="number" id="advSurfMin" placeholder="Min" oninput="doSearch()">
+            <span>—</span>
+            <input type="number" id="advSurfMax" placeholder="Max" oninput="doSearch()">
+          </div>
+        </div>
+
+        <div class="n-filter-group">
+          <label>Pièces</label>
+          <div class="n-filter-btns" id="advPieceBtns">
+            <button class="active" data-p="all">Tous</button>
+            <button data-p="1">1</button>
+            <button data-p="2">2</button>
+            <button data-p="3">3</button>
+            <button data-p="4">4+</button>
+          </div>
+        </div>
+
+        <div class="n-filter-group">
+          <label>DPE min</label>
+          <select id="advDpe" onchange="doSearch()">
+            <option value="">Tous</option>
+            <option value="A">A</option><option value="B">B</option>
+            <option value="C">C</option><option value="D">D</option>
+            <option value="E">E</option>
+          </select>
+        </div>
+
+        <div class="n-filter-group">
+          <label>Publié par</label>
+          <select id="advPub" onchange="doSearch()">
+            <option value="all">Tous</option>
+            <option value="pro">Professionnels</option>
+            <option value="particulier">Particuliers</option>
+          </select>
+        </div>
+
+        <div class="n-filter-group">
+          <label>Meublé</label>
+          <select id="advFurnished" onchange="doSearch()">
+            <option value="all">Tous</option>
+            <option value="meuble">Meublé</option>
+            <option value="non-meuble">Non meublé</option>
+          </select>
+        </div>
+
+        <div class="n-filter-group">
+          <label>Date de publication</label>
+          <select id="advDate" onchange="doSearch()">
+            <option value="all">Toutes</option>
+            <option value="today">Aujourd'hui</option>
+            <option value="week">Cette semaine</option>
+            <option value="month">Ce mois</option>
+          </select>
+        </div>
+
+        <button class="n-btn-reset" onclick="resetAdvSearch()">🔄 Réinitialiser</button>
+      </aside>
+    </div>
+
+    <!-- Results + Map -->
+    <div>
+      <div class="n-results-header">
+        <div class="n-results-count" id="advCount"><strong>0</strong> biens trouvés</div>
+        <div class="n-results-tabs">
+          <button class="active" data-v="grid" onclick="toggleView('grid')">📰 Grille</button>
+          <button data-v="map" onclick="toggleView('map')">🗺️ Carte</button>
+        </div>
+      </div>
+
+      <!-- Map View -->
+      <div id="advMapView" class="n-dash-card" style="display:none;padding:16px;margin-bottom:16px">
+        <div class="search-map" id="advMap"></div>
+      </div>
+
+      <!-- Grid View -->
+      <div id="advGridView">
+        <div class="n-card-grid" id="advGrid"></div>
+      </div>
+
+      <!-- Search History -->
+      <div class="n-dash-card" style="margin-top:24px;padding:20px">
+        <h3 class="n-section-title">🕓 Recherches récentes</h3>
+        <div style="display:flex;flex-wrap:wrap;gap:8px">
+          <span class="n-filter-btns" style="display:flex;gap:6px;flex-wrap:wrap;background:none;padding:0;border:none">
+            <button style="padding:6px 14px;border:1px solid var(--n-border);border-radius:50px;background:transparent;font-size:.78rem;cursor:pointer;font-family:var(--n-font);color:var(--n-text-secondary)" onclick="quickSearch('Paris 11e')">📍 Paris 11e</button>
+            <button style="padding:6px 14px;border:1px solid var(--n-border);border-radius:50px;background:transparent;font-size:.78rem;cursor:pointer;font-family:var(--n-font);color:var(--n-text-secondary)" onclick="quickSearch('Lyon 3 pièces')">🏠 Lyon 3 pièces</button>
+            <button style="padding:6px 14px;border:1px solid var(--n-border);border-radius:50px;background:transparent;font-size:.78rem;cursor:pointer;font-family:var(--n-font);color:var(--n-text-secondary)" onclick="quickSearch('Bordeaux < 200k')">💰 Bordeaux &lt; 200k</button>
+            <button style="padding:6px 14px;border:1px solid var(--n-border);border-radius:50px;background:transparent;font-size:.78rem;cursor:pointer;font-family:var(--n-font);color:var(--n-text-secondary)" onclick="quickSearch('Marseille villa')">🏡 Marseille villa</button>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <footer class="n-footer">
+      <div class="n-footer-inner">
+        <div>
+          <div class="n-logo" style="margin-bottom:8px">
+            <div class="n-logo-icon" style="width:28px;height:28px;font-size:.8rem">IE</div>
+            <span style="font-size:1rem">Immo</span><span class="n-cyan" style="font-size:1rem">Express</span>
+          </div>
+          <p>Plateforme immobilière intelligente. Achat, vente, location, notation IA.</p>
+        </div>
+        <div>
+          <h4>Marché</h4>
+          <ul>
+            <li><a href="vente.html">💰 Acheter</a></li>
+            <li><a href="location.html">📍 Louer</a></li>
+            <li><a href="recherche.html">🔎 Recherche</a></li>
+            <li><a href="scoring.html">🔬 Scoring</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Outils</h4>
+          <ul>
+            <li><a href="risques.html">🌍 Risques</a></li>
+            <li><a href="dashboard.html">📊 Dashboard</a></li>
+            <li><a href="profil.html">👤 Profil</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Pro</h4>
+          <ul>
+            <li><a href="pro.html">🏢 Espace Pro</a></li>
+            <li><a href="pro.html#plans">Abonnements</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="n-footer-bottom">
+        <span>© 2025 Immo-Express</span>
+        <span class="n-footer-eva">Powered by EVA · NODUS SYSTEMS</span>
+        <span>CGU · Confidentialité</span>
+      </div>
+    </footer>
+<script>
+const listings = [];
+let advMap = null;
+let advMarkers = [];
+let currentView = 'grid';
+
+document.querySelectorAll('#advTypeBtns button').forEach(b => b.addEventListener('click', function() {
+  document.querySelectorAll('#advTypeBtns button').forEach(x => x.classList.remove('active'));
+  this.classList.add('active'); doSearch();
+}));
+document.querySelectorAll('#advPieceBtns button').forEach(b => b.addEventListener('click', function() {
+  document.querySelectorAll('#advPieceBtns button').forEach(x => x.classList.remove('active'));
+  this.classList.add('active'); doSearch();
+}));
+
+function doSearch() {
+  const state = {
+    search: document.getElementById('advSearch').value,
+    type: document.getElementById('advType').value,
+    category: document.querySelector('#advTypeBtns .active')?.dataset?.v || 'all',
+    minPrice: document.getElementById('advMin').value,
+    maxPrice: document.getElementById('advMax').value,
+    minSurface: document.getElementById('advSurfMin').value,
+    maxSurface: document.getElementById('advSurfMax').value,
+    pieces: document.querySelector('#advPieceBtns .active')?.dataset?.p || 'all',
+    dpe: document.getElementById('advDpe').value,
+    publisher: document.getElementById('advPub').value,
+    furnished: document.getElementById('advFurnished').value,
+    date: document.getElementById('advDate').value
+  };
+
+  const grid = document.getElementById('advGrid');
+  const count = document.getElementById('advCount');
+  let f = listings.filter(p => {
+    if (state.type !== 'all') {
+      if (state.type === 'vente' && p.type === 'location') return false;
+      if (state.type === 'location' && p.type !== 'location') return false;
+    }
+    if (state.category !== 'all' && p.type !== state.category) return false;
+    if (state.pieces !== 'all') { const n = parseInt(state.pieces); if (state.pieces === '4' ? p.pieces < 4 : p.pieces !== n) return false; }
+    if (state.dpe && (p.dpe || ' ') > state.dpe) return false;
+    if (state.minPrice && p.price < Number(state.minPrice)) return false;
+    if (state.maxPrice && p.price > Number(state.maxPrice)) return false;
+    if (state.minSurface && p.surface < Number(state.minSurface)) return false;
+    if (state.maxSurface && p.surface > Number(state.maxSurface)) return false;
+    if (state.publisher !== 'all' && p.publisher !== state.publisher) return false;
+    if (state.furnished !== 'all' && p.furnished !== state.furnished) return false;
+    if (state.search) { const q = state.search.toLowerCase(); if (!p.title.toLowerCase().includes(q) && !p.location.toLowerCase().includes(q)) return false; }
+    return true;
+  });
+
+  count.innerHTML = '<strong>' + f.length + '</strong> bien' + (f.length > 1 ? 's' : '') + ' trouv\u00e9' + (f.length > 1 ? 's' : '');
+  if (!f.length) {
+    grid.innerHTML = '<div class="n-no-results"><div class="n-icon">\ud83d\udd0d</div><h3>Aucun bien trouv\u00e9</h3><p>Essayez de modifier vos filtres.</p></div>';
+  } else {
+    grid.innerHTML = f.map(p => {
+      const cl = p.publisher === 'pro' ? 'n-pub-pro' : 'n-pub-particulier';
+      const lb = p.publisher === 'pro' ? 'Pro' : 'Particulier';
+      const badge = p.rentalType === 'seasonal' ? 'n-badge-seasonal' : (p.type === 'location' ? 'n-badge-rent' : 'n-badge-sale');
+      const badgeLabel = p.rentalType === 'seasonal' ? 'Saisonnier' : (p.type === 'location' ? 'Location' : 'Vente');
+      return '<div class="n-card" onclick="alert(\'D\u00e9tail du bien: ' + p.title + '\')">' +
+        '<div class="n-card-img" style="background:' + p.bg + '">' +
+          '<span class="n-badge ' + badge + '">' + badgeLabel + '</span>' +
+          p.emoji +
+        '</div>' +
+        '<div class="n-card-info">' +
+          '<div class="n-card-price">' + p.pl + '</div>' +
+          '<div class="n-card-price-sub">' + Math.round(p.price / p.surface).toLocaleString('fr') + ' \u20ac/m\u00b2</div>' +
+          '<div class="n-card-title">' + p.title + '</div>' +
+          '<div class="n-card-location">\ud83d\udccd ' + p.location + '</div>' +
+          '<div class="n-card-tags">' +
+            '<span class="n-card-tag">\ud83d\udcd0 <strong>' + p.surface + ' m\u00b2</strong></span>' +
+            '<span class="n-card-tag">\ud83d\udecf\ufe0f <strong>' + p.pieces + '</strong> pi\u00e8ces</span>' +
+          '</div>' +
+          '<div class="n-card-footer">' +
+            '<div class="n-card-publisher"><span class="n-pub-type ' + cl + '">' + lb + '</span>' + p.pubName + '</div>' +
+            '<div class="n-card-date">' + p.date + '</div>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+  }
+
+  // Update map markers
+  if (advMap && f.length > 0) {
+    advMarkers.forEach(m => advMap.removeLayer(m));
+    advMarkers = [];
+    f.forEach(p => {
+      if (p.lat && p.lng) {
+        const m = L.marker([p.lat, p.lng]).addTo(advMap)
+          .bindPopup('<b>' + p.title + '</b><br>' + p.pl);
+        advMarkers.push(m);
+      }
+    });
+  }
+}
+
+function toggleView(view) {
+  currentView = view;
+  document.querySelectorAll('.n-results-tabs button').forEach(b => b.classList.toggle('active', b.dataset.v === view));
+  document.getElementById('advMapView').style.display = view === 'map' ? 'block' : 'none';
+  document.getElementById('advGridView').style.display = view === 'grid' ? 'block' : 'none';
+  if (view === 'map' && !advMap) {
+    advMap = L.map('advMap').setView([48.8566, 2.3522], 12);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors', maxZoom: 18
+    }).addTo(advMap);
+    doSearch();
+  }
+}
+
+function resetAdvSearch() {
+  document.getElementById('advSearch').value = '';
+  document.getElementById('advType').value = 'all';
+  document.getElementById('advMin').value = '';
+  document.getElementById('advMax').value = '';
+  document.getElementById('advSurfMin').value = '';
+  document.getElementById('advSurfMax').value = '';
+  document.getElementById('advDpe').value = '';
+  document.getElementById('advPub').value = 'all';
+  document.getElementById('advFurnished').value = 'all';
+  document.getElementById('advDate').value = 'all';
+  document.querySelectorAll('.n-filter-btns button').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('[data-v="all"],[data-p="all"]').forEach(b => b.classList.add('active'));
+  doSearch();
+}
+
+function quickSearch(q) {
+  document.getElementById('advSearch').value = q;
+  doSearch();
+}
+
+// Initial search
+doSearch();
+</script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</body>
+</html>

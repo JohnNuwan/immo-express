@@ -1,3 +1,4 @@
+# EVA · NODUS SYSTEMS — Immo-Express
 *.apk
 *.aab
 jdk/
@@ -7,3 +8,10 @@ node_modules/
 www/
 .DS_Store
 Thumbs.db
+__pycache__/
+*.pyc
+.venv/
+*.db
+.env
+backups/
+.DS_Store

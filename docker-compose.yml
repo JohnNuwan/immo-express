@@ -1,0 +1,39 @@
+# EVA · NODUS SYSTEMS — Immo-Express Deployment
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: immo-express-api
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=sqlite:///./immo_express.db
+      - SECRET_KEY=eva-nodus-production-key-change-me
+    volumes:
+      - immo-db:/app
+    networks:
+      - immo-network
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: immo-express-web
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - immo-network
+
+volumes:
+  immo-db:
+
+networks:
+  immo-network:
+    driver: bridge
