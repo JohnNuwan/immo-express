@@ -45,7 +45,7 @@ if [ -f "./backend/immo_express.db" ]; then
 fi
 
 # Build and deploy
-log "🐳 Construction des containers..."
+log "🐳 Construction des containers Node.js..."
 $DOCKER_COMPOSE build
 
 log "🚀 Démarrage des services..."
