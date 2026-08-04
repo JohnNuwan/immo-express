@@ -96,7 +96,12 @@ router.delete('/:id', auth, (req, res) => {
     return res.status(404).json({ error: 'Bien non trouvé' });
   }
 
-  db.prepare('DELETE FROM biens WHERE id = ?').run(req.params.id);
+  const del = db.transaction(() => {
+    db.prepare('DELETE FROM contacts WHERE bien_id = ?').run(req.params.id);
+    db.prepare('DELETE FROM biens WHERE id = ?').run(req.params.id);
+  });
+  del();
+
   res.json({ message: 'Bien supprimé avec succès' });
 });
 

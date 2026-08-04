@@ -1,0 +1,10 @@
+# Dependencies
+node_modules/
+
+# Database
+*.db
+*.db-shm
+*.db-wal
+
+# Environment
+.env
