@@ -394,8 +394,9 @@
           </div>
         </div>
         <div class="form-actions">
-          <button class="btn-primary" onclick="analyzeRisques()">🌍 Analyser les risques</button>
-        </div>
+                <button class="btn-primary" onclick="analyzeRisques()">🌍 Analyser les risques</button>
+                <button class="btn-success" onclick="runIGIAnalysis()">🏆 IGI — Indice Global</button>
+              </div>
       </div>
     </div>
 
@@ -511,35 +512,74 @@
         </div>
 
         <!-- Integrated Score -->
-        <div class="risk-integrated" id="riskIntegrated">
-          <h3>📊 Intégration au score global</h3>
-          <div class="ri-grid">
-            <div class="ri-item">
-              <div class="ri-val" id="riScoreGeo" style="color:var(--blue)">—</div>
-              <div class="ri-lbl">Score Risques</div>
-              <div class="ri-sub">/100</div>
+            <div class="risk-integrated" id="riskIntegrated">
+              <h3>📊 Intégration au score global</h3>
+              <div class="ri-grid">
+                <div class="ri-item">
+                  <div class="ri-val" id="riScoreGeo" style="color:var(--blue)">—</div>
+                  <div class="ri-lbl">Score Risques</div>
+                  <div class="ri-sub">/100</div>
+                </div>
+                <div class="ri-item">
+                  <div class="ri-val" id="riScoreImmo" style="color:var(--purple)">—</div>
+                  <div class="ri-lbl">Score Immobilier</div>
+                  <div class="ri-sub">de la notation</div>
+                </div>
+                <div class="ri-item">
+                  <div class="ri-val" id="riScoreFinal" style="color:var(--green)">—</div>
+                  <div class="ri-lbl">Score Combiné</div>
+                  <div class="ri-sub">avec risques intégrés</div>
+                </div>
+              </div>
+              <div style="margin-top:12px;text-align:right">
+                <button class="btn-secondary" onclick="runFullAnalysis()">🔬 Lancer la notation complète</button>
+              </div>
             </div>
-            <div class="ri-item">
-              <div class="ri-val" id="riScoreImmo" style="color:var(--purple)">—</div>
-              <div class="ri-lbl">Score Immobilier</div>
-              <div class="ri-sub">de la notation</div>
-            </div>
-            <div class="ri-item">
-              <div class="ri-val" id="riScoreFinal" style="color:var(--green)">—</div>
-              <div class="ri-lbl">Score Combiné</div>
-              <div class="ri-sub">avec risques intégrés</div>
-            </div>
-          </div>
-          <div style="margin-top:12px;text-align:right">
-            <button class="btn-secondary" onclick="runFullAnalysis()">🔬 Lancer la notation complète</button>
-          </div>
-        </div>
 
-        <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
-          <button class="btn-primary" onclick="scrollTo(0,0)">⬆️ Nouvelle recherche</button>
+            <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+              <button class="btn-primary" onclick="scrollTo(0,0)">⬆️ Nouvelle recherche</button>
+            </div>
+          </div>
+
+          <!-- IGI RESULTS -->
+          <div class="score-results" id="igiResults">
+            <div class="score-hero-card">
+              <div class="score-circle" id="igiScoreCircle">
+                <canvas id="igiCanvas" width="160" height="160"></canvas>
+                <span class="score-value" id="igiFinalValue">—</span>
+                <span class="score-label">/100</span>
+              </div>
+              <div class="score-hero-info">
+                <h2 id="igiResultTitle">Indice Global Immobilier</h2>
+                <div class="location" id="igiResultLocation">📍 </div>
+                <div class="price" id="igiResultPrice"></div>
+                <div class="verdict" id="igiResultVerdict"></div>
+              </div>
+            </div>
+
+            <!-- Radar Chart -->
+            <div class="radar-section">
+              <h3>📊 Radar IGI — 7 critères clés</h3>
+              <div class="radar-container">
+                <canvas id="igiRadarCanvas" width="500" height="420"></canvas>
+              </div>
+            </div>
+
+            <!-- IGI Score Grid -->
+            <div class="score-grid" id="igiGrid"></div>
+
+            <!-- IGI Tips -->
+            <div class="tips-section active" id="igiTipsSection">
+              <h3>💡 Recommandations IGI</h3>
+              <div class="tips-grid" id="igiTipsGrid"></div>
+            </div>
+
+            <div style="display:flex;gap:12px;justify-content:center;margin-bottom:24px;flex-wrap:wrap">
+              <button class="btn-primary" onclick="scrollTo(0,0)">⬆️ Nouvelle analyse</button>
+              <button class="btn-secondary" onclick="saveIGI()">💾 Sauvegarder</button>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
 
 <script>
 // ========== MARKET DATA — DONNÉES DE RÉFÉRENCE POUR LA FRANCE ==========
@@ -1329,6 +1369,218 @@ function runFullAnalysis() {
   document.getElementById('risquesResults').classList.remove('active');
 }
 
+// ========== IGI — Indice Global Immobilier ==========
+let lastIGIResult = null;
+
+async function runIGIAnalysis() {
+  const address = document.getElementById('rAddress').value.trim();
+  const complement = document.getElementById('rComplement').value.trim();
+  if (!address || address.length < 3) { alert('Veuillez saisir une adresse'); return; }
+  
+  const query = complement ? `${address}, ${complement}, France` : `${address}, France`;
+  
+  document.getElementById('loadingSpinner').classList.add('active');
+  document.getElementById('igiResults').classList.remove('active');
+  
+  // Build input from the manual form if available
+  const input = {
+    city: document.getElementById('fCity')?.value || address,
+    type: document.getElementById('fType')?.value || 'appartement',
+    cat: document.getElementById('fCat')?.value || 'vente',
+    price: parseFloat(document.getElementById('fPrice')?.value) || 0,
+    surface: parseFloat(document.getElementById('fSurface')?.value) || 50,
+    pieces: parseInt(document.getElementById('fPieces')?.value) || 3,
+    condition: document.getElementById('fCondition')?.value || 'bon',
+    dpe: document.getElementById('fDPE')?.value || '',
+    etage: parseInt(document.getElementById('fEtage')?.value) || 0,
+    equip: document.getElementById('fEquip')?.value || 'moyen',
+    transports: document.getElementById('fTransports')?.value || 'bon'
+  };
+  
+  try {
+    const result = await IGI.compute(query, input);
+    lastIGIResult = result;
+    renderIGI(result);
+  } catch (e) {
+    alert('Erreur IGI: ' + e.message);
+    document.getElementById('loadingSpinner').classList.remove('active');
+  }
+}
+
+function renderIGI(result) {
+  document.getElementById('loadingSpinner').classList.remove('active');
+  document.getElementById('igiResults').classList.add('active');
+  
+  const { score, verdict, couleur, geo, details } = result;
+  
+  // Hero
+  document.getElementById('igiFinalValue').textContent = score;
+  document.getElementById('igiResultTitle').textContent = `IGI — ${geo.city}`;
+  document.getElementById('igiResultLocation').textContent = `📍 ${geo.city} · ${geo.postcode} · ${geo.departement || ''}`;
+  document.getElementById('igiResultPrice').textContent = `🏠 ${geo.name.substring(0, 80)}`;
+  const ve = document.getElementById('igiResultVerdict');
+  ve.textContent = `Indice Global Immobilier : ${verdict}`;
+  const vc = score >= 75 ? 'verdict-excellent' : score >= 55 ? 'verdict-good' : score >= 40 ? 'verdict-average' : 'verdict-poor';
+  ve.className = `verdict ${vc}`;
+  
+  // Draw circle
+  drawIGICircle(score);
+  
+  // Radar
+  drawIGIRadar(details);
+  
+  // Grid
+  const grid = document.getElementById('igiGrid');
+  grid.innerHTML = '';
+  const labels = { risques:'🌋 Risques naturels', securite:'🔒 Sécurité', commodites:'🏪 Commodités', transports:'🚇 Transports', marche:'💰 Marché immo', education:'🏫 Éducation', environnement:'🌿 Environnement' };
+  const emojis = { risques:'🌋', securite:'🔒', commodites:'🏪', transports:'🚇', marche:'💰', education:'🏫', environnement:'🌿' };
+  const weights = IGI.WEIGHTS;
+  
+  for (const k in details) {
+    const d = details[k];
+    const s = d.score || 0;
+    const color = s >= 75 ? '#059669' : s >= 55 ? '#d97706' : '#dc2626';
+    const item = document.createElement('div');
+    item.className = 'score-item';
+    let extra = '';
+    if (d.details && typeof d.details === 'object') {
+      extra = Object.values(d.details).map(v => v.label || '').join(' · ');
+    } else if (d.label) extra = d.label;
+    else if (d.niveau) extra = d.niveau;
+    item.innerHTML = `
+      <div class="score-item-header">
+        <div class="label"><span class="emoji">${emojis[k]}</span> ${labels[k]}</div>
+        <div class="value" style="color:${color}">${s}<span style="font-size:0.7rem;color:var(--text-tertiary)">/100</span></div>
+      </div>
+      <div class="score-bar"><div class="score-bar-fill" style="width:${s}%;background:${color}"></div></div>
+      <div class="score-detail"><span class="detail-label">Pondération ${weights[k]}%</span><span class="detail-value">${extra.substring(0, 80)}</span></div>
+    `;
+    grid.appendChild(item);
+  }
+  
+  // Tips
+  const tips = document.getElementById('igiTipsGrid');
+  tips.innerHTML = '';
+  const tipsArr = [];
+  if (details.risques.score < 55) tipsArr.push({icon:'🌋', title:'Risques naturels préoccupants', desc:'Plusieurs risques identifiés (inondation, argiles, séisme). Vérifiez les diagnostics obligatoires et l\'assurabilité du bien.'});
+  if (details.securite.score < 60) tipsArr.push({icon:'🔒', title:'Sécurité à vérifier', desc:'Le niveau de sécurité est en dessous de la moyenne. Consultez les statistiques de la commune.'});
+  if (details.commodites.score < 60) tipsArr.push({icon:'🏪', title:'Commerces limités', desc:'Peu de commerces et services à proximité. Vérifiez les projets d\'implantation.'});
+  if (details.transports.score < 60) tipsArr.push({icon:'🚇', title:'Transports à améliorer', desc:'La desserte en transports en commun est limitée. Idéal si vous avez une voiture.'});
+  if (details.marche.score < 50) tipsArr.push({icon:'💰', title:'Prix au-dessus du marché', desc:'Le prix au m² est supérieur à la moyenne locale. Justifiez la différence ou négociez.'});
+  if (details.education.score < 60) tipsArr.push({icon:'🏫', title:'Écoles peu nombreuses', desc:'Peu d\'établissements scolaires à proximité immédiate. Renseignez-vous sur les navettes.'});
+  if (tipsArr.length === 0) tipsArr.push({icon:'✨', title:'Profil exceptionnel', desc:'Tous les indicateurs sont au vert — excellent choix immobilier !'});
+  
+  for (const t of tipsArr) {
+    tips.innerHTML += `<div class="tip-item"><div><span style="font-size:1.2rem;margin-right:8px">${t.icon}</span><span class="tip-title">${t.title}</span></div><div class="tip-desc">${t.desc}</div></div>`;
+  }
+  
+  document.getElementById('igiTipsSection').classList.add('active');
+  document.getElementById('igiResults').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function drawIGICircle(score) {
+  const canvas = document.getElementById('igiCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const w = canvas.width, h = canvas.height;
+  ctx.clearRect(0,0,w,h);
+  const cx = w/2, cy = h/2, r = 68;
+  const start = -Math.PI/2;
+  const end = start + (score/100) * Math.PI * 2;
+  const color = score >= 75 ? '#059669' : score >= 55 ? '#d97706' : '#dc2626';
+  ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI*2); ctx.strokeStyle = '#e5e7eb'; ctx.lineWidth = 10; ctx.stroke();
+  ctx.beginPath(); ctx.arc(cx, cy, r, start, end); ctx.strokeStyle = color; ctx.lineWidth = 10; ctx.lineCap = 'round'; ctx.stroke();
+}
+
+function drawIGIRadar(details) {
+  const canvas = document.getElementById('igiRadarCanvas');
+  if (!canvas) return;
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.getBoundingClientRect();
+  canvas.width = 500 * dpr; canvas.height = 420 * dpr;
+  canvas.style.width = '500px'; canvas.style.height = '420px';
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  
+  const labels = ['Risques','Sécurité','Commodités','Transports','Marché','Éducation','Environnement'];
+  const keys = ['risques','securite','commodites','transports','marche','education','environnement'];
+  const n = labels.length;
+  const cx = 250, cy = 210, r = 140;
+  ctx.clearRect(0,0,500,420);
+  
+  function angle(i) { return -Math.PI/2 + (2*Math.PI*i)/n; }
+  
+  for (let ring=1; ring<=5; ring++) {
+    const radius = (r * ring) / 5;
+    ctx.beginPath();
+    for (let i=0; i<=n; i++) {
+      const a = angle(i % n);
+      const x = cx + radius * Math.cos(a);
+      const y = cy + radius * Math.sin(a);
+      if (i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    }
+    ctx.closePath();
+    ctx.strokeStyle = '#e5e7eb'; ctx.lineWidth = 1; ctx.stroke();
+  }
+  
+  for (let i=0; i<n; i++) {
+    const a = angle(i);
+    ctx.beginPath(); ctx.moveTo(cx, cy);
+    ctx.lineTo(cx + r * Math.cos(a), cy + r * Math.sin(a));
+    ctx.strokeStyle = '#e5e7eb'; ctx.lineWidth = 1; ctx.stroke();
+  }
+  
+  const colors = ['#2563eb','#059669','#7c3aed','#dc2626','#d97706','#0d9488','#8b5cf6'];
+  ctx.beginPath();
+  for (let i=0; i<=n; i++) {
+    const idx = i % n;
+    const val = (details[keys[idx]]?.score || 50) / 100;
+    const a = angle(idx);
+    const dist = r * val;
+    const x = cx + dist * Math.cos(a);
+    const y = cy + dist * Math.sin(a);
+    if (i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+  }
+  ctx.closePath();
+  ctx.fillStyle = 'rgba(37,99,235,0.15)'; ctx.fill();
+  ctx.strokeStyle = '#2563eb'; ctx.lineWidth = 2; ctx.stroke();
+  
+  for (let i=0; i<n; i++) {
+    const val = (details[keys[i]]?.score || 50) / 100;
+    const a = angle(i);
+    const dist = r * val;
+    const x = cx + dist * Math.cos(a);
+    const y = cy + dist * Math.sin(a);
+    ctx.beginPath(); ctx.arc(x, y, 4, 0, Math.PI*2);
+    ctx.fillStyle = colors[i]; ctx.fill();
+    ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.stroke();
+    const lx = cx + (r + 32) * Math.cos(a);
+    const ly = cy + (r + 32) * Math.sin(a);
+    ctx.fillStyle = '#374151'; ctx.font = '11px Inter, sans-serif';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText(`${labels[i]} ${Math.round(details[keys[i]]?.score||0)}`, lx, ly);
+  }
+  
+  ctx.fillStyle = '#9ca3af'; ctx.font = '11px Inter, sans-serif';
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText('IGI', cx, cy);
+}
+
+function saveIGI() {
+  const key = 'immo-igi-scores';
+  const saved = JSON.parse(localStorage.getItem(key)||'[]');
+  const entry = {
+    id: Date.now(),
+    date: new Date().toLocaleDateString('fr-FR'),
+    title: document.getElementById('igiResultTitle').textContent,
+    score: document.getElementById('igiFinalValue').textContent,
+    verdict: document.getElementById('igiResultVerdict').textContent
+  };
+  saved.unshift(entry);
+  localStorage.setItem(key, JSON.stringify(saved.slice(0,20)));
+  alert('✅ Score IGI sauvegardé !');
+}
+
 // ========== SAVE ==========
 function saveScore() {
   const key = 'immo-saved-scores';
@@ -1363,5 +1615,6 @@ window.addEventListener('beforeprint', () => {
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="js/risques.js"></script>
+<script src="js/igi.js"></script>
 </body>
 </html>
