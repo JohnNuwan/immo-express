@@ -266,7 +266,7 @@
           <div style="background:linear-gradient(135deg,#1e3a5f,var(--blue));border-radius:var(--radius-lg);padding:24px 28px;margin-bottom:24px;color:white;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px">
             <div>
               <div style="font-size:1.1rem;font-weight:700;margin-bottom:4px">🎉 Lancement Immo-Express</div>
-              <div style="font-size:0.85rem;opacity:0.9">Les <strong>5 premiers comptes Pro</strong> sont offerts — 1 mois gratuit sans engagement</div>
+              <div style="font-size:0.85rem;opacity:0.9">Les <strong>5 premiers comptes Pro</strong> sont offerts — <strong>2 ans gratuits</strong> sans engagement</div>
             </div>
             <div style="background:rgba(255,255,255,0.15);border-radius:var(--radius);padding:10px 20px;text-align:center">
               <div style="font-size:1.6rem;font-weight:800" id="freeSlots">5</div>
@@ -585,14 +585,14 @@ function selectPlan(plan) {
   let priceLabel = labels[plan];
   let freeSlots = parseInt(localStorage.getItem('immo-free-slots') || '5');
   if(freeSlots > 0) {
-    if(confirm(`🎉 Lancement — plus que ${freeSlots} place${freeSlots>1?'s':''} gratuite${freeSlots>1?'s':''} !\n\nPasser au forfait ${labels[plan]} offert pour 1 mois ?`)){
+    if(confirm(`🎉 Lancement — plus que ${freeSlots} place${freeSlots>1?'s':''} gratuite${freeSlots>1?'s':''} !\n\nPasser au forfait ${labels[plan]} offert pour 2 ans ?`)){
       freeSlots--;
       localStorage.setItem('immo-free-slots', freeSlots);
       savePlan(plan);
       if(freeSlots > 0){
-        alert(`✅ Félicitations ! Vous êtes sur ${labels[plan]} — 1er mois offert.\n\nPlus que ${freeSlots} place${freeSlots>1?'s':''} gratuite${freeSlots>1?'s':''} pour d'autres agences !`);
+        alert(`✅ Félicitations ! Vous êtes sur ${labels[plan]} — 2 ans offerts.\n\nPlus que ${freeSlots} place${freeSlots>1?'s':''} gratuite${freeSlots>1?'s':''} pour d'autres agences !`);
       } else {
-        alert(`✅ Félicitations ! Vous êtes sur ${labels[plan]} — 1er mois offert.\n\nToutes les places gratuites sont prises !`);
+        alert(`✅ Félicitations ! Vous êtes sur ${labels[plan]} — 2 ans offerts.\n\nToutes les places gratuites sont prises !`);
       }
     }
   } else {

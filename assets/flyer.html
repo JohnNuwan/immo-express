@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flyer ImmoExpress — À imprimer</title>
+<style>
+  @page{size:A5;margin:0}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:Inter,-apple-system,sans-serif;background:#e5e7eb;display:flex;justify-content:center;align-items:center;min-height:100vh;padding:20px;gap:20px;flex-wrap:wrap}
+  .flyer{width:420px;height:595px;background:white;overflow:hidden;position:relative;box-shadow:0 8px 32px rgba(0,0,0,.15);border-radius:8px}
+
+  /* RECTO */
+  .recto .hero{background:linear-gradient(135deg,#1e3a5f,#2563eb);padding:36px 30px 28px;color:white;text-align:center}
+  .recto .hero .logo{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:8px}
+  .recto .hero .logo img{width:44px;height:44px;border-radius:8px}
+  .recto .hero .logo span{font-size:24px;font-weight:800}
+  .recto .hero .logo .b{color:white}.recto .hero .logo .bl{color:#93c5fd}
+  .recto .hero h1{font-size:22px;font-weight:700;margin-top:8px}
+  .recto .hero p{font-size:13px;opacity:.85;margin-top:4px;line-height:1.4}
+  .recto .hero .badge{display:inline-block;background:rgba(255,255,255,.15);border-radius:50px;padding:5px 16px;font-size:11px;margin-top:10px}
+
+  .recto .features{padding:24px 28px}
+  .recto .features h2{font-size:14px;font-weight:700;color:#2563eb;margin-bottom:12px;text-align:center}
+  .recto .features .grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .recto .features .item{display:flex;align-items:center;gap:8px;font-size:12px;padding:7px 10px;background:#f3f4f6;border-radius:6px;color:#374151}
+  .recto .features .item .i{font-size:15px}
+  .recto .features .item .t{font-weight:500}
+
+  .recto .pricing{padding:0 28px 24px}
+  .recto .pricing h2{font-size:14px;font-weight:700;color:#2563eb;margin-bottom:10px;text-align:center}
+  .recto .pricing .plans{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+  .recto .pricing .plan{text-align:center;padding:10px 6px;background:#f9fafb;border-radius:8px;border:1px solid #e5e7eb}
+  .recto .pricing .plan.pop{border-color:#2563eb;background:#eff6ff}
+  .recto .pricing .plan .pr{font-size:18px;font-weight:800;color:#2563eb}
+  .recto .pricing .plan .pr span{font-size:10px;font-weight:400;color:#6b7280}
+  .recto .pricing .plan .nm{font-size:11px;font-weight:600;color:#111827;margin-top:2px}
+  .recto .pricing .plan .desc{font-size:9px;color:#6b7280;margin-top:2px}
+  .recto .pricing .promo{background:linear-gradient(135deg,#059669,#0d9488);border-radius:6px;padding:8px 14px;color:white;font-size:11px;font-weight:600;text-align:center;margin-top:10px}
+
+  .recto .footer{position:absolute;bottom:0;left:0;right:0;padding:14px 28px;background:#f9fafb;border-top:1px solid #e5e7eb;text-align:center;font-size:10px;color:#6b7280}
+
+  /* VERSO */
+  .verso{padding:32px 28px;display:flex;flex-direction:column;justify-content:center;height:100%;text-align:center}
+  .verso h2{font-size:18px;font-weight:700;color:#111827;margin-bottom:6px}
+  .verso .sub{font-size:12px;color:#6b7280;margin-bottom:20px}
+  .verso .cta{background:#2563eb;color:white;border:none;padding:14px 36px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;display:inline-block;margin-bottom:14px}
+  .verso .contact{font-size:12px;color:#374151;line-height:1.8}
+  .verso .contact strong{color:#2563eb}
+  .verso .qr{width:100px;height:100px;background:#e5e7eb;margin:16px auto 0;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:10px;color:#6b7280}
+  .verso .qr img{width:100px;height:100px}
+
+  @media print{
+    body{background:white;padding:0;gap:0;flex-direction:column}
+    .flyer{box-shadow:none;border-radius:0;margin:0;page-break-after:always}
+    .verso{page-break-after:avoid}
+  }
+</style>
+</head>
+<body>
+
+<!-- RECTO -->
+<div class="flyer recto">
+  <div class="hero">
+    <div class="logo">
+      <img src="assets/icon-192.svg" alt="">
+      <div><span class="b">Immo</span><span class="bl">Express</span></div>
+    </div>
+    <p>La plateforme immobilière intelligente<br>avec notation IA 8 critères</p>
+    <div class="badge">🎉 2 ans offerts — 5 premières agences</div>
+  </div>
+
+  <div class="features">
+    <h2>✨ Fonctionnalités exclusives</h2>
+    <div class="grid">
+      <div class="item"><span class="i">🔬</span><span class="t">Notation IA 8 critères</span></div>
+      <div class="item"><span class="i">📊</span><span class="t">Dashboard pro complet</span></div>
+      <div class="item"><span class="i">📨</span><span class="t">Leads en temps réel</span></div>
+      <div class="item"><span class="i">🏠</span><span class="t">Annonces avec score confiance</span></div>
+      <div class="item"><span class="i">💰</span><span class="t">Analyse du prix vs marché</span></div>
+      <div class="item"><span class="i">📈</span><span class="t">Stats visites + contacts</span></div>
+    </div>
+  </div>
+
+  <div class="pricing">
+    <h2>⭐ Abonnements</h2>
+    <div class="plans">
+      <div class="plan">
+        <div class="pr">29<span>€</span></div>
+        <div class="nm">Starter</div>
+        <div class="desc">5 annonces</div>
+      </div>
+      <div class="plan pop">
+        <div class="pr">59<span>€</span></div>
+        <div class="nm">Pro</div>
+        <div class="desc">20 annonces</div>
+      </div>
+      <div class="plan">
+        <div class="pr">119<span>€</span></div>
+        <div class="nm">Premium</div>
+        <div class="desc">Illimité</div>
+      </div>
+    </div>
+    <div class="promo">🎁 2 ans gratuits · Offre limitée aux 5 premières agences</div>
+  </div>
+
+  <div class="footer">
+    ImmoExpress — La plateforme immobilière intelligente · Sans engagement
+  </div>
+</div>
+
+<!-- VERSO -->
+<div class="flyer verso">
+  <div style="margin-top:auto">
+    <h2>🚀 Boostez votre agence</h2>
+    <p class="sub">
+      Plus de visibilité · Meilleurs scores · Plus de leads<br>
+      Rejoignez les premières agences connectées du 42
+    </p>
+
+    <div style="background:#f3f4f6;border-radius:10px;padding:16px 20px;text-align:left;margin-bottom:16px">
+      <div style="font-size:13px;font-weight:600;margin-bottom:6px">🔬 Comment ça marche ?</div>
+      <div style="font-size:11px;color:#4b5563;line-height:1.6">
+        1. Déposez vos annonces<br>
+        2. L'IA calcule un score de confiance /100<br>
+        3. Les acheteurs/locateurs voient le score<br>
+        4. Vous recevez les leads directement<br>
+        5. Suivez tout depuis votre dashboard
+      </div>
+    </div>
+
+    <div style="margin:16px 0">
+      <div class="cta">📱 2 ans gratuits</div>
+    </div>
+
+    <div class="contact">
+      <strong>Robin</strong> — Votre conseiller ImmoExpress<br>
+      📍 Saint-Just-Saint-Rambert (42)<br>
+      📧 <strong>robin@immo-express.fr</strong><br>
+      📱 <strong>06 XX XX XX XX</strong>
+    </div>
+
+    <div style="margin-top:auto;padding-top:12px;font-size:10px;color:#9ca3af">
+      Offre valable pour les 5 premières souscriptions · 2 ans gratuits · Sans engagement · Résiliable à tout moment
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
