@@ -6,7 +6,7 @@
   <title>Notation Immobilière — Immo-Express</title>
   <link rel="icon" href="assets/icon-192.svg" type="image/svg+xml">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sql.js@1.11.0/dist/sql-wasm.js"></script>
     <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     :root{--white:#fff;--bg:#f3f4f6;--bg-card:#fff;--border:#e5e7eb;--border-hover:#d1d5db;--text:#111827;--text-secondary:#6b7280;--text-tertiary:#9ca3af;--blue:#2563eb;--blue-light:#eff6ff;--blue-dark:#1d4ed8;--green:#059669;--green-light:#ecfdf5;--orange:#d97706;--orange-light:#fef3c7;--red:#dc2626;--red-light:#fef2f2;--purple:#7c3aed;--purple-light:#f5f3ff;--teal:#0d9488;--teal-light:#f0fdfa;--shadow-sm:0 1px 2px rgba(0,0,0,0.05);--shadow:0 1px 3px rgba(0,0,0,0.1),0 1px 2px rgba(0,0,0,0.06);--shadow-md:0 4px 6px rgba(0,0,0,0.07),0 2px 4px rgba(0,0,0,0.06);--shadow-lg:0 10px 25px rgba(0,0,0,0.1);--radius-sm:6px;--radius:8px;--radius-lg:12px;--font:'Inter',-apple-system,BlinkMacSystemFont,sans-serif}
@@ -583,47 +583,105 @@
 
 <script>
 // ========== MARKET DATA — DONNÉES DE RÉFÉRENCE POUR LA FRANCE ==========
-const marketData = {
-  'paris 11e':   {avgPrice:10500, avgRent:28, risk:3, transport:95, projets:['Nouvelle ligne métro 11 prolongée','ZAC Paris Est','Végétalisation rues']},
-  'paris 16e':   {avgPrice:14000, avgRent:30, risk:2, transport:92, projets:['Rénovation Trocadéro','Jardin climato-résilient']},
-  'paris 6e':    {avgPrice:15000, avgRent:32, risk:2, transport:96, projets:['Piétonnisation quais Seine']},
-  'lyon 6e':     {avgPrice:6400,  avgRent:22, risk:3, transport:88, projets:['Métro E','Confluence']},
-  'lyon 3e':     {avgPrice:5500,  avgRent:20, risk:4, transport:87, projets:['Pôle multimodal','Rénovation Part-Dieu']},
-  'marseille corniche':{avgPrice:5800,avgRent:18,risk:2,transport:72, projets:['Rénovation Vieux-Port','Euroméditerranée']},
-  'marseille':   {avgPrice:4200,  avgRent:16, risk:5, transport:70, projets:['Euroméditerranée','Nouveau stade']},
-  'bordeaux':    {avgPrice:5800,  avgRent:22, risk:6, transport:85, projets:['LGV Bordeaux-Toulouse','Pont Simone Veil']},
-  'bordeaux centre':{avgPrice:6200,avgRent:24,risk:6,transport:88,projets:['Tram extension','Piétonnisation centre']},
-  'toulouse':    {avgPrice:4200,  avgRent:18, risk:5, transport:82, projets:['Ligne C métro','Aéroport']},
-  'toulouse ramonville':{avgPrice:3900,avgRent:17,risk:4,transport:80,projets:['Métro Ligne B extension']},
-  'cannes':      {avgPrice:9500,  avgRent:28, risk:1, transport:72, projets:['Palais des Festivals rénovation']},
-  'nice':        {avgPrice:5500,  avgRent:22, risk:4, transport:78, projets:['Tram Ouest-Est','Grand Arénas']},
-  'aix en provence':{avgPrice:5200,avgRent:20,risk:3,transport:70,projets:['Parc d\'activités','Métro?']},
-  'aix-en-provence':{avgPrice:5200,avgRent:20,risk:3,transport:70,projets:['Parc d\'activités']},
-  'rennes':      {avgPrice:4400,  avgRent:19, risk:4, transport:80, projets:['Ligne B métro','ZAC Atalante']},
-  'strasbourg':  {avgPrice:4300,  avgRent:20, risk:7, transport:85, projets:['Tram extension','Pont de l\'Europe']},
-  'strasbourg orangerie':{avgPrice:4800,avgRent:22,risk:7,transport:87,projets:['Parc Orangerie rénovation']},
-  'montpellier': {avgPrice:3800,  avgRent:18, risk:6, transport:82, projets:['Ligne 5 tram','ZAC ODE']},
-  'montpellier antigone':{avgPrice:4000,avgRent:19,risk:6,transport:84,projets:['Tram']},
-  'nantes':      {avgPrice:4000,  avgRent:19, risk:6, transport:80, projets:['Ligne C tram','Île de Nantes']},
-  'lille':       {avgPrice:3500,  avgRent:17, risk:6, transport:88, projets:['Métro extension','Euralille']},
-  'grenoble':    {avgPrice:3200,  avgRent:16, risk:4, transport:78, projets:['Tram','Écoquartier']},
-  'gordes':      {avgPrice:6500,  avgRent:22, risk:2, transport:30, projets:['Rénovation centre historique']},
-  'luberon':     {avgPrice:5500,  avgRent:20, risk:2, transport:25, projets:['Protection parc naturel']},
-  'saint etienne':{avgPrice:1800, avgRent:12, risk:3, transport:60, projets:['Rénovation centre','Cité du design']},
-};
+// ========== BASE DE DONNÉES SQLITE ==========
+let db = null;
+let dbReady = false;
 
-function findMarket(city) {
-  const q = city.trim().toLowerCase();
-  if(marketData[q]) return marketData[q];
-  // fuzzy match
-  for(const k in marketData){
-    if(q.includes(k) || k.includes(q)) return marketData[k];
+async function initDB() {
+  try {
+    const SQL = await initSqlJs();
+    const resp = await fetch('assets/france.db');
+    const buf = await resp.arrayBuffer();
+    db = new SQL.Database(new Uint8Array(buf));
+    dbReady = true;
+    console.log('✅ Base France chargée :', db.exec('SELECT COUNT(*) FROM cities')[0].values[0][0], 'villes');
+  } catch(e) {
+    console.warn('⚠️ Base de données non disponible, fallback données statiques');
+    dbReady = false;
   }
-  // generic default
-  return {avgPrice:2500, avgRent:14, risk:5, transport:50, projets:['Non renseigné']};
 }
 
-// Risk labels
+function dbFindCity(query) {
+  if(!dbReady || !db) return null;
+  const q = query.trim().toLowerCase().replace(/['']/g, '').replace(/[^a-z0-9\s-]/g, '').trim();
+  try {
+    // Exact match by slug or name
+    let sql = "SELECT c.*, m.avg_price_per_m2, m.avg_rent_per_m2, m.flood_risk, m.transport_score, m.projects, d.name as dept_name, r.name as region_name FROM cities c LEFT JOIN market_data m ON c.id = m.city_id JOIN departments d ON c.department_code = d.code JOIN regions r ON d.region_code = r.code WHERE LOWER(c.name) = ?";
+    let row = db.exec(sql, [q]);
+    if(row.length && row[0].values.length) return rowToMarket(row[0].values[0]);
+
+    // Try fuzzy LIKE
+    sql = "SELECT c.*, m.avg_price_per_m2, m.avg_rent_per_m2, m.flood_risk, m.transport_score, m.projects, d.name as dept_name, r.name as region_name FROM cities c LEFT JOIN market_data m ON c.id = m.city_id JOIN departments d ON c.department_code = d.code JOIN regions r ON d.region_code = r.code WHERE LOWER(c.name) LIKE ? LIMIT 1";
+    row = db.exec(sql, ['%' + q + '%']);
+    if(row.length && row[0].values.length) return rowToMarket(row[0].values[0]);
+
+    // Try by zipcode match
+    if(/^\d{5}$/.test(q)) {
+      sql = "SELECT c.*, m.avg_price_per_m2, m.avg_rent_per_m2, m.flood_risk, m.transport_score, m.projects, d.name as dept_name, r.name as region_name FROM cities c LEFT JOIN market_data m ON c.id = m.city_id JOIN departments d ON c.department_code = d.code JOIN regions r ON d.region_code = r.code WHERE c.zipcode = ? LIMIT 1";
+      row = db.exec(sql, [q]);
+      if(row.length && row[0].values.length) return rowToMarket(row[0].values[0]);
+    }
+
+    // Try keyword split (e.g. "saint etienne" -> match "Saint-Étienne")
+    for(const word of q.split(/[\s-]+/)) {
+      if(word.length < 2) continue;
+      sql = "SELECT c.*, m.avg_price_per_m2, m.avg_rent_per_m2, m.flood_risk, m.transport_score, m.projects, d.name as dept_name, r.name as region_name FROM cities c LEFT JOIN market_data m ON c.id = m.city_id JOIN departments d ON c.department_code = d.code JOIN regions r ON d.region_code = r.code WHERE LOWER(c.name) LIKE ? LIMIT 1";
+      row = db.exec(sql, ['%' + word + '%']);
+      if(row.length && row[0].values.length) return rowToMarket(row[0].values[0]);
+    }
+
+    // Last resort: average by department
+    sql = "SELECT d.code as dept_code, d.name as dept_name, r.name as region_name, AVG(m.avg_price_per_m2) as avg_p, AVG(m.avg_rent_per_m2) as avg_r, AVG(m.flood_risk) as avg_flood, AVG(m.transport_score) as avg_transport FROM cities c JOIN market_data m ON c.id = m.city_id JOIN departments d ON c.department_code = d.code JOIN regions r ON d.region_code = r.code WHERE LOWER(d.name) LIKE ? OR LOWER(r.name) LIKE ? GROUP BY d.code LIMIT 1";
+    row = db.exec(sql, ['%' + q + '%', '%' + q + '%']);
+    if(row.length && row[0].values.length) {
+      const v = row[0].values[0];
+      return {avgPrice: Math.round(v[4]||2500), avgRent: Math.round(v[5]||14), risk: Math.round(v[6]||3), transport: Math.round(v[7]||50), projets: ['Données basées sur le département ' + v[1]]};
+    }
+  } catch(e) {
+    console.warn('DB query error:', e);
+  }
+  return null;
+}
+
+function rowToMarket(r) {
+  let projets = [];
+  try { projets = JSON.parse(r[12]||'[]'); } catch(e) { projets = ['Projets en développement'] }
+  return {
+    avgPrice: r[8] || 2500,
+    avgRent: r[9] || 14,
+    risk: r[10] || 3,
+    transport: r[11] || 50,
+    projets: projets,
+    city: r[1],
+    dept: r[13],
+    region: r[14],
+    population: r[5]
+  };
+}
+
+// Fallback market data
+function findMarket(city) {
+  if(!city) return {avgPrice:2500, avgRent:14, risk:3, transport:50, projets:['Non renseigné']};
+  const dbResult = dbFindCity(city);
+  if(dbResult) return dbResult;
+  // Generic default by region keywords
+  const q = city.trim().toLowerCase();
+  if(q.includes('paris')) return {avgPrice:10500, avgRent:28, risk:3, transport:95, projets:['Île-de-France — Grand Paris Express']};
+  if(q.includes('lyon')) return {avgPrice:5500, avgRent:20, risk:3, transport:88, projets:['Auvergne-Rhône-Alpes — Métro E']};
+  if(q.includes('marseille')) return {avgPrice:4200, avgRent:16, risk:5, transport:70, projets:['PACA — Euroméditerranée']};
+  if(q.includes('bordeaux')) return {avgPrice:5800, avgRent:22, risk:6, transport:85, projets:['Nouvelle-Aquitaine — LGV']};
+  if(q.includes('toulouse')) return {avgPrice:4200, avgRent:18, risk:5, transport:82, projets:['Occitanie — Ligne C métro']};
+  if(q.includes('nice')||q.includes('cannes')) return {avgPrice:6500, avgRent:24, risk:3, transport:75, projets:['PACA — Grand Arénas']};
+  if(q.includes('lille')) return {avgPrice:3500, avgRent:17, risk:6, transport:88, projets:['Hauts-de-France — Euralille']};
+  if(q.includes('strasbourg')) return {avgPrice:4300, avgRent:20, risk:7, transport:85, projets:['Grand Est — Tram extension']};
+  if(q.includes('nantes')) return {avgPrice:4000, avgRent:19, risk:6, transport:80, projets:['Pays de la Loire — Île de Nantes']};
+  if(q.includes('rennes')) return {avgPrice:4400, avgRent:19, risk:4, transport:80, projets:['Bretagne — Ligne B']};
+  if(q.includes('montpellier')) return {avgPrice:3800, avgRent:18, risk:6, transport:82, projets:['Occitanie — Ligne 5 tram']};
+  // Regional average
+  return {avgPrice:2500, avgRent:14, risk:4, transport:55, projets:['Consultez les données locales']};
+}
+
+// Risk labels and colors (kept from before)
 const riskLabels = {1:'Très faible',2:'Faible',3:'Modéré',4:'Moyen',5:'Élevé',6:'Fort',7:'Très fort'};
 const riskColors = {1:['#059669','#ecfdf5'],2:['#0d9488','#f0fdfa'],3:['#d97706','#fef3c7'],4:['#ea580c','#fff7ed'],5:['#dc2626','#fef2f2'],6:['#b91c1c','#fef2f2'],7:['#991b1b','#fef2f2']};
 
@@ -1599,6 +1657,7 @@ function saveScore() {
 
 // ========== INIT ==========
 document.addEventListener('DOMContentLoaded', () => {
+  initDB();
   renderListings();
   // Mobile menu toggle
   document.getElementById('menuToggle').addEventListener('click', () => {
