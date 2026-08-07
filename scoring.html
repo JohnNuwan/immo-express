@@ -6,8 +6,223 @@
   <title>Scoring Immobilier — Immo-Express · NODUS</title>
   <meta name="theme-color" content="#14141a">
   <link rel="icon" href="assets/icon-192.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="css/nodus.css">
-</head>
+<link rel="stylesheet" href="css/nodus.css">
+  <style>
+
+    /* HEADER */
+    .header{background:var(--white);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+    .header-inner{max-width:1200px;margin:0 auto;padding:0 20px;height:64px;display:flex;align-items:center;justify-content:space-between}
+    .logo{font-size:1.35rem;font-weight:800;color:var(--text);display:flex;align-items:center;gap:8px;cursor:pointer}
+    .logo-icon{width:32px;height:32px;background:var(--blue);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;color:white;font-size:1rem;font-weight:700}
+    .logo span{color:var(--blue)}
+    .header-links{display:flex;align-items:center;gap:4px}
+    .header-links a{padding:8px 16px;border-radius:var(--radius);font-size:0.875rem;font-weight:500;color:var(--text-secondary);transition:all 0.15s;text-decoration:none}
+    .header-links a:hover{background:var(--bg);color:var(--text);text-decoration:none}
+    .header-links a.active{color:var(--blue);background:var(--blue-light)}
+    .mobile-toggle{display:none;background:none;border:none;font-size:1.5rem;cursor:pointer;padding:4px;color:var(--text)}
+
+    /* HERO */
+    .hero-score{background:linear-gradient(135deg,var(--blue) 0%,#1e40af 100%);padding:40px 20px;text-align:center}
+    .hero-score h1{font-size:1.8rem;font-weight:700;color:white;margin-bottom:6px}
+    .hero-score p{color:rgba(255,255,255,0.85);font-size:0.95rem;margin-bottom:24px;max-width:600px;margin-left:auto;margin-right:auto}
+
+    /* MODE TOGGLE */
+    .mode-toggle{display:flex;gap:8px;justify-content:center;margin-bottom:24px;flex-wrap:wrap}
+    .mode-btn{padding:12px 28px;border:2px solid rgba(255,255,255,0.3);border-radius:50px;background:transparent;color:rgba(255,255,255,0.8);font-size:0.9rem;font-weight:500;cursor:pointer;font-family:var(--font);transition:all 0.2s}
+    .mode-btn:hover{background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.5)}
+    .mode-btn.active{background:white;color:var(--blue);border-color:white;font-weight:600}
+
+    /* MAIN */
+    .scoring-main{max-width:1200px;margin:0 auto;padding:24px 20px}
+
+    /* FORM */
+    .scoring-form{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px;margin-bottom:24px;display:none}
+    .scoring-form.active{display:block}
+    .scoring-form h2{font-size:1.1rem;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+    .scoring-form h2 .icon{font-size:1.3rem}
+    .form-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-bottom:20px}
+    .form-group{display:flex;flex-direction:column;gap:4px}
+    .form-group label{font-size:0.8rem;font-weight:500;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.3px}
+    .form-group input,.form-group select{width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:0.85rem;font-family:var(--font);background:var(--white);color:var(--text);outline:none;transition:border-color 0.15s}
+    .form-group input:focus,.form-group select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,99,235,0.1)}
+    .form-group .helper{font-size:0.7rem;color:var(--text-tertiary)}
+    .form-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px}
+    .form-actions{display:flex;gap:12px;justify-content:flex-end;padding-top:16px;border-top:1px solid var(--border)}
+    .btn-primary{padding:12px 32px;background:var(--blue);color:white;border:none;border-radius:var(--radius);font-weight:600;font-size:0.9rem;cursor:pointer;font-family:var(--font);transition:background 0.15s}
+    .btn-primary:hover{background:var(--blue-dark)}
+    .btn-secondary{padding:12px 32px;background:var(--white);color:var(--text-secondary);border:1px solid var(--border);border-radius:var(--radius);font-weight:500;font-size:0.9rem;cursor:pointer;font-family:var(--font);transition:all 0.15s}
+    .btn-secondary:hover{background:var(--bg);border-color:var(--border-hover)}
+    .btn-success{padding:12px 32px;background:var(--green);color:white;border:none;border-radius:var(--radius);font-weight:600;font-size:0.9rem;cursor:pointer;font-family:var(--font);transition:background 0.15s}
+    .btn-success:hover{background:#047857}
+
+    /* RESULTS */
+    .score-results{display:none}
+    .score-results.active{display:block}
+
+    /* SCORE HERO CARD */
+    .score-hero-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:32px;margin-bottom:24px;display:grid;grid-template-columns:auto 1fr;gap:32px;align-items:center}
+    @media(max-width:700px){.score-hero-card{grid-template-columns:1fr;text-align:center}}
+    .score-circle{width:160px;height:160px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;flex-shrink:0;margin:0 auto}
+    .score-circle canvas{position:absolute;top:0;left:0;width:160px;height:160px}
+    .score-circle .score-value{font-size:2.6rem;font-weight:800;z-index:1;color:var(--text)}
+    .score-circle .score-label{font-size:0.7rem;color:var(--text-secondary);z-index:1;font-weight:500;text-transform:uppercase;letter-spacing:0.5px}
+    .score-hero-info h2{font-size:1.3rem;font-weight:600;margin-bottom:4px}
+    .score-hero-info .location{font-size:0.9rem;color:var(--text-secondary);margin-bottom:8px}
+    .score-hero-info .price{font-size:1.5rem;font-weight:700;color:var(--blue);margin-bottom:6px}
+    .score-hero-info .verdict{font-size:0.9rem;padding:8px 16px;border-radius:var(--radius);font-weight:500;display:inline-block}
+    .verdict-excellent{background:var(--green-light);color:var(--green)}
+    .verdict-good{background:var(--teal-light);color:var(--teal)}
+    .verdict-average{background:var(--orange-light);color:var(--orange)}
+    .verdict-poor{background:var(--red-light);color:var(--red)}
+
+    /* SCORE GRID */
+    .score-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px;margin-bottom:24px}
+    .score-item{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px}
+    .score-item-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+    .score-item-header .label{font-size:0.9rem;font-weight:600;display:flex;align-items:center;gap:8px}
+    .score-item-header .label .emoji{font-size:1.2rem}
+    .score-item-header .value{font-size:1.2rem;font-weight:700}
+    .score-bar{height:8px;background:var(--bg);border-radius:4px;overflow:hidden;margin-bottom:8px}
+    .score-bar-fill{height:100%;border-radius:4px;transition:width 1s ease}
+    .score-detail{font-size:0.8rem;color:var(--text-secondary);display:flex;justify-content:space-between}
+    .score-detail .detail-label{color:var(--text-tertiary)}
+    .score-detail .detail-value{font-weight:500}
+
+    /* RADAR CHART */
+    .radar-section{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px;margin-bottom:24px}
+    .radar-section h3{font-size:1rem;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+    .radar-container{max-width:500px;margin:0 auto;position:relative}
+
+    /* BREAKDOWN TABLE */
+    .breakdown-table-wrap{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px;margin-bottom:24px;overflow-x:auto}
+    .breakdown-table-wrap h3{font-size:1rem;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+    table.score-table{width:100%;border-collapse:collapse;font-size:0.85rem}
+    table.score-table th{text-align:left;padding:10px 12px;background:var(--bg);font-weight:500;color:var(--text-secondary);font-size:0.8rem;text-transform:uppercase;letter-spacing:0.3px;border-bottom:1px solid var(--border)}
+    table.score-table td{padding:10px 12px;border-bottom:1px solid var(--border)}
+    table.score-table tr:last-child td{border-bottom:none}
+    table.score-table tr:hover td{background:var(--bg)}
+    table.score-table .td-score{font-weight:700;text-align:center}
+    table.score-table .td-weight{color:var(--text-secondary);text-align:center}
+    .mini-bar{display:inline-block;height:6px;width:60px;background:var(--bg);border-radius:3px;vertical-align:middle;margin-right:8px}
+    .mini-bar-fill{height:100%;border-radius:3px;display:block}
+
+    /* SELECTED LISTING */
+    .selected-listing{background:var(--blue-light);border:1px solid var(--blue);border-radius:var(--radius-lg);padding:16px 20px;margin-bottom:20px;display:none;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+    .selected-listing.show{display:flex}
+    .selected-listing-info{display:flex;align-items:center;gap:12px}
+    .selected-listing-info .emoji-big{font-size:2rem}
+    .selected-listing-info .title{font-weight:600;font-size:0.95rem}
+    .selected-listing-info .sub{font-size:0.8rem;color:var(--text-secondary)}
+    .selected-listing .btn-remove{background:none;border:none;color:var(--red);cursor:pointer;font-size:0.85rem;font-weight:500;padding:6px 12px;border-radius:var(--radius-sm)}
+    .selected-listing .btn-remove:hover{background:var(--red-light)}
+
+    /* EXISTING LISTINGS BROWSER */
+    .listing-browser{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;margin-bottom:24px;display:none}
+    .listing-browser.active{display:block}
+    .listing-browser h3{font-size:1rem;font-weight:600;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+    .lb-search{display:flex;gap:8px;margin-bottom:16px}
+    .lb-search input{flex:1;padding:10px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:0.85rem;font-family:var(--font);outline:none}
+    .lb-search input:focus{border-color:var(--blue)}
+    .lb-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;max-height:400px;overflow-y:auto}
+    .lb-card{display:flex;align-items:center;gap:12px;padding:12px;border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;transition:all 0.15s}
+    .lb-card:hover{border-color:var(--blue);background:var(--blue-light)}
+    .lb-card .emoji{font-size:1.8rem;width:48px;text-align:center}
+    .lb-card .info{flex:1;min-width:0}
+    .lb-card .info .title{font-size:0.85rem;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .lb-card .info .sub{font-size:0.75rem;color:var(--text-secondary)}
+    .lb-card .btn-analyze{padding:6px 16px;background:var(--blue);color:white;border:none;border-radius:var(--radius-sm);font-size:0.8rem;font-weight:500;cursor:pointer;font-family:var(--font);transition:background 0.15s}
+    .lb-card .btn-analyze:hover{background:var(--blue-dark)}
+
+    /* COMPARE */
+    .compare-section{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px;margin-bottom:24px;display:none}
+    .compare-section.active{display:block}
+    .compare-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+    .compare-card{border:1px solid var(--border);border-radius:var(--radius);padding:16px;position:relative}
+    .compare-card .c-score{font-size:1.4rem;font-weight:700;margin-bottom:4px}
+    .compare-card .c-title{font-size:0.85rem;font-weight:500;margin-bottom:2px}
+    .compare-card .c-sub{font-size:0.75rem;color:var(--text-secondary)}
+    .compare-card .c-bar{margin-top:8px}
+
+    /* TIPS */
+    .tips-section{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px;margin-bottom:24px;display:none}
+    .tips-section.active{display:block}
+    .tips-section h3{font-size:1rem;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+    .tips-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
+    .tip-item{padding:14px;background:var(--bg);border-radius:var(--radius);font-size:0.85rem}
+    .tip-item .tip-icon{font-size:1.2rem;margin-right:8px}
+    .tip-item .tip-title{font-weight:600;margin-bottom:4px}
+    .tip-item .tip-desc{color:var(--text-secondary);font-size:0.8rem}
+
+    /* LOADING */
+    .loading-spinner{display:none;text-align:center;padding:40px}
+    .loading-spinner.active{display:block}
+    .spinner{width:40px;height:40px;border:4px solid var(--border);border-top-color:var(--blue);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 12px}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .loading-spinner p{color:var(--text-secondary);font-size:0.85rem}
+
+    /* RESPONSIVE */
+    @media(max-width:900px){
+      .header-links a{font-size:0.8rem;padding:6px 10px}
+      .score-grid{grid-template-columns:1fr}
+    }
+    @media(max-width:640px){
+          .mobile-toggle{display:block}
+          .header-links{display:none;position:absolute;top:64px;left:0;right:0;background:var(--white);border-bottom:1px solid var(--border);flex-direction:column;padding:12px;box-shadow:var(--shadow-md)}
+          .header-links.open{display:flex}
+          .header-links a{padding:12px 16px;width:100%}
+          .hero-score h1{font-size:1.3rem}
+          .score-hero-card{padding:20px}
+          .score-circle{width:120px;height:120px}
+          .score-circle .score-value{font-size:2rem}
+          .form-grid{grid-template-columns:1fr}
+          .form-row{grid-template-columns:1fr}
+          .risques-grid{grid-template-columns:1fr}
+          .risk-map{height:250px}
+        }
+
+        /* ========== RISQUES GÉOGRAPHIQUES ========== */
+        .risques-form{display:none}
+        .risques-form.active{display:block}
+        .risques-form .form-grid{grid-template-columns:1fr 1fr}
+        .risques-results{display:none}
+        .risques-results.active{display:block}
+        .risk-hero{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px;margin-bottom:20px}
+        .risk-hero-inner{display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:center}
+        @media(max-width:700px){.risk-hero-inner{grid-template-columns:1fr;text-align:center}}
+        .risk-score-circle{width:120px;height:120px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto;flex-shrink:0}
+        .risk-score-circle .rs-value{font-size:2.2rem;font-weight:800;color:var(--text)}
+        .risk-score-circle .rs-label{font-size:0.7rem;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.5px}
+        .risk-hero-info h2{font-size:1.2rem;font-weight:600;margin-bottom:4px}
+        .risk-hero-info .risk-addr{font-size:0.85rem;color:var(--text-secondary);margin-bottom:6px}
+        .risk-hero-info .risk-niveau{font-size:0.95rem;padding:6px 16px;border-radius:var(--radius);font-weight:600;display:inline-block;margin-top:4px}
+        .risk-map-wrap{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;margin-bottom:20px}
+        .risk-map-wrap h3{font-size:1rem;font-weight:600;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+        .risk-map{height:350px;border-radius:var(--radius);overflow:hidden;border:1px solid var(--border)}
+        .risques-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;margin-bottom:20px}
+        .risk-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px;transition:box-shadow 0.2s}
+        .risk-card:hover{box-shadow:var(--shadow-md)}
+        .risk-card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+        .risk-card-header .rc-label{font-size:0.9rem;font-weight:600;display:flex;align-items:center;gap:8px}
+        .risk-card-header .rc-score{font-size:1.1rem;font-weight:700}
+        .risk-bar{height:8px;background:var(--bg);border-radius:4px;overflow:hidden;margin-bottom:6px}
+        .risk-bar-fill{height:100%;border-radius:4px;transition:width 1s ease}
+        .risk-card-detail{font-size:0.8rem;color:var(--text-secondary);display:flex;justify-content:space-between;flex-wrap:wrap;gap:4px}
+        .risk-table-wrap{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px;margin-bottom:20px;overflow-x:auto}
+        .risk-table-wrap h3{font-size:1rem;font-weight:600;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+        .risk-summary{background:var(--blue-light);border:1px solid var(--blue);border-radius:var(--radius-lg);padding:20px;margin-bottom:20px;display:none}
+        .risk-summary.active{display:block}
+        .risk-summary h3{font-size:0.95rem;font-weight:600;margin-bottom:8px;color:var(--blue)}
+        .risk-summary p{font-size:0.85rem;color:var(--text-secondary);line-height:1.6}
+        .risk-integrated{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;margin-bottom:20px;display:none}
+        .risk-integrated.active{display:block}
+        .risk-integrated h3{font-size:0.95rem;font-weight:600;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+        .risk-integrated .ri-grid{display:flex;gap:16px;flex-wrap:wrap;align-items:center}
+        .risk-integrated .ri-item{text-align:center;padding:12px 20px;background:var(--bg);border-radius:var(--radius);flex:1;min-width:120px}
+        .risk-integrated .ri-item .ri-val{font-size:1.5rem;font-weight:700}
+        .risk-integrated .ri-item .ri-lbl{font-size:0.75rem;color:var(--text-secondary)}
+        .risk-integrated .ri-item .ri-sub{font-size:0.7rem;color:var(--text-tertiary)}
+      </style>
+      </head>
 <body class="n-page">
 
     <header class="n-header">
@@ -129,7 +344,7 @@
           </div>
           <p>La plateforme immobilière intelligente. Annonces vérifiées, analyses IA, mise en relation directe.</p>
         </div>
-        <div>
+<div>
           <h4>Annonces</h4>
           <ul>
             <li><a href="vente.html">💰 Acheter</a></li>
@@ -158,11 +373,808 @@
         <span>© 2026 Immo-Express — Plateforme immobilière intelligente</span>
         <span class="n-footer-eva">⚡ Powered by EVA · NODUS SYSTEMS</span>
       </div>
-    </footer>
+</footer>
 <script>
 const property = null;
 let currentMode = "manual";
+      </div>
+    </div>
 
+    <!-- Score Grid -->
+    <div class="score-grid" id="scoreGrid"></div>
+
+    <!-- Breakdown Table -->
+    <div class="breakdown-table-wrap">
+      <h3>📋 Détail de la notation</h3>
+      <table class="score-table">
+        <thead>
+          <tr><th>Critère</th><th>Note</th><th>Coefficient</th><th>Pondéré</th><th>Détail</th></tr>
+        </thead>
+        <tbody id="scoreTableBody"></tbody>
+        <tfoot id="scoreTableFoot"></tfoot>
+      </table>
+    </div>
+
+    <!-- Tips -->
+    <div class="tips-section active" id="tipsSection">
+      <h3>💡 Recommandations & Axes d'amélioration</h3>
+      <div class="tips-grid" id="tipsGrid"></div>
+    </div>
+
+    <!-- Compare -->
+    <div class="compare-section" id="compareSection">
+      <h3>📈 Comparer avec d'autres biens</h3>
+      <div class="compare-grid" id="compareGrid"></div>
+    </div>
+
+    <div style="display:flex;gap:12px;justify-content:center;margin-bottom:24px;flex-wrap:wrap">
+          <button class="btn-primary" onclick="window.print()">🖨️ Imprimer le rapport</button>
+          <button class="btn-secondary" onclick="scrollTo(0,0)">⬆️ Nouvelle analyse</button>
+          <button class="btn-secondary" onclick="saveScore()">💾 Sauvegarder</button>
+        </div>
+      </div>
+
+      <!-- RISQUES RESULTS -->
+      <div class="risques-results" id="risquesResults">
+
+        <!-- Risk Hero -->
+        <div class="risk-hero">
+          <div class="risk-hero-inner">
+            <div class="risk-score-circle" id="riskScoreCircle" style="background:var(--bg)">
+              <span class="rs-value" id="riskScoreValue">—</span>
+              <span class="rs-label">/100</span>
+            </div>
+            <div class="risk-hero-info">
+              <h2 id="riskResultTitle">Analyse des risques géographiques</h2>
+              <div class="risk-addr" id="riskResultAddr">📍 </div>
+              <div class="risk-niveau" id="riskResultNiveau"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Map -->
+        <div class="risk-map-wrap">
+          <h3>🗺️ Localisation du bien</h3>
+          <div class="risk-map" id="riskMap"></div>
+        </div>
+
+        <!-- Risk Cards -->
+        <div class="risques-grid" id="risquesGrid"></div>
+
+        <!-- Risk Table -->
+        <div class="risk-table-wrap">
+          <h3>📋 Détail des risques</h3>
+          <table class="score-table">
+            <thead>
+              <tr><th>Risque</th><th>Note</th><th>Pénalité</th><th>Détail</th></tr>
+            </thead>
+            <tbody id="riskTableBody"></tbody>
+            <tfoot id="riskTableFoot"></tfoot>
+          </table>
+        </div>
+
+        <!-- Summary -->
+        <div class="risk-summary" id="riskSummary">
+          <h3>💡 Synthèse & Recommandations</h3>
+          <p id="riskSummaryText"></p>
+        </div>
+
+        <!-- Integrated Score -->
+            <div class="risk-integrated" id="riskIntegrated">
+              <h3>📊 Intégration au score global</h3>
+              <div class="ri-grid">
+                <div class="ri-item">
+                  <div class="ri-val" id="riScoreGeo" style="color:var(--blue)">—</div>
+                  <div class="ri-lbl">Score Risques</div>
+                  <div class="ri-sub">/100</div>
+                </div>
+                <div class="ri-item">
+                  <div class="ri-val" id="riScoreImmo" style="color:var(--purple)">—</div>
+                  <div class="ri-lbl">Score Immobilier</div>
+                  <div class="ri-sub">de la notation</div>
+                </div>
+                <div class="ri-item">
+                  <div class="ri-val" id="riScoreFinal" style="color:var(--green)">—</div>
+                  <div class="ri-lbl">Score Combiné</div>
+                  <div class="ri-sub">avec risques intégrés</div>
+                </div>
+              </div>
+              <div style="margin-top:12px;text-align:right">
+                <button class="btn-secondary" onclick="runFullAnalysis()">🔬 Lancer la notation complète</button>
+              </div>
+            </div>
+
+            <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+              <button class="btn-primary" onclick="scrollTo(0,0)">⬆️ Nouvelle recherche</button>
+            </div>
+          </div>
+
+          <!-- IGI RESULTS -->
+          <div class="score-results" id="igiResults">
+            <div class="score-hero-card">
+              <div class="score-circle" id="igiScoreCircle">
+                <canvas id="igiCanvas" width="160" height="160"></canvas>
+                <span class="score-value" id="igiFinalValue">—</span>
+                <span class="score-label">/100</span>
+              </div>
+              <div class="score-hero-info">
+                <h2 id="igiResultTitle">Indice Global Immobilier</h2>
+                <div class="location" id="igiResultLocation">📍 </div>
+                <div class="price" id="igiResultPrice"></div>
+                <div class="verdict" id="igiResultVerdict"></div>
+              </div>
+            </div>
+
+            <!-- Radar Chart -->
+            <div class="radar-section">
+              <h3>📊 Radar IGI — 7 critères clés</h3>
+              <div class="radar-container">
+                <canvas id="igiRadarCanvas" width="500" height="420"></canvas>
+              </div>
+            </div>
+
+            <!-- IGI Score Grid -->
+            <div class="score-grid" id="igiGrid"></div>
+
+            <!-- IGI Tips -->
+            <div class="tips-section active" id="igiTipsSection">
+              <h3>💡 Recommandations IGI</h3>
+              <div class="tips-grid" id="igiTipsGrid"></div>
+            </div>
+
+            <div style="display:flex;gap:12px;justify-content:center;margin-bottom:24px;flex-wrap:wrap">
+              <button class="btn-primary" onclick="scrollTo(0,0)">⬆️ Nouvelle analyse</button>
+              <button class="btn-secondary" onclick="saveIGI()">💾 Sauvegarder</button>
+            </div>
+          </div>
+        </div>
+
+<script>
+// ========== MARKET DATA — DONNÉES DE RÉFÉRENCE POUR LA FRANCE ==========
+// ========== BASE DE DONNÉES SQLITE ==========
+let db = null;
+let dbReady = false;
+
+async function initDB() {
+  try {
+    const SQL = await initSqlJs();
+    const resp = await fetch('assets/france.db');
+    const buf = await resp.arrayBuffer();
+    db = new SQL.Database(new Uint8Array(buf));
+    dbReady = true;
+    console.log('✅ Base France chargée :', db.exec('SELECT COUNT(*) FROM cities')[0].values[0][0], 'villes');
+  } catch(e) {
+    console.warn('⚠️ Base de données non disponible, fallback données statiques');
+    dbReady = false;
+  }
+}
+
+function dbFindCity(query) {
+  if(!dbReady || !db) return null;
+  const q = query.trim().toLowerCase().replace(/['']/g, '').replace(/[^a-z0-9\s-]/g, '').trim();
+  try {
+    // Exact match by slug or name
+    let sql = "SELECT c.*, m.avg_price_per_m2, m.avg_rent_per_m2, m.flood_risk, m.transport_score, m.projects, d.name as dept_name, r.name as region_name FROM cities c LEFT JOIN market_data m ON c.id = m.city_id JOIN departments d ON c.department_code = d.code JOIN regions r ON d.region_code = r.code WHERE LOWER(c.name) = ?";
+    let row = db.exec(sql, [q]);
+    if(row.length && row[0].values.length) return rowToMarket(row[0].values[0]);
+
+    // Try fuzzy LIKE
+    sql = "SELECT c.*, m.avg_price_per_m2, m.avg_rent_per_m2, m.flood_risk, m.transport_score, m.projects, d.name as dept_name, r.name as region_name FROM cities c LEFT JOIN market_data m ON c.id = m.city_id JOIN departments d ON c.department_code = d.code JOIN regions r ON d.region_code = r.code WHERE LOWER(c.name) LIKE ? LIMIT 1";
+    row = db.exec(sql, ['%' + q + '%']);
+    if(row.length && row[0].values.length) return rowToMarket(row[0].values[0]);
+
+    // Try by zipcode match
+    if(/^\d{5}$/.test(q)) {
+      sql = "SELECT c.*, m.avg_price_per_m2, m.avg_rent_per_m2, m.flood_risk, m.transport_score, m.projects, d.name as dept_name, r.name as region_name FROM cities c LEFT JOIN market_data m ON c.id = m.city_id JOIN departments d ON c.department_code = d.code JOIN regions r ON d.region_code = r.code WHERE c.zipcode = ? LIMIT 1";
+      row = db.exec(sql, [q]);
+      if(row.length && row[0].values.length) return rowToMarket(row[0].values[0]);
+    }
+
+    // Try keyword split (e.g. "saint etienne" -> match "Saint-Étienne")
+    for(const word of q.split(/[\s-]+/)) {
+      if(word.length < 2) continue;
+      sql = "SELECT c.*, m.avg_price_per_m2, m.avg_rent_per_m2, m.flood_risk, m.transport_score, m.projects, d.name as dept_name, r.name as region_name FROM cities c LEFT JOIN market_data m ON c.id = m.city_id JOIN departments d ON c.department_code = d.code JOIN regions r ON d.region_code = r.code WHERE LOWER(c.name) LIKE ? LIMIT 1";
+      row = db.exec(sql, ['%' + word + '%']);
+      if(row.length && row[0].values.length) return rowToMarket(row[0].values[0]);
+    }
+
+    // Last resort: average by department
+    sql = "SELECT d.code as dept_code, d.name as dept_name, r.name as region_name, AVG(m.avg_price_per_m2) as avg_p, AVG(m.avg_rent_per_m2) as avg_r, AVG(m.flood_risk) as avg_flood, AVG(m.transport_score) as avg_transport FROM cities c JOIN market_data m ON c.id = m.city_id JOIN departments d ON c.department_code = d.code JOIN regions r ON d.region_code = r.code WHERE LOWER(d.name) LIKE ? OR LOWER(r.name) LIKE ? GROUP BY d.code LIMIT 1";
+    row = db.exec(sql, ['%' + q + '%', '%' + q + '%']);
+    if(row.length && row[0].values.length) {
+      const v = row[0].values[0];
+      return {avgPrice: Math.round(v[4]||2500), avgRent: Math.round(v[5]||14), risk: Math.round(v[6]||3), transport: Math.round(v[7]||50), projets: ['Données basées sur le département ' + v[1]]};
+    }
+  } catch(e) {
+    console.warn('DB query error:', e);
+  }
+  return null;
+}
+
+function rowToMarket(r) {
+  let projets = [];
+  try { projets = JSON.parse(r[12]||'[]'); } catch(e) { projets = ['Projets en développement'] }
+  return {
+    avgPrice: r[8] || 2500,
+    avgRent: r[9] || 14,
+    risk: r[10] || 3,
+    transport: r[11] || 50,
+    projets: projets,
+    city: r[1],
+    dept: r[13],
+    region: r[14],
+    population: r[5]
+  };
+}
+
+// Fallback market data
+function findMarket(city) {
+  if(!city) return {avgPrice:2500, avgRent:14, risk:3, transport:50, projets:['Non renseigné']};
+  const dbResult = dbFindCity(city);
+  if(dbResult) return dbResult;
+  // Generic default by region keywords
+  const q = city.trim().toLowerCase();
+  if(q.includes('paris')) return {avgPrice:10500, avgRent:28, risk:3, transport:95, projets:['Île-de-France — Grand Paris Express']};
+  if(q.includes('lyon')) return {avgPrice:5500, avgRent:20, risk:3, transport:88, projets:['Auvergne-Rhône-Alpes — Métro E']};
+  if(q.includes('marseille')) return {avgPrice:4200, avgRent:16, risk:5, transport:70, projets:['PACA — Euroméditerranée']};
+  if(q.includes('bordeaux')) return {avgPrice:5800, avgRent:22, risk:6, transport:85, projets:['Nouvelle-Aquitaine — LGV']};
+  if(q.includes('toulouse')) return {avgPrice:4200, avgRent:18, risk:5, transport:82, projets:['Occitanie — Ligne C métro']};
+  if(q.includes('nice')||q.includes('cannes')) return {avgPrice:6500, avgRent:24, risk:3, transport:75, projets:['PACA — Grand Arénas']};
+  if(q.includes('lille')) return {avgPrice:3500, avgRent:17, risk:6, transport:88, projets:['Hauts-de-France — Euralille']};
+  if(q.includes('strasbourg')) return {avgPrice:4300, avgRent:20, risk:7, transport:85, projets:['Grand Est — Tram extension']};
+  if(q.includes('nantes')) return {avgPrice:4000, avgRent:19, risk:6, transport:80, projets:['Pays de la Loire — Île de Nantes']};
+  if(q.includes('rennes')) return {avgPrice:4400, avgRent:19, risk:4, transport:80, projets:['Bretagne — Ligne B']};
+  if(q.includes('montpellier')) return {avgPrice:3800, avgRent:18, risk:6, transport:82, projets:['Occitanie — Ligne 5 tram']};
+  // Regional average
+  return {avgPrice:2500, avgRent:14, risk:4, transport:55, projets:['Consultez les données locales']};
+}
+
+// Risk labels and colors (kept from before)
+const riskLabels = {1:'Très faible',2:'Faible',3:'Modéré',4:'Moyen',5:'Élevé',6:'Fort',7:'Très fort'};
+const riskColors = {1:['#059669','#ecfdf5'],2:['#0d9488','#f0fdfa'],3:['#d97706','#fef3c7'],4:['#ea580c','#fff7ed'],5:['#dc2626','#fef2f2'],6:['#b91c1c','#fef2f2'],7:['#991b1b','#fef2f2']};
+
+// ========== SCORING ENGINE ==========
+function computeScore(input) {
+  const {city, type, cat, price, surface, pieces, condition, dpe, etage, equip, transports} = input;
+  const market = findMarket(city);
+  const pricePerM2 = surface > 0 ? price / surface : 0;
+
+  // 1. PRIX DE MARCHÉ (25%)
+  let prixScore = 50;
+  if(market.avgPrice > 0){
+    const ratio = pricePerM2 / market.avgPrice;
+    if(cat === 'vente'){
+      if(ratio <= 0.7) prixScore = 95;
+      else if(ratio <= 0.85) prixScore = 85;
+      else if(ratio <= 0.95) prixScore = 75;
+      else if(ratio <= 1.05) prixScore = 65; // au juste prix
+      else if(ratio <= 1.15) prixScore = 50;
+      else if(ratio <= 1.30) prixScore = 35;
+      else if(ratio <= 1.50) prixScore = 20;
+      else prixScore = 10;
+    } else {
+      // location
+      if(ratio <= 0.7) prixScore = 80;
+      else if(ratio <= 0.85) prixScore = 70;
+      else if(ratio <= 1.0) prixScore = 60;
+      else if(ratio <= 1.15) prixScore = 45;
+      else if(ratio <= 1.30) prixScore = 30;
+      else prixScore = 15;
+    }
+  }
+  const prixDetail = `${pricePerM2.toFixed(0)} €/m² vs marché ${market.avgPrice} €/m² (${((pricePerM2/market.avgPrice-1)*100).toFixed(1)}%)`;
+
+  // 2. RENDEMENT LOCATIF (20%)
+  let rendementScore = 0;
+  let rendementDetail = '';
+  if(cat === 'vente'){
+    const estLoyer = surface * market.avgRent;
+    const annualRent = estLoyer * 12;
+    const grossYield = price > 0 ? (annualRent / price) * 100 : 0;
+    if(grossYield >= 8) rendementScore = 95;
+    else if(grossYield >= 6) rendementScore = 85;
+    else if(grossYield >= 5) rendementScore = 75;
+    else if(grossYield >= 4) rendementScore = 65;
+    else if(grossYield >= 3.5) rendementScore = 55;
+    else if(grossYield >= 3) rendementScore = 45;
+    else if(grossYield >= 2.5) rendementScore = 35;
+    else if(grossYield >= 2) rendementScore = 25;
+    else rendementScore = 15;
+    rendementDetail = `Estimation loyer: ${estLoyer.toFixed(0)} €/mois → rendement brut ${grossYield.toFixed(1)}%`;
+  } else {
+    // location: compare prix du loyer au marché
+    const expectedRent = surface * market.avgRent;
+    const ratio = price / expectedRent;
+    if(ratio <= 0.7) rendementScore = 85;
+    else if(ratio <= 0.85) rendementScore = 75;
+    else if(ratio <= 1.0) rendementScore = 65;
+    else if(ratio <= 1.15) rendementScore = 50;
+    else if(ratio <= 1.3) rendementScore = 35;
+    else rendementScore = 20;
+    rendementDetail = `Loyer actuel ${price} € vs marché ${expectedRent.toFixed(0)} € (${((price/expectedRent-1)*100).toFixed(1)}%)`;
+  }
+
+  // 3. LOCALISATION & TRANSPORTS (15%)
+  const transportScore = {excellent:92, bon:78, moyen:55, faible:25};
+  let locScore = transportScore[transports] || 55;
+  locScore = Math.min(100, locScore + (market.transport > 80 ? 8 : market.transport > 60 ? 4 : 0));
+  const locDetail = `Transport: ${transports} · Ville notée ${market.transport}/100`;
+
+  // 4. RISQUES INONDATION (10%)
+  const risk = market.risk || 5;
+  const floodScore = Math.max(5, 100 - (risk * 14));
+  const floodDetail = `Risque: ${riskLabels[risk]} (niveau ${risk}/7)`;
+
+  // 5. PROJETS URBAINS (10%)
+  const projets = market.projets || [];
+  const projCount = projets.length;
+  const projScore = Math.min(95, 40 + projCount * 20 + (projCount > 2 ? 10 : 0));
+  const projDetail = projets.length > 0 ? projets.slice(0,3).join(' · ') : 'Aucun projet majeur identifié';
+
+  // 6. DPE & ÉNERGIE (10%)
+  const dpeScores = {'':40, 'G':10, 'F':20, 'E':35, 'D':50, 'C':65, 'B':80, 'A':95};
+  let dpeScore = dpeScores[dpe] || 40;
+  // bonus pour condition
+  if(condition === 'neuf') dpeScore = Math.max(dpeScore, 70);
+  if(condition === 'renover') dpeScore = Math.min(dpeScore, 30);
+  const dpeDetail = `DPE: ${dpe || 'Non connu'} · État: ${condition}`;
+
+  // 7. QUARTIER & COMMODITÉS (5%)
+  const equipScores = {aucun:20, basique:40, moyen:60, haut:80, luxe:95};
+  let quartierScore = equipScores[equip] || 40;
+  if(market.transport > 80) quartierScore += 10;
+  if(etage > 1 && type !== 'maison') quartierScore += 5;
+  quartierScore = Math.min(100, quartierScore);
+  const quartierDetail = `Équipements: ${equip} · Ville dynamique: ${market.transport > 70 ? 'Oui' : 'Moyen'}`;
+
+  // 8. POTENTIEL PLUS-VALUE (5%)
+  let plusvalScore = 50;
+  if(cat === 'vente'){
+    // neighbourhood, projects, condition
+    if(projCount >= 2) plusvalScore += 15;
+    if(condition === 'renover' || condition === 'travaux') plusvalScore += 15; // marge de rénovation
+    if(market.transport > 75) plusvalScore += 5;
+    if(type === 'villa' || type === 'maison') plusvalScore += 5;
+    if(equip === 'luxe') plusvalScore -= 10; // déjà valorisé
+  } else {
+    plusvalScore = 40; // pas de plus-value en location
+  }
+  plusvalScore = Math.max(5, Math.min(98, plusvalScore));
+  const plusvalDetail = `Projets urbains: ${projCount} · État: ${condition}${condition==='renover'?' (potentiel rénovation)':''}`;
+
+  // WEIGHTS
+  const weights = {
+    prix: 25,
+    rendement: 20,
+    localisation: 15,
+    risque: 10,
+    projets: 10,
+    dpe: 10,
+    quartier: 5,
+    plusvalue: 5
+  };
+
+  const raw = {
+    prix: {score: prixScore, detail: prixDetail, weight: weights.prix},
+    rendement: {score: rendementScore, detail: rendementDetail, weight: weights.rendement},
+    localisation: {score: locScore, detail: locDetail, weight: weights.localisation},
+    risque: {score: floodScore, detail: floodDetail, weight: weights.risque},
+    projets: {score: projScore, detail: projDetail, weight: weights.projets},
+    dpe: {score: dpeScore, detail: dpeDetail, weight: weights.dpe},
+    quartier: {score: quartierScore, detail: quartierDetail, weight: weights.quartier},
+    plusvalue: {score: plusvalScore, detail: plusvalDetail, weight: weights.plusvalue}
+  };
+
+  let final = 0;
+  let totalWeight = 0;
+  for(const k in raw){
+    final += raw[k].score * raw[k].weight;
+    totalWeight += raw[k].weight;
+  }
+  final = Math.round(final / totalWeight);
+
+  // Verdict
+  let verdict, verdictClass;
+  if(final >= 85){verdict='Exceptionnel — Excellent investissement'; verdictClass='verdict-excellent';}
+  else if(final >= 75){verdict='Très bon — Opportunité à saisir'; verdictClass='verdict-excellent';}
+  else if(final >= 65){verdict='Bon — Bien équilibré'; verdictClass='verdict-good';}
+  else if(final >= 55){verdict='Correct — Quelques points d\'attention'; verdictClass='verdict-average';}
+  else if(final >= 45){verdict='Moyen — À étudier avec prudence'; verdictClass='verdict-average';}
+  else if(final >= 35){verdict='Risqué — Plusieurs points faibles'; verdictClass='verdict-poor';}
+  else {verdict='Déconseillé — Investissement risqué'; verdictClass='verdict-poor';}
+
+  // Tips
+  const tips = [];
+  if(prixScore < 40) tips.push({icon:'💰', title:'Prix au-dessus du marché', desc:'Le prix au m² est supérieur à la moyenne locale. Justifiez la différence (prestations, emplacement exceptionnel) ou négociez.'});
+  else if(prixScore > 80) tips.push({icon:'🏷️', title:'Prix attractif', desc:'Le bien est en dessous du prix du marché. Vérifiez qu\'il n\'y a pas de vices cachés.'});
+  if(floodScore < 40) tips.push({icon:'🌊', title:'Zone inondable', desc:'Risque inondation élevé. Vérifiez l\'assurance et l\'historique des crues. Un diagnostic ERNMT est obligatoire.'});
+  if(dpeScore < 30) tips.push({icon:'🔋', title:'Mauvaise performance énergétique', desc:'DPE F ou G (passoire thermique). Des travaux de rénovation seront obligatoires (interdiction location progressive).'});
+  else if(dpeScore > 75) tips.push({icon:'🔋', title:'Bonne performance énergétique', desc:'DPE A ou B — un vrai plus pour la valeur du bien et l\'attractivité locative.'});
+  if(rendementScore < 40 && cat === 'vente') tips.push({icon:'📈', title:'Rendement locatif faible', desc:'Le rendement brut estimé est bas. Vérifiez si le quartier justifie un investissement en plus-value plutôt qu\'en rentabilité.'});
+  if(rendementScore > 75 && cat === 'vente') tips.push({icon:'📈', title:'Bon rendement locatif', desc:'Le rendement brut estimé est intéressant. Vérifiez la demande locative dans le secteur.'});
+  if(projCount >= 2) tips.push({icon:'🏗️', title:'Projets urbains en cours', desc:`Plusieurs projets d'aménagement identifiés : ${projets.slice(0,3).join(', ')}. Potentiel de plus-value à moyen terme.`});
+  if(locScore < 40) tips.push({icon:'🚇', title:'Transports limités', desc:'La desserte en transports en commun est faible. Vérifiez les projets d\'extension.'});
+  if(plusvalScore > 70) tips.push({icon:'📊', title:'Bon potentiel de plus-value', desc:'Plusieurs facteurs favorables : projets urbains, état à rénover, quartier en développement.'});
+  if(tips.length === 0) tips.push({icon:'✅', title:'Profil équilibré', desc:'Le bien présente un bon équilibre entre prix, qualité et potentiel.'});
+
+  return {final, raw, weights, verdict, verdictClass, tips, market, projetNames: projets, _input: input};
+}
+
+// ========== RENDERING ==========
+function renderScore(result, input) {
+  const {final, raw, verdict, verdictClass, tips, market, projetNames} = result;
+  // Compute comparables
+  const comparable = [];
+  const listings = typeof window.allListings !== 'undefined' ? window.allListings : [];
+  for(const l of listings){
+    const inp = {
+      city: l.location||'', type: l.type||'', cat: l.cat||'vente',
+      price: l.price||0, surface: l.surface||50, pieces: l.pieces||2,
+      condition: 'bon', dpe: '', etage: l.etage||0, equip: 'moyen', transports: 'bon'
+    };
+    const cResult = computeScore(inp);
+    comparable.push({title: l.title, price: l.priceLabel, score: cResult.final, id: l.id, emoji: l.emoji});
+  }
+  comparable.sort((a,b)=>b.score-a.score);
+  const comparaison = comparable.slice(0, 6);
+  const city = typeof input.city === 'string' ? input.city : (input.city || '');
+  const priceLabel = input.cat === 'vente' ? `${(input.price||0).toLocaleString('fr-FR')} €` : `${(input.price||0).toLocaleString('fr-FR')} €/mois`;
+  const typeLabel = {appartement:'Appartement',maison:'Maison',villa:'Villa',studio:'Studio',local:'Local commercial'}[input.type]||'Bien';
+
+  // Hero
+  document.getElementById('scoreFinalValue').textContent = final;
+  document.getElementById('resultTitle').textContent = `${typeLabel} — ${city}`;
+  document.getElementById('resultLocation').textContent = `📍 ${city} · ${input.surface} m² · ${input.pieces} pièce(s)`;
+  document.getElementById('resultPrice').textContent = priceLabel;
+  const verdictEl = document.getElementById('resultVerdict');
+  verdictEl.textContent = verdict;
+  verdictEl.className = `verdict ${verdictClass}`;
+  document.getElementById('scoreResults').classList.add('active');
+  document.getElementById('loadingSpinner').classList.remove('active');
+
+  // Draw score circle
+  drawScoreCircle(final);
+
+  // Radar
+  drawRadar(raw);
+
+  // Score grid
+  const grid = document.getElementById('scoreGrid');
+  grid.innerHTML = '';
+  const labels = {
+    prix:'💰 Prix de marché',rendement:'📈 Rendement locatif',localisation:'📍 Localisation & Transports',
+    risque:'🌊 Risques inondation',projets:'🏗️ Projets urbains',dpe:'🔋 DPE & Énergie',
+    quartier:'🏘️ Quartier & Commodités',plusvalue:'📊 Potentiel plus-value'
+  };
+  const emojis = {prix:'💰',rendement:'📈',localisation:'📍',risque:'🌊',projets:'🏗️',dpe:'🔋',quartier:'🏘️',plusvalue:'📊'};
+  const colors = [
+    '#2563eb','#059669','#7c3aed','#dc2626','#d97706','#0d9488','#8b5cf6','#e11d48'
+  ];
+  let i=0;
+  for(const k in raw){
+    const item = document.createElement('div');
+    item.className = 'score-item';
+    const score = Math.round(raw[k].score);
+    const color = score >= 75 ? '#059669' : score >= 55 ? '#d97706' : '#dc2626';
+    item.innerHTML = `
+      <div class="score-item-header">
+        <div class="label"><span class="emoji">${emojis[k]}</span> ${labels[k]}</div>
+        <div class="value" style="color:${color}">${score}<span style="font-size:0.7rem;color:var(--text-tertiary)">/100</span></div>
+      </div>
+      <div class="score-bar"><div class="score-bar-fill" style="width:${score}%;background:${color}"></div></div>
+      <div class="score-detail"><span class="detail-label">Pondération ${raw[k].weight}%</span><span class="detail-value">${raw[k].detail}</span></div>
+    `;
+    grid.appendChild(item);
+    i++;
+  }
+
+  // Table
+  const tbody = document.getElementById('scoreTableBody');
+  tbody.innerHTML = '';
+  let totalWeighted = 0;
+  for(const k in raw){
+    const r = raw[k];
+    const weighted = Math.round(r.score * r.weight / 100);
+    totalWeighted += weighted;
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><strong>${emojis[k]} ${labels[k]}</strong></td>
+      <td class="td-score" style="color:${r.score>=75?'#059669':r.score>=55?'#d97706':'#dc2626'}">${Math.round(r.score)}</td>
+      <td class="td-weight">${r.weight}%</td>
+      <td class="td-score" style="color:${weighted>=15?'#059669':weighted>=10?'#d97706':'#dc2626'}">${weighted}</td>
+      <td style="font-size:0.8rem;color:var(--text-secondary);max-width:250px">${r.detail}</td>
+    `;
+    tbody.appendChild(tr);
+  }
+  const tfoot = document.getElementById('scoreTableFoot');
+  if(!tfoot) return;
+  tfoot.innerHTML = `<tr style="background:var(--bg);font-weight:600"><td>TOTAL</td><td class="td-score">—</td><td class="td-weight">100%</td><td class="td-score" style="color:${final>=75?'#059669':final>=55?'#d97706':'#dc2626'};font-size:1.1rem">${Math.round(totalWeighted)}</td><td>Note finale : ${final}/100 — ${verdict}</td></tr>`;
+
+  // Tips
+  const tipsGrid = document.getElementById('tipsGrid');
+  tipsGrid.innerHTML = '';
+  document.getElementById('tipsSection').classList.add('active');
+  if(tips.length === 0){
+    tipsGrid.innerHTML = '<div class="tip-item"><div class="tip-icon">✅</div><div class="tip-title">Profil équilibré</div><div class="tip-desc">Le bien présente un bon équilibre entre prix, qualité et potentiel.</div></div>';
+  } else {
+    for(const t of tips){
+      const div = document.createElement('div');
+      div.className = 'tip-item';
+      div.innerHTML = `<div><span style="font-size:1.2rem;margin-right:8px">${t.icon}</span><span class="tip-title">${t.title}</span></div><div class="tip-desc">${t.desc}</div>`;
+      tipsGrid.appendChild(div);
+    }
+  }
+
+  // Comparaison
+  const compSection = document.getElementById('compareSection');
+  const compGrid = document.getElementById('compareGrid');
+  compGrid.innerHTML = '';
+  if(comparaison && comparaison.length > 0){
+    compSection.classList.add('active');
+    const myCard = document.createElement('div');
+    myCard.className = 'compare-card';
+    myCard.style.border = '2px solid var(--blue)';
+    myCard.innerHTML = `<div class="c-score" style="color:var(--blue)">${final}<span style="font-size:0.8rem;color:var(--text-tertiary)">/100</span></div>
+      <div class="c-title">📌 Ce bien</div>
+      <div class="c-sub">${city} · ${input.surface}m²</div>
+      <div class="c-bar"><div class="score-bar"><div class="score-bar-fill" style="width:${final}%;background:var(--blue)"></div></div></div>`;
+    compGrid.appendChild(myCard);
+    for(const c of comparaison.slice(0,5)){
+      const card = document.createElement('div');
+      card.className = 'compare-card';
+      const s = c.score;
+      const color = s >= 75 ? '#059669' : s >= 55 ? '#d97706' : '#dc2626';
+      card.innerHTML = `<div class="c-score" style="color:${color}">${s}<span style="font-size:0.8rem;color:var(--text-tertiary)">/100</span></div>
+        <div class="c-title">${c.emoji||'🏠'} ${c.title}</div>
+        <div class="c-sub">${c.price||''}</div>
+        <div class="c-bar"><div class="score-bar"><div class="score-bar-fill" style="width:${s}%;background:${color}"></div></div></div>`;
+      compGrid.appendChild(card);
+    }
+  } else {
+    compSection.classList.remove('active');
+  }
+
+  // Scroll to results
+  document.getElementById('scoreResults').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+// ========== DRAWING ==========
+function drawScoreCircle(score) {
+  const canvas = document.getElementById('scoreCanvas');
+  const ctx = canvas.getContext('2d');
+  const w = canvas.width, h = canvas.height;
+  ctx.clearRect(0,0,w,h);
+
+  const cx = w/2, cy = h/2, r = 68;
+  const start = -Math.PI/2;
+  const end = start + (score/100) * Math.PI * 2;
+  const color = score >= 75 ? '#059669' : score >= 55 ? '#d97706' : '#dc2626';
+
+  // bg circle
+  ctx.beginPath();
+  ctx.arc(cx, cy, r, 0, Math.PI*2);
+  ctx.strokeStyle = '#e5e7eb';
+  ctx.lineWidth = 10;
+  ctx.stroke();
+
+  // progress arc
+  ctx.beginPath();
+  ctx.arc(cx, cy, r, start, end);
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 10;
+  ctx.lineCap = 'round';
+  ctx.stroke();
+}
+
+function drawRadar(raw) {
+  const canvas = document.getElementById('radarCanvas');
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.getBoundingClientRect();
+  // Reset canvas
+  canvas.width = 500 * dpr;
+  canvas.height = 420 * dpr;
+  canvas.style.width = '500px';
+  canvas.style.height = '420px';
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+
+  const labels = ['Prix','Rendement','Localisation','Risques','Projets','DPE','Quartier','Plus-value'];
+  const keys = ['prix','rendement','localisation','risque','projets','dpe','quartier','plusvalue'];
+  const n = labels.length;
+  const cx = 250, cy = 210, r = 140;
+
+  ctx.clearRect(0,0,500,420);
+
+  function angle(i){return -Math.PI/2 + (2*Math.PI*i)/n}
+
+  // Grid rings
+  for(let ring=1; ring<=5; ring++){
+    const radius = (r * ring) / 5;
+    ctx.beginPath();
+    for(let i=0; i<=n; i++){
+      const a = angle(i % n);
+      const x = cx + radius * Math.cos(a);
+      const y = cy + radius * Math.sin(a);
+      if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    }
+    ctx.closePath();
+    ctx.strokeStyle = '#e5e7eb';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  }
+
+  // Axes
+  for(let i=0; i<n; i++){
+    const a = angle(i);
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(cx + r * Math.cos(a), cy + r * Math.sin(a));
+    ctx.strokeStyle = '#e5e7eb';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  }
+
+  // Data polygon
+  const colors = ['#2563eb','#059669','#7c3aed','#dc2626','#d97706','#0d9488','#8b5cf6','#e11d48'];
+  ctx.beginPath();
+  for(let i=0; i<=n; i++){
+    const idx = i % n;
+    const val = (raw[keys[idx]]?.score || 50) / 100;
+    const a = angle(idx);
+    const dist = r * val;
+    const x = cx + dist * Math.cos(a);
+    const y = cy + dist * Math.sin(a);
+    if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+  }
+  ctx.closePath();
+  ctx.fillStyle = 'rgba(37,99,235,0.15)';
+  ctx.fill();
+  ctx.strokeStyle = '#2563eb';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  // Dots + labels
+  for(let i=0; i<n; i++){
+    const val = (raw[keys[i]]?.score || 50) / 100;
+    const a = angle(i);
+    const dist = r * val;
+    const x = cx + dist * Math.cos(a);
+    const y = cy + dist * Math.sin(a);
+
+    ctx.beginPath();
+    ctx.arc(x, y, 4, 0, Math.PI*2);
+    ctx.fillStyle = colors[i];
+    ctx.fill();
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Label
+    const lx = cx + (r + 32) * Math.cos(a);
+    const ly = cy + (r + 32) * Math.sin(a);
+    ctx.fillStyle = '#374151';
+    ctx.font = '11px Inter, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    const labelText = `${labels[i]} ${Math.round(raw[keys[i]]?.score||0)}`;
+    ctx.fillText(labelText, lx, ly);
+  }
+
+  // Center label
+  ctx.fillStyle = '#9ca3af';
+  ctx.font = '11px Inter, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('Critères', cx, cy);
+}
+
+// ========== ANALYSIS ENTRY POINTS ==========
+function analyzeManual() {
+  const input = {
+    city: document.getElementById('fCity').value.trim() || 'Paris 11e',
+    type: document.getElementById('fType').value,
+    cat: document.getElementById('fCat').value,
+    price: parseFloat(document.getElementById('fPrice').value) || 0,
+    surface: parseFloat(document.getElementById('fSurface').value) || 50,
+    pieces: parseInt(document.getElementById('fPieces').value) || 3,
+    condition: document.getElementById('fCondition').value,
+    dpe: document.getElementById('fDPE').value,
+    etage: parseInt(document.getElementById('fEtage').value) || 0,
+    equip: document.getElementById('fEquip').value,
+    transports: document.getElementById('fTransports').value
+  };
+
+  if(!input.city || !input.price || !input.surface){
+    alert('Veuillez remplir les champs obligatoires : ville, prix et surface.');
+    return;
+  }
+
+  document.getElementById('loadingSpinner').classList.add('active');
+  document.getElementById('scoreResults').classList.remove('active');
+
+  // Analyse immédiate
+  setTimeout(() => {
+    try {
+      const result = computeScore(input);
+      renderScore(result, input);
+    } catch(e) {
+      alert('Erreur lors de l\'analyse: ' + e.message);
+      document.getElementById('loadingSpinner').classList.remove('active');
+    }
+  }, 100);
+}
+
+function analyzeListing(listing) {
+  const input = {
+    city: listing.location || '',
+    type: listing.type || 'appartement',
+    cat: listing.cat || 'vente',
+    price: listing.price || 0,
+    surface: listing.surface || 50,
+    pieces: listing.pieces || 2,
+    condition: 'bon',
+    dpe: '',
+    etage: listing.etage || 0,
+    equip: ['parking','piscine','ascenseur','jardin'].some(e=>listing.equip&&listing.equip.includes(e)) ? 'haut' : 'moyen',
+    transports: listing.location && (listing.location.toLowerCase().includes('paris')||listing.location.toLowerCase().includes('lyon')||listing.location.toLowerCase().includes('bordeaux')) ? 'excellent' : 'bon'
+  };
+  window._lastListing = listing;
+
+  document.getElementById('loadingSpinner').classList.add('active');
+  document.getElementById('scoreResults').classList.remove('active');
+  document.getElementById('listingBrowser').classList.remove('active');
+
+  setTimeout(() => {
+    const result = computeScore(input);
+    renderScore(result, input);
+  }, 600);
+}
+
+// ========== EXISTING LISTINGS ==========
+const allListings = [];
+window.allListings = allListings;
+
+function renderListings(filter) {
+  const grid = document.getElementById('lbGrid');
+  const q = (filter||'').toLowerCase();
+  const f = allListings.filter(l => {
+    if(!q) return true;
+    return l.title.toLowerCase().includes(q) || l.location.toLowerCase().includes(q) || l.priceLabel.toLowerCase().includes(q);
+  });
+  grid.innerHTML = f.map(l => `
+    <div class="lb-card" onclick="selectListing(${l.id})">
+      <div class="emoji">${l.emoji||'🏠'}</div>
+      <div class="info">
+        <div class="title">${l.title}</div>
+        <div class="sub">${l.location} · ${l.priceLabel} · ${l.surface}m²</div>
+      </div>
+      <button class="btn-analyze">🔬 Noter</button>
+    </div>
+  `).join('');
+}
+
+function filterListings() {
+  renderListings(document.getElementById('lbSearchInput').value);
+}
+
+function selectListing(id) {
+  const listing = allListings.find(l => l.id === id);
+  if(!listing) return;
+  const bar = document.getElementById('selectedListing');
+  document.getElementById('selEmoji').textContent = listing.emoji||'🏠';
+  document.getElementById('selTitle').textContent = listing.title;
+  document.getElementById('selSub').textContent = `${listing.location} · ${listing.priceLabel} · ${listing.surface} m² · ${listing.pieces} pièce(s)`;
+  bar.classList.add('show');
+  analyzeListing(listing);
+}
+
+function clearSelected() {
+  document.getElementById('selectedListing').classList.remove('show');
+  document.getElementById('listingBrowser').classList.add('active');
+  document.getElementById('scoreResults').classList.remove('active');
+}
+
+// ========== MODES ==========
 function switchMode(mode) {
   currentMode = mode;
   document.querySelectorAll(".mode-btn").forEach(b => b.classList.toggle("active", b.dataset.mode === mode));
@@ -418,5 +1430,294 @@ function displayResults(finalScore, scores, price, surface) {
     <span class="n-footer-eva">⚡ Powered by EVA · NODUS SYSTEMS</span>
   </div>
 </footer>
+
+let riskMapInstance = null;
+
+function renderRiskMap(lat, lng, label) {
+  const container = document.getElementById('riskMap');
+  container.innerHTML = '';
+
+  if (riskMapInstance) {
+    riskMapInstance.remove();
+    riskMapInstance = null;
+  }
+
+  riskMapInstance = L.map('riskMap', { zoomControl: true }).setView([lat, lng], 13);
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    maxZoom: 19
+  }).addTo(riskMapInstance);
+
+  L.marker([lat, lng])
+    .addTo(riskMapInstance)
+    .bindPopup(`<b>${label}</b><br>Lat: ${lat.toFixed(4)}<br>Lng: ${lng.toFixed(4)}`)
+    .openPopup();
+
+  setTimeout(() => riskMapInstance.invalidateSize(), 300);
+}
+
+function runFullAnalysis() {
+  if (!lastRiskResult) return;
+  const city = lastRiskResult.geo.city;
+  document.getElementById('fCity').value = city;
+  switchMode('manual');
+  // Auto-fill address fields
+  document.querySelectorAll('.mode-btn').forEach(b => {
+    b.classList.toggle('active', b.textContent.includes('Saisie'));
+  });
+  document.getElementById('manualForm').classList.add('active');
+  document.getElementById('risquesForm').classList.remove('active');
+  document.getElementById('risquesResults').classList.remove('active');
+}
+
+// ========== IGI — Indice Global Immobilier ==========
+let lastIGIResult = null;
+
+async function runIGIAnalysis() {
+  const address = document.getElementById('rAddress').value.trim();
+  const complement = document.getElementById('rComplement').value.trim();
+  if (!address || address.length < 3) { alert('Veuillez saisir une adresse'); return; }
+  
+  const query = complement ? `${address}, ${complement}, France` : `${address}, France`;
+  
+  document.getElementById('loadingSpinner').classList.add('active');
+  document.getElementById('igiResults').classList.remove('active');
+  
+  // Build input from the manual form if available
+  const input = {
+    city: document.getElementById('fCity')?.value || address,
+    type: document.getElementById('fType')?.value || 'appartement',
+    cat: document.getElementById('fCat')?.value || 'vente',
+    price: parseFloat(document.getElementById('fPrice')?.value) || 0,
+    surface: parseFloat(document.getElementById('fSurface')?.value) || 50,
+    pieces: parseInt(document.getElementById('fPieces')?.value) || 3,
+    condition: document.getElementById('fCondition')?.value || 'bon',
+    dpe: document.getElementById('fDPE')?.value || '',
+    etage: parseInt(document.getElementById('fEtage')?.value) || 0,
+    equip: document.getElementById('fEquip')?.value || 'moyen',
+    transports: document.getElementById('fTransports')?.value || 'bon'
+  };
+  
+  try {
+    const result = await IGI.compute(query, input);
+    lastIGIResult = result;
+    renderIGI(result);
+  } catch (e) {
+    alert('Erreur IGI: ' + e.message);
+    document.getElementById('loadingSpinner').classList.remove('active');
+  }
+}
+
+function renderIGI(result) {
+  document.getElementById('loadingSpinner').classList.remove('active');
+  document.getElementById('igiResults').classList.add('active');
+  
+  const { score, verdict, couleur, geo, details } = result;
+  
+  // Hero
+  document.getElementById('igiFinalValue').textContent = score;
+  document.getElementById('igiResultTitle').textContent = `IGI — ${geo.city}`;
+  document.getElementById('igiResultLocation').textContent = `📍 ${geo.city} · ${geo.postcode} · ${geo.departement || ''}`;
+  document.getElementById('igiResultPrice').textContent = `🏠 ${geo.name.substring(0, 80)}`;
+  const ve = document.getElementById('igiResultVerdict');
+  ve.textContent = `Indice Global Immobilier : ${verdict}`;
+  const vc = score >= 75 ? 'verdict-excellent' : score >= 55 ? 'verdict-good' : score >= 40 ? 'verdict-average' : 'verdict-poor';
+  ve.className = `verdict ${vc}`;
+  
+  // Draw circle
+  drawIGICircle(score);
+  
+  // Radar
+  drawIGIRadar(details);
+  
+  // Grid
+  const grid = document.getElementById('igiGrid');
+  grid.innerHTML = '';
+  const labels = { risques:'🌋 Risques naturels', securite:'🔒 Sécurité', commodites:'🏪 Commodités', transports:'🚇 Transports', marche:'💰 Marché immo', education:'🏫 Éducation', environnement:'🌿 Environnement' };
+  const emojis = { risques:'🌋', securite:'🔒', commodites:'🏪', transports:'🚇', marche:'💰', education:'🏫', environnement:'🌿' };
+  const weights = IGI.WEIGHTS;
+  
+  for (const k in details) {
+    const d = details[k];
+    const s = d.score || 0;
+    const color = s >= 75 ? '#059669' : s >= 55 ? '#d97706' : '#dc2626';
+    const item = document.createElement('div');
+    item.className = 'score-item';
+    let extra = '';
+    if (d.details && typeof d.details === 'object') {
+      extra = Object.values(d.details).map(v => v.label || '').join(' · ');
+    } else if (d.label) extra = d.label;
+    else if (d.niveau) extra = d.niveau;
+    item.innerHTML = `
+      <div class="score-item-header">
+        <div class="label"><span class="emoji">${emojis[k]}</span> ${labels[k]}</div>
+        <div class="value" style="color:${color}">${s}<span style="font-size:0.7rem;color:var(--text-tertiary)">/100</span></div>
+      </div>
+      <div class="score-bar"><div class="score-bar-fill" style="width:${s}%;background:${color}"></div></div>
+      <div class="score-detail"><span class="detail-label">Pondération ${weights[k]}%</span><span class="detail-value">${extra.substring(0, 80)}</span></div>
+    `;
+    grid.appendChild(item);
+  }
+  
+  // Tips
+  const tips = document.getElementById('igiTipsGrid');
+  tips.innerHTML = '';
+  const tipsArr = [];
+  if (details.risques.score < 55) tipsArr.push({icon:'🌋', title:'Risques naturels préoccupants', desc:'Plusieurs risques identifiés (inondation, argiles, séisme). Vérifiez les diagnostics obligatoires et l\'assurabilité du bien.'});
+  if (details.securite.score < 60) tipsArr.push({icon:'🔒', title:'Sécurité à vérifier', desc:'Le niveau de sécurité est en dessous de la moyenne. Consultez les statistiques de la commune.'});
+  if (details.commodites.score < 60) tipsArr.push({icon:'🏪', title:'Commerces limités', desc:'Peu de commerces et services à proximité. Vérifiez les projets d\'implantation.'});
+  if (details.transports.score < 60) tipsArr.push({icon:'🚇', title:'Transports à améliorer', desc:'La desserte en transports en commun est limitée. Idéal si vous avez une voiture.'});
+  if (details.marche.score < 50) tipsArr.push({icon:'💰', title:'Prix au-dessus du marché', desc:'Le prix au m² est supérieur à la moyenne locale. Justifiez la différence ou négociez.'});
+  if (details.education.score < 60) tipsArr.push({icon:'🏫', title:'Écoles peu nombreuses', desc:'Peu d\'établissements scolaires à proximité immédiate. Renseignez-vous sur les navettes.'});
+  if (tipsArr.length === 0) tipsArr.push({icon:'✨', title:'Profil exceptionnel', desc:'Tous les indicateurs sont au vert — excellent choix immobilier !'});
+  
+  for (const t of tipsArr) {
+    tips.innerHTML += `<div class="tip-item"><div><span style="font-size:1.2rem;margin-right:8px">${t.icon}</span><span class="tip-title">${t.title}</span></div><div class="tip-desc">${t.desc}</div></div>`;
+  }
+  
+  document.getElementById('igiTipsSection').classList.add('active');
+  document.getElementById('igiResults').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function drawIGICircle(score) {
+  const canvas = document.getElementById('igiCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const w = canvas.width, h = canvas.height;
+  ctx.clearRect(0,0,w,h);
+  const cx = w/2, cy = h/2, r = 68;
+  const start = -Math.PI/2;
+  const end = start + (score/100) * Math.PI * 2;
+  const color = score >= 75 ? '#059669' : score >= 55 ? '#d97706' : '#dc2626';
+  ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI*2); ctx.strokeStyle = '#e5e7eb'; ctx.lineWidth = 10; ctx.stroke();
+  ctx.beginPath(); ctx.arc(cx, cy, r, start, end); ctx.strokeStyle = color; ctx.lineWidth = 10; ctx.lineCap = 'round'; ctx.stroke();
+}
+
+function drawIGIRadar(details) {
+  const canvas = document.getElementById('igiRadarCanvas');
+  if (!canvas) return;
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.getBoundingClientRect();
+  canvas.width = 500 * dpr; canvas.height = 420 * dpr;
+  canvas.style.width = '500px'; canvas.style.height = '420px';
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  
+  const labels = ['Risques','Sécurité','Commodités','Transports','Marché','Éducation','Environnement'];
+  const keys = ['risques','securite','commodites','transports','marche','education','environnement'];
+  const n = labels.length;
+  const cx = 250, cy = 210, r = 140;
+  ctx.clearRect(0,0,500,420);
+  
+  function angle(i) { return -Math.PI/2 + (2*Math.PI*i)/n; }
+  
+  for (let ring=1; ring<=5; ring++) {
+    const radius = (r * ring) / 5;
+    ctx.beginPath();
+    for (let i=0; i<=n; i++) {
+      const a = angle(i % n);
+      const x = cx + radius * Math.cos(a);
+      const y = cy + radius * Math.sin(a);
+      if (i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    }
+    ctx.closePath();
+    ctx.strokeStyle = '#e5e7eb'; ctx.lineWidth = 1; ctx.stroke();
+  }
+  
+  for (let i=0; i<n; i++) {
+    const a = angle(i);
+    ctx.beginPath(); ctx.moveTo(cx, cy);
+    ctx.lineTo(cx + r * Math.cos(a), cy + r * Math.sin(a));
+    ctx.strokeStyle = '#e5e7eb'; ctx.lineWidth = 1; ctx.stroke();
+  }
+  
+  const colors = ['#2563eb','#059669','#7c3aed','#dc2626','#d97706','#0d9488','#8b5cf6'];
+  ctx.beginPath();
+  for (let i=0; i<=n; i++) {
+    const idx = i % n;
+    const val = (details[keys[idx]]?.score || 50) / 100;
+    const a = angle(idx);
+    const dist = r * val;
+    const x = cx + dist * Math.cos(a);
+    const y = cy + dist * Math.sin(a);
+    if (i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+  }
+  ctx.closePath();
+  ctx.fillStyle = 'rgba(37,99,235,0.15)'; ctx.fill();
+  ctx.strokeStyle = '#2563eb'; ctx.lineWidth = 2; ctx.stroke();
+  
+  for (let i=0; i<n; i++) {
+    const val = (details[keys[i]]?.score || 50) / 100;
+    const a = angle(i);
+    const dist = r * val;
+    const x = cx + dist * Math.cos(a);
+    const y = cy + dist * Math.sin(a);
+    ctx.beginPath(); ctx.arc(x, y, 4, 0, Math.PI*2);
+    ctx.fillStyle = colors[i]; ctx.fill();
+    ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.stroke();
+    const lx = cx + (r + 32) * Math.cos(a);
+    const ly = cy + (r + 32) * Math.sin(a);
+    ctx.fillStyle = '#374151'; ctx.font = '11px Inter, sans-serif';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText(`${labels[i]} ${Math.round(details[keys[i]]?.score||0)}`, lx, ly);
+  }
+  
+  ctx.fillStyle = '#9ca3af'; ctx.font = '11px Inter, sans-serif';
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText('IGI', cx, cy);
+}
+
+function saveIGI() {
+  const key = 'immo-igi-scores';
+  const saved = JSON.parse(localStorage.getItem(key)||'[]');
+  const entry = {
+    id: Date.now(),
+    date: new Date().toLocaleDateString('fr-FR'),
+    title: document.getElementById('igiResultTitle').textContent,
+    score: document.getElementById('igiFinalValue').textContent,
+    verdict: document.getElementById('igiResultVerdict').textContent
+  };
+  saved.unshift(entry);
+  localStorage.setItem(key, JSON.stringify(saved.slice(0,20)));
+  alert('✅ Score IGI sauvegardé !');
+}
+
+// ========== SAVE ==========
+function saveScore() {
+  const key = 'immo-saved-scores';
+  const saved = JSON.parse(localStorage.getItem(key)||'[]');
+  const entry = {
+    id: Date.now(),
+    date: new Date().toLocaleDateString('fr-FR'),
+    title: document.getElementById('resultTitle').textContent,
+    score: document.getElementById('scoreFinalValue').textContent,
+    verdict: document.getElementById('resultVerdict').textContent
+  };
+  saved.unshift(entry);
+  localStorage.setItem(key, JSON.stringify(saved.slice(0,20)));
+  alert('✅ Notation sauvegardée !');
+}
+
+// ========== INIT ==========
+document.addEventListener('DOMContentLoaded', () => {
+  initDB();
+  renderListings();
+  // Mobile menu toggle
+  document.getElementById('menuToggle').addEventListener('click', () => {
+    document.getElementById('headerLinks').classList.toggle('open');
+  });
+});
+
+// Print-friendly
+window.addEventListener('beforeprint', () => {
+  document.querySelector('.hero-score').style.background = '#2563eb';
+  document.querySelector('.hero-score').style.webkitPrintColorAdjust = 'exact';
+});
+</script>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="js/risques.js"></script>
+<script src="js/igi.js"></script>
 </body>
 </html>

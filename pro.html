@@ -117,13 +117,12 @@
         <button class="n-btn n-btn-secondary" onclick="alert('Filtre : Publiées')">📤 Publiées</button>
         <button class="n-btn n-btn-secondary" onclick="alert('Filtre : Brouillons')">📝 Brouillons</button>
       </div>
-      <div class="pro-listing-card" style="background:var(--n-bg-card);border:1px solid var(--n-border);border-radius:var(--n-radius-lg);display:grid;grid-template-columns:140px 1fr;overflow:hidden;margin-bottom:12px">
+<div class="pro-listing-card" style="background:var(--n-bg-card);border:1px solid var(--n-border);border-radius:var(--n-radius-lg);display:grid;grid-template-columns:140px 1fr;overflow:hidden;margin-bottom:12px">
         <div style="display:flex;align-items:center;justify-content:center;font-size:2.5rem;min-height:120px;background:var(--n-bg-hover)">🏠</div>
         <div style="padding:14px 16px;display:flex;flex-direction:column">
           <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">
             <div><div style="font-weight:600;font-size:.9rem">Appartement Paris 11e</div><div style="font-size:.77rem;color:var(--n-text-secondary);margin:4px 0">📍 Paris 11e · 65 m² · 3 pièces</div></div>
             <div style="text-align:right"><div style="font-size:1.1rem;font-weight:700;color:var(--n-cyan);font-family:var(--n-mono)">395 000 €</div><div style="font-size:.7rem;color:var(--n-text-tertiary)">Vente</div></div>
-          </div>
           <div style="display:flex;gap:8px;flex-wrap:wrap;margin:4px 0 8px">
             <span class="pli-tag" style="font-size:.7rem;padding:2px 8px;border-radius:4px;background:var(--n-bg);color:var(--n-text-secondary)">DPE C</span>
             <span class="pli-tag pro-pub" style="font-size:.7rem;padding:2px 8px;border-radius:4px;background:var(--n-cyan-dim);color:var(--n-cyan)">Publiée</span>
@@ -287,8 +286,64 @@
         <span>© 2026 Immo-Express — Plateforme immobilière intelligente</span>
         <span class="n-footer-eva">⚡ Powered by EVA · NODUS SYSTEMS</span>
       </div>
-    </footer>
+</footer>
 <script>
+function renderPlans() {
+  const current = proData ? proData.agency.plan : 'pro';
+  const plans = ['starter','pro','premium'];
+  const labels = {starter:'Starter',pro:'Pro',premium:'Premium'};
+  // Compteur de places gratuites (stocké dans localStorage)
+  let freeSlots = parseInt(localStorage.getItem('immo-free-slots') || '5');
+  if(freeSlots < 0) freeSlots = 0;
+  if(freeSlots > 5) freeSlots = 5;
+  document.getElementById('freeSlots').textContent = freeSlots;
+  plans.forEach(p => {
+    const card = document.getElementById(`plan-${p}`);
+    const btn = card.querySelector('.btn-plan');
+    if(p === current) {
+      card.classList.add('current');
+      btn.textContent = '✅ Mon forfait actuel';
+      btn.className = 'btn-plan';
+    } else {
+      card.classList.remove('current');
+      btn.textContent = p==='pro'?'Choisir Pro':p==='premium'?'Choisir Premium':'Choisir Starter';
+      btn.className = `btn-plan ${p==='pro'?'btn-primary':'btn-outline'}`;
+    }
+  });
+  document.getElementById('currentPlanDisplay').textContent = `Plan ${labels[current]}`;
+  const d = new Date();
+  d.setMonth(d.getMonth()+1);
+  document.getElementById('nextRenewal').textContent = `01/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
+}
+
+function selectPlan(plan) {
+  if(plan === proData.agency.plan) {
+    alert('Vous êtes déjà sur ce forfait.');
+    return;
+  }
+  const labels = {starter:'Starter 29€/mois',pro:'Pro 59€/mois',premium:'Premium 119€/mois'};
+  let priceLabel = labels[plan];
+  let freeSlots = parseInt(localStorage.getItem('immo-free-slots') || '5');
+  if(freeSlots > 0) {
+    if(confirm(`🎉 Lancement — plus que ${freeSlots} place${freeSlots>1?'s':''} gratuite${freeSlots>1?'s':''} !\n\nPasser au forfait ${labels[plan]} offert pour 2 ans ?`)){
+      freeSlots--;
+      localStorage.setItem('immo-free-slots', freeSlots);
+      savePlan(plan);
+      if(freeSlots > 0){
+        alert(`✅ Félicitations ! Vous êtes sur ${labels[plan]} — 2 ans offerts.\n\nPlus que ${freeSlots} place${freeSlots>1?'s':''} gratuite${freeSlots>1?'s':''} pour d'autres agences !`);
+      } else {
+        alert(`✅ Félicitations ! Vous êtes sur ${labels[plan]} — 2 ans offerts.\n\nToutes les places gratuites sont prises !`);
+      }
+    }
+  } else {
+    if(confirm(`Passer au forfait ${priceLabel} ?`)){
+      savePlan(plan);
+      alert(`✅ Vous êtes maintenant sur le forfait ${priceLabel} !`);
+    }
+  }
+}
+
+// ========== NAVIGATION ==========
 function showSection(id, btn) {
   document.querySelectorAll('.pro-section').forEach(s => s.classList.remove('active'));
   document.getElementById('sec-' + id).classList.add('active');
