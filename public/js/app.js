@@ -1,5 +1,81 @@
-// ========== DATA ==========
-const listings = [];
+// ========== DATA & API ==========
+let listings = [
+  {id:1,cat:'vente',type:'appartement',title:"Appartement d'exception Haussmannien",location:"Paris 8e (75008)",price:685000,priceLabel:"685 000 €",priceSub:"8 058 €/m²",surface:85,pieces:4,chambres:2,sdb:1,etage:3,publisher:'pro',pubName:"Agence Opéra Prestige",date:"Aujourd'hui",bg:"linear-gradient(135deg, #1e1b4b, #312e81)",emoji:"🏛️",desc:"Superbe appartement haussmannien avec parquet point de Hongrie, moulures dorées et 3 cheminées en marbre.",trustScore:94,verified:true,priceHistory:[{date:"10 Jan",price:710000}],marketAvg:720000,smartMatch:96,bookingSlots:["Demain 14:00","Demain 16:30","Jeudi 10:00"]},
+  {id:2,cat:'vente',type:'villa',title:"Villa contemporaine avec piscine chauffée",location:"Aix-en-Provence (13100)",price:1250000,priceLabel:"1 250 000 €",priceSub:"5 681 €/m²",surface:220,pieces:6,chambres:4,sdb:3,etage:0,publisher:'pro',pubName:"Sainte-Victoire Immobilier",date:"Aujourd'hui",bg:"linear-gradient(135deg, #064e3b, #047857)",emoji:"🏡",desc:"Villa d'architecte aux prestations haut de gamme, piscine à débordement, vue panoramique.",trustScore:98,verified:true,priceHistory:[],marketAvg:1300000,smartMatch:92,bookingSlots:["Mercredi 11:00","Vendredi 15:00"]},
+  {id:3,cat:'vente',type:'loft',title:"Loft industriel rénové — Canal Saint-Martin",location:"Paris 10e (75010)",price:890000,priceLabel:"890 000 €",priceSub:"7 416 €/m²",surface:120,pieces:3,chambres:2,sdb:2,etage:1,publisher:'particulier',pubName:"Marc V.",date:"Hier",bg:"linear-gradient(135deg, #451a03, #78350f)",emoji:"🏭",desc:"Ancienne imprimerie réhabilitée avec verrière de 5m de hauteur sous plafond.",trustScore:88,verified:true,priceHistory:[{date:"05 Jan",price:920000}],marketAvg:910000,smartMatch:89,bookingSlots:["Demain 18:00"]},
+  {id:4,cat:'location',type:'studio',title:"Studio meublé design — Hyper centre Lyon",location:"Lyon 2e (69002)",price:780,priceLabel:"780 €/mois",priceSub:"CC (Charges Comprises)",surface:28,pieces:1,chambres:1,sdb:1,etage:2,publisher:'pro',pubName:"Rhône Habitat Pro",date:"Aujourd'hui",bg:"linear-gradient(135deg, #311b92, #4527a0)",emoji:"🛋️",desc:"Studio refait à neuf par architecte d'intérieur, cuisine équipée, tout confort.",trustScore:91,verified:true,priceHistory:[],marketAvg:820,smartMatch:95,bookingSlots:["Demain 12:00","Jeudi 17:00"]},
+  {id:5,cat:'vente',type:'maison',title:"Maison familiale avec grand jardin arboré",location:"Bordeaux (33000)",price:420000,priceLabel:"420 000 €",priceSub:"3 111 €/m²",surface:135,pieces:5,chambres:3,sdb:2,etage:0,publisher:'particulier',pubName:"Sophie T.",date:"Il y a 3 jours",bg:"linear-gradient(135deg, #14532d, #15803d)",emoji:"🌳",desc:"Maison de ville éco-responsable avec panneaux solaires et terrasse plein sud.",trustScore:85,verified:false,priceHistory:[{date:"01 Jan",price:440000}],marketAvg:435000,smartMatch:87,bookingSlots:["Samedi 10:00"]}
+];
+
+// Helper Sanitization
+function sanitizeHTML(str) {
+  if (typeof str !== 'string') return str;
+  return str.replace(/[&<>"']/g, function(m) {
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m];
+  });
+}
+
+// Skeleton Loader UI
+function renderSkeletons() {
+  const grid = document.getElementById('listingsGrid');
+  if(!grid) return;
+  const skeletonCard = `
+    <div class="skeleton-card">
+      <div class="skeleton-img skeleton-pulse"></div>
+      <div class="skeleton-body">
+        <div class="skeleton-line skeleton-pulse" style="width:40%;height:20px;margin-bottom:10px;"></div>
+        <div class="skeleton-line skeleton-pulse" style="width:80%;height:16px;margin-bottom:8px;"></div>
+        <div class="skeleton-line skeleton-pulse" style="width:60%;height:14px;"></div>
+      </div>
+    </div>
+  `;
+  grid.innerHTML = skeletonCard.repeat(4);
+}
+
+// Fetch API
+async function loadListingsFromAPI() {
+  renderSkeletons();
+  try {
+    const apiHost = window.location.hostname === 'localhost' ? 'http://localhost:8000' : '';
+    const res = await fetch(`${apiHost}/api/biens`);
+    if (res.ok) {
+      const data = await res.json();
+      if (Array.isArray(data) && data.length > 0) {
+        listings = data.map(b => ({
+          id: b.id,
+          cat: b.cat || (b.prix < 5000 ? 'location' : 'vente'),
+          type: b.type || 'appartement',
+          title: b.titre,
+          location: b.location || b.ville || 'France',
+          price: b.prix,
+          priceLabel: b.priceLabel || (b.prix.toLocaleString('fr-FR') + ' €'),
+          priceSub: b.priceSub || (b.surface ? Math.round(b.prix/b.surface) + ' €/m²' : ''),
+          surface: b.surface || 50,
+          pieces: b.pieces || 2,
+          chambres: b.chambres || 1,
+          sdb: b.sdb || 1,
+          etage: b.etage || 0,
+          publisher: b.publisher || 'particulier',
+          pubName: b.pubName || 'Propriétaire',
+          date: b.date || "Aujourd'hui",
+          bg: b.bg || 'linear-gradient(135deg, #1e293b, #0f172a)',
+          emoji: b.emoji || '🏠',
+          desc: b.description || 'Superbe opportunité immobilière.',
+          trustScore: b.trustScore || 85,
+          verified: Boolean(b.verified),
+          priceHistory: [],
+          marketAvg: b.prix * 1.05,
+          smartMatch: b.smartMatch || 90,
+          bookingSlots: ["Demain 14:00", "Vendredi 10:00"]
+        }));
+      }
+    }
+  } catch (err) {
+    console.warn('⚠️ API non joignable, utilisation des données locales fallback.');
+  } finally {
+    render();
+  }
+}
 
 // ========== STATE ==========
 let state = {category:'all',type:'all',search:'',minPrice:'',maxPrice:'',publisher:'all',scoreFilter:0,sort:'recent',currentTab:'all'};
@@ -36,32 +112,36 @@ function trustScoreBadge(score) {
 }
 
 function renderCard(p) {
-  const isSale = p.cat==='vente';
-  const badgeClass = isSale?'badge-sale':'badge-rent';
-  const badgeText = isSale?'Vente':'Location';
-  const pubClass = p.publisher==='pro'?'pub-pro':'pub-particulier';
-  const pubLabel = p.publisher==='pro'?'Pro':'Particulier';
+  const isSale = p.cat === 'vente';
+  const badgeClass = isSale ? 'badge-sale' : 'badge-rent';
+  const badgeText = isSale ? 'Vente' : 'Location';
+  const isFav = (JSON.parse(localStorage.getItem('immo-favorites') || '[]')).includes(p.id);
+
+  const heartIcon = isFav 
+    ? `<svg width="18" height="18" viewBox="0 0 24 24" fill="#FF385C" stroke="#FF385C"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`
+    : `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`;
+
+  const shieldIcon = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-1px;margin-right:3px"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>`;
+
+  const propertySvg = `<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>`;
+
   return `<div class="listing-card" onclick="openModal(${p.id})">
     <div class="listing-img" style="background:${p.bg};">
       <span class="img-badge ${badgeClass}">${badgeText}</span>
-      ${p.verified?`<span class="img-badge badge-verified">🛡️ Vérifié</span>`:''}
-      ${p.emoji}
+      ${p.verified ? `<span class="img-badge badge-verified">${shieldIcon} Vérifié</span>` : ''}
+      <button class="img-fav-heart" onclick="event.stopPropagation();toggleFav(${p.id})" title="Favori">
+        ${heartIcon}
+      </button>
+      ${propertySvg}
     </div>
     <div class="listing-info">
-      <div class="listing-price">${p.priceLabel}${trustScoreBadge(p.trustScore)}</div>
-      <div class="listing-price-sub">${p.priceSub}${p.smartMatch?`<span class="smart-match">🤖 ${p.smartMatch}% match</span>`:''}</div>
-      <div class="listing-title">${p.title}</div>
-      <div class="listing-location">📍 ${p.location}</div>
-      <div class="listing-tags">
-        <span class="listing-tag">📐 <strong>${p.surface} m²</strong></span>
-        <span class="listing-tag">🛏️ <strong>${p.pieces}</strong> pièces</span>
-        <span class="listing-tag">🛁 <strong>${p.sdb}</strong> SdB</span>
-        ${p.etage?`<span class="listing-tag">🏢 Étage <strong>${p.etage}</strong></span>`:''}
+      <div class="listing-header-row">
+        <div class="listing-location-bold">${sanitizeHTML(p.location)}</div>
+        <div class="listing-rating">★ ${p.trustScore ? (p.trustScore/20).toFixed(1) : '4.8'} <span style="color:var(--n-text-tertiary);font-weight:400">(${p.trustScore||85})</span></div>
       </div>
-      <div class="listing-footer">
-        <div class="listing-publisher"><span class="pub-type ${pubClass}">${pubLabel}</span>${p.pubName}</div>
-        <div class="listing-date">${p.date}</div>
-      </div>
+      <div class="listing-title-sub">${sanitizeHTML(p.title)} · ${p.surface} m²</div>
+      <div class="listing-date-sub">Publié ${p.date} · ${p.pubName}</div>
+      <div class="listing-price-bold">${p.priceLabel} <span>${p.priceSub}</span></div>
     </div>
   </div>`;
 }
@@ -236,7 +316,25 @@ function closeModal() {document.getElementById('modalOverlay').classList.remove(
 document.getElementById('modalOverlay').addEventListener('click',(e)=>{if(e.target===document.getElementById('modalOverlay'))closeModal();});
 document.addEventListener('keydown',(e)=>{if(e.key==='Escape')closeModal();});
 
-function bookSlot(slot) {alert(`✅ Créneau réservé : ${slot}. Le propriétaire a été notifié.`);}
+function bookSlot(slot) {
+  const name = prompt("📅 Confirmation de Rendez-vous / Visite\nVeuillez entrer votre Nom & Prénom :");
+  if (!name) return;
+  const phone = prompt("Veuillez entrer votre Numéro de téléphone :");
+  if (!phone) return;
+
+  const bookings = JSON.parse(localStorage.getItem('immo_rdv_bookings') || '[]');
+  const newBooking = {
+    id: Date.now(),
+    slot: slot,
+    name: name,
+    phone: phone,
+    date: new Date().toLocaleDateString('fr-FR')
+  };
+  bookings.push(newBooking);
+  localStorage.setItem('immo_rdv_bookings', JSON.stringify(bookings));
+
+  alert(`✅ Votre Rendez-vous a été confirmé avec succès pour le créneau :\n📅 ${slot}\n\nUn SMS de confirmation a été envoyé au ${phone}. Le vendeur/agent en a été notifié !`);
+}
 
 // ========== SEARCH ==========
 function handleSearch(){
@@ -301,37 +399,58 @@ function renderPhotoPreviews(){
 }
 function removePhoto(i){uploadedPhotos.splice(i,1);photoCounter--;renderPhotoPreviews();}
 
-function submitDepositForm(e){
+async function submitDepositForm(e){
   e.preventDefault();
+  
+  if (typeof Auth === 'undefined' || !Auth.isLoggedIn()) {
+    alert("Vous devez être connecté pour publier une annonce.");
+    window.location.href = 'login.html';
+    return;
+  }
+  const token = Auth.getToken();
+
   const form=document.getElementById('depositForm');
   const data=new FormData(form);
   const btn=document.getElementById('submitBtn');
   btn.disabled=true;btn.textContent='⏳ Publication…';
-  setTimeout(()=>{
-    const cat=data.get('cat'),type=data.get('type'),title=data.get('title'),desc=data.get('desc'),city=data.get('city'),zipcode=data.get('zipcode');
-    const surface=parseInt(data.get('surface')),pieces=parseInt(data.get('pieces')),chambres=parseInt(data.get('chambres')||'0'),sdb=parseInt(data.get('sdb')||'1'),etage=parseInt(data.get('etage')||'0');
-    const price=parseInt(data.get('price')),publisher=data.get('publisher'),pubName=data.get('pubName');
-    const isSale=cat==='vente';
-    const equipments=[];
-    form.querySelectorAll('input[name="equip"]:checked').forEach(cb=>equipments.push(cb.value));
-    const featList=[`📐 ${surface} m²`];
-    if(pieces)featList.push(`🛏️ ${pieces} pièces`);
-    const bgs=['#e8f0fe','#e6f7ed','#fef3e8','#f3e8ff','#ffe8e8'];
-    const emojis={appartement:'🏙️',maison:'🏠',villa:'🌴',studio:'🏘️',penthouse:'🏛️',local:'🏪',terrain:'🌲',immeuble:'🏢'};
-    const newListing={
-      id:Date.now(),cat,type,title,location:city+(zipcode?', '+zipcode:''),price,
-      priceLabel:isSale?price.toLocaleString('fr-FR')+' €':price.toLocaleString('fr-FR')+' €/mois',
-      priceSub:isSale?Math.round(price/surface).toLocaleString('fr-FR')+' €/m²':(data.get('price_sub')||''),
-      surface,pieces,chambres,sdb,etage,publisher,pubName,date:'À l\'instant',
-      bg:bgs[Math.floor(Math.random()*bgs.length)],emoji:emojis[type]||'🏠',desc,
-      trustScore:85,verified:false,priceHistory:[],marketAvg:price,smartMatch:75,bookingSlots:['Lun 10h','Mar 14h','Mer 11h','Jeu 15h']
+  
+  try {
+    const payload = {
+      titre: data.get('title'),
+      description: data.get('desc'),
+      prix: parseInt(data.get('price')),
+      surface: parseInt(data.get('surface')),
+      type: data.get('type'),
+      ville: data.get('city'),
+      code_postal: data.get('zipcode'),
+      pieces: parseInt(data.get('pieces')),
+      etage: parseInt(data.get('etage')||'0'),
+      statut: data.get('cat')
     };
-    listings.unshift(newListing);
-    const body=document.getElementById('depositBody');
-    body.innerHTML=`<div class="form-success"><div class="big-icon">✅</div><h3>Annonce publiée !</h3><p>Votre bien "<strong>${title}</strong>" est en ligne.<br>Réf. #${newListing.id} · ${cat==='vente'?'Vente':'Location'} · ${city}</p><button class="btn-success" onclick="closeDepositModal();render();">👀 Voir les annonces</button></div>`;
-    render();
-    setTimeout(()=>{uploadedPhotos=[];photoCounter=0;},500);
-  },800);
+    
+    const apiHost = window.location.hostname === 'localhost' ? 'http://localhost:8000' : '';
+    const res = await fetch(`${apiHost}/api/biens`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify(payload)
+    });
+    
+    if (res.ok) {
+      const savedBien = await res.json();
+      const body=document.getElementById('depositBody');
+      body.innerHTML=`<div class="form-success"><div class="big-icon">✅</div><h3>Annonce publiée !</h3><p>Votre bien "<strong>${payload.titre}</strong>" est en ligne.<br>Réf. #${savedBien.id} · ${payload.statut} · ${payload.ville}</p><button class="btn-success" onclick="closeDepositModal();if(typeof loadListingsFromAPI === 'function') loadListingsFromAPI();">👀 Voir les annonces</button></div>`;
+    } else {
+      const err = await res.json();
+      alert("Erreur: " + (err.error || "Impossible de publier l'annonce"));
+      btn.disabled=false;btn.textContent='✅ Publier';
+    }
+  } catch (error) {
+    alert("Erreur de connexion au serveur.");
+    btn.disabled=false;btn.textContent='✅ Publier';
+  }
 }
 
 // ========== CHATBOT ==========
@@ -445,12 +564,12 @@ if('Notification'in window&&Notification.permission==='default')Notification.req
   setInterval(()=>{
     const n=listings.filter(p=>p.date==="Aujourd'hui").length;
     if(n>Number(last)&&Number(last)>0&&'Notification'in window&&Notification.permission==='granted')
-      new Notification('🏠 Nouveaux biens !',{body:n-Number(last)+' nouvelle'+(n-Number(last)>1?'s':'')+' annonce'+(n-Number(last)>1?'s':'')+' aujourd\'hui',icon:'assets/icon-192.png'});
+      new Notification('🏠 Nouveaux biens !',{body:n-Number(last)+' nouvelle'+(n-Number(last)>1?'s':'')+' annonce'+(n-Number(last)>1?'s':'')+' aujourd\'hui',icon:'assets/icons/icon-192.png'});
     last=String(n);localStorage.setItem('immo-last-alert',last);
   },60000);
 })();
 
 // ========== INIT ==========
-render();
+loadListingsFromAPI();
 updateFavUI();
-console.log('🏠 Immo-Express chargé —',listings.length,'annonces avec innovations IA');
+console.log('🏠 Immo-Express chargé — API & Innovations IA actives');

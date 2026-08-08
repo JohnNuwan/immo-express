@@ -1,12 +1,14 @@
 // Immo-Express — Service Worker v1.0
 const CACHE = 'immo-express-v1';
 const ASSETS = [
+  '/',
   '/index.html',
+  '/css/nodus.css',
   '/css/style.css',
   '/js/app.js',
   '/manifest.json',
-  '/assets/icon-192.png',
-  '/assets/icon-512.png'
+  '/assets/icons/icon-192.png',
+  '/assets/icons/icon-512.png'
 ];
 
 // Install — cache les assets

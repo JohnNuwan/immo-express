@@ -44,16 +44,24 @@ Puis ouvrez http://localhost:8000
 
 ```
 Immo-Express/
-├── index.html          # Application complète (HTML + CSS + JS)
-├── README.md           # Ce fichier
-├── CHANGELOG.md        # Historique des versions
-├── .gitignore          # Fichiers ignorés par Git
-├── docs/
-│   └── architecture.md # Documentation technique
-└── assets/
-    ├── css/            # Styles séparés (futur)
-    ├── js/             # Scripts séparés (futur)
-    └── images/         # Images du projet
+├── public/                 # Racine Web & Application Frontend
+│   ├── *.html              # Pages HTML (index, scoring, risques, location, etc.)
+│   ├── css/                # Feuilles de style (nodus.css, style.css)
+│   ├── js/                 # Scripts client (app.js, auth.js, igi.js, risques.js)
+│   ├── assets/             # Images, Data (france.db), Icônes & Templates
+│   ├── manifest.json       # Manifeste PWA
+│   └── sw.js               # Service Worker
+├── backend/                # API REST Node.js (Express + SQLite)
+│   ├── routes/             # Endpoints API (auth, biens, scoring, contact, admin)
+│   ├── middleware/         # Middleware JWT & Auth
+│   ├── database.js         # Base SQLite
+│   └── server.js           # Point d'entrée serveur Node.js
+├── config/                 # Configurations infrastructure
+│   └── nginx.conf          # Configuration Nginx
+├── docs/                   # Documentation technique (architecture.md)
+├── capacitor.config.json   # Configuration Mobile Capacitor
+├── Dockerfile & docker-compose.yml
+└── README.md
 ```
 
 > Actuellement l'application est **monolithique** (tout dans `index.html`) pour la simplicité de déploiement. Une version découpée viendra plus tard.

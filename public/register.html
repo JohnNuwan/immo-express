@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Inscription — Immo-Express · NODUS</title>
+  <meta name="theme-color" content="#14141a">
+  <link rel="icon" href="assets/icons/icon-192.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/nodus.css">
+  <script src="js/components.js" defer></script>
+  <script src="js/auth.js" defer></script>
+</head>
+<body class="n-page">
+
+  <div id="header-placeholder"></div>
+
+  <div style="min-height: calc(100vh - 80px); display: flex; align-items: center; justify-content: center; padding: 20px;">
+    <div style="background: var(--n-bg-card); padding: 40px; border-radius: var(--n-radius-lg); border: 1px solid var(--n-border); width: 100%; max-width: 450px; box-shadow: var(--n-shadow);">
+      <div style="text-align: center; margin-bottom: 30px;">
+        <h1 style="font-size: 1.8rem; font-weight: 800;">Rejoignez-nous 🚀</h1>
+        <p style="color: var(--n-text-secondary); margin-top: 8px;">Créez votre compte Immo-Express gratuitement</p>
+      </div>
+
+      <form id="registerForm" class="n-form">
+        <div id="registerError" class="auth-status" style="display:none; color: var(--n-error); margin-bottom: 15px; font-size: 0.9rem; text-align: center; padding: 10px; background: rgba(255,59,48,0.1); border-radius: 6px;"></div>
+        
+        <div class="n-form-group">
+          <label for="regName">Prénom & Nom</label>
+          <input type="text" id="regName" placeholder="Jean Dupont" required style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--n-border); background: var(--n-bg); color: var(--n-text);">
+        </div>
+
+        <div class="n-form-group" style="margin-top: 15px;">
+          <label for="regEmail">Adresse email</label>
+          <input type="email" id="regEmail" placeholder="jean@email.com" required style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--n-border); background: var(--n-bg); color: var(--n-text);">
+        </div>
+        
+        <div class="n-form-group" style="margin-top: 15px;">
+          <label for="regPassword">Mot de passe</label>
+          <input type="password" id="regPassword" placeholder="Minimum 6 caractères" required minlength="6" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--n-border); background: var(--n-bg); color: var(--n-text);">
+        </div>
+
+        <button type="submit" class="n-btn n-btn-primary" id="registerSubmitBtn" style="width: 100%; margin-top: 25px; padding: 12px; font-size: 1rem;">
+          Créer mon compte
+        </button>
+      </form>
+
+      <div style="text-align: center; margin-top: 25px; font-size: 0.9rem; color: var(--n-text-secondary);">
+        Vous avez déjà un compte ? <a href="login.html" style="color: var(--n-cyan); font-weight: 600; text-decoration: none;">Se connecter</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Redirect if already logged in
+      if (Auth.isLoggedIn()) {
+        window.location.href = 'profil.html';
+      }
+
+      const form = document.getElementById('registerForm');
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const name = document.getElementById('regName').value;
+        const email = document.getElementById('regEmail').value;
+        const password = document.getElementById('regPassword').value;
+        const errorDiv = document.getElementById('registerError');
+        const btn = document.getElementById('registerSubmitBtn');
+        
+        if (password.length < 6) {
+          errorDiv.textContent = 'Le mot de passe doit contenir au moins 6 caractères.';
+          errorDiv.style.display = 'block';
+          return;
+        }
+
+        btn.textContent = 'Création du compte...';
+        btn.disabled = true;
+        errorDiv.style.display = 'none';
+
+        const res = await Auth.register(email, password, name);
+        if (res.ok) {
+          window.location.href = 'profil.html';
+        } else {
+          errorDiv.textContent = res.error || 'Erreur lors de l\'inscription';
+          errorDiv.style.display = 'block';
+          btn.textContent = 'Créer mon compte';
+          btn.disabled = false;
+        }
+      });
+    });
+  </script>
+</body>
+</html>

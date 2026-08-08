@@ -9,6 +9,7 @@ const biensRoutes = require('./routes/biens');
 const scoringRoutes = require('./routes/scoring');
 const contactRoutes = require('./routes/contact');
 const adminRoutes = require('./routes/admin');
+const opendataRoutes = require('./routes/opendata');
 
 const app = express();
 
@@ -27,6 +28,7 @@ app.use('/api/biens', biensRoutes);
 app.use('/api/scoring', scoringRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/opendata', opendataRoutes);
 
 // 404 handler
 app.use((req, res) => {

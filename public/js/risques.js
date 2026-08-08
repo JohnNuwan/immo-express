@@ -41,12 +41,13 @@ async function fetchRisquesByCommune(codeInsee) {
 
   try {
     // Risques naturels et technologiques (endpoint consolidé)
+    const proxy = 'http://127.0.0.1:8000/api/opendata/proxy?url=';
     const [risques, radon, seisme, argiles, icpe] = await Promise.all([
-      fetch(`${GEORISQUES_BASE}/risques?code_insee=${codeInsee}`).then(r => r.ok ? r.json() : null),
-      fetch(`${GEORISQUES_BASE}/radon?code_insee=${codeInsee}`).then(r => r.ok ? r.json() : null),
-      fetch(`${GEORISQUES_BASE}/seisme?code_insee=${codeInsee}`).then(r => r.ok ? r.json() : null),
-      fetch(`${GEORISQUES_BASE}/argiles?code_insee=${codeInsee}`).then(r => r.ok ? r.json() : null),
-      fetch(`${GEORISQUES_BASE}/icpe?code_insee=${codeInsee}&page=1&page_size=1`).then(r => r.ok ? r.json() : null)
+      fetch(proxy + encodeURIComponent(`${GEORISQUES_BASE}/risques?code_insee=${codeInsee}`)).then(r => r.ok ? r.json() : null),
+      fetch(proxy + encodeURIComponent(`${GEORISQUES_BASE}/radon?code_insee=${codeInsee}`)).then(r => r.ok ? r.json() : null),
+      fetch(proxy + encodeURIComponent(`${GEORISQUES_BASE}/seisme?code_insee=${codeInsee}`)).then(r => r.ok ? r.json() : null),
+      fetch(proxy + encodeURIComponent(`${GEORISQUES_BASE}/argiles?code_insee=${codeInsee}`)).then(r => r.ok ? r.json() : null),
+      fetch(proxy + encodeURIComponent(`${GEORISQUES_BASE}/icpe?code_insee=${codeInsee}&page=1&page_size=1`)).then(r => r.ok ? r.json() : null)
     ]);
 
     const result = {

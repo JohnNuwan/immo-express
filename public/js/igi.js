@@ -49,12 +49,13 @@ const IGI = {
     if (this._cache[key]) return this._cache[key];
 
     try {
+      const proxy = 'http://127.0.0.1:8000/api/opendata/proxy?url=';
       const [risques, radon, seisme, argiles, icpe] = await Promise.all([
-        fetch(`https://georisques.gouv.fr/api/v1/risques?code_insee=${codeInsee}`).then(r => r.ok ? r.json() : null),
-        fetch(`https://georisques.gouv.fr/api/v1/radon?code_insee=${codeInsee}`).then(r => r.ok ? r.json() : null),
-        fetch(`https://georisques.gouv.fr/api/v1/seisme?code_insee=${codeInsee}`).then(r => r.ok ? r.json() : null),
-        fetch(`https://georisques.gouv.fr/api/v1/argiles?code_insee=${codeInsee}`).then(r => r.ok ? r.json() : null),
-        fetch(`https://georisques.gouv.fr/api/v1/icpe?code_insee=${codeInsee}&page=1&page_size=1`).then(r => r.ok ? r.json() : null)
+        fetch(proxy + encodeURIComponent(`https://georisques.gouv.fr/api/v1/risques?code_insee=${codeInsee}`)).then(r => r.ok ? r.json() : null),
+        fetch(proxy + encodeURIComponent(`https://georisques.gouv.fr/api/v1/radon?code_insee=${codeInsee}`)).then(r => r.ok ? r.json() : null),
+        fetch(proxy + encodeURIComponent(`https://georisques.gouv.fr/api/v1/seisme?code_insee=${codeInsee}`)).then(r => r.ok ? r.json() : null),
+        fetch(proxy + encodeURIComponent(`https://georisques.gouv.fr/api/v1/argiles?code_insee=${codeInsee}`)).then(r => r.ok ? r.json() : null),
+        fetch(proxy + encodeURIComponent(`https://georisques.gouv.fr/api/v1/icpe?code_insee=${codeInsee}&page=1&page_size=1`)).then(r => r.ok ? r.json() : null)
       ]);
       const result = { risques, radon, seisme, argiles, icpe };
       this._cache[key] = result;

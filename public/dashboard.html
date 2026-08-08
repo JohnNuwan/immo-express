@@ -1,54 +1,26 @@
-1|<!DOCTYPE html>
-2|<html lang="fr" data-theme="dark">
-3|<head>
-4|  <meta charset="UTF-8">
-5|  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-6|  <title>Dashboard — Immo-Express · NODUS</title>
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Dashboard — Immo-Express · NODUS</title>
   <meta name="theme-color" content="#14141a">
-7|  <link rel="icon" href="assets/icon-192.svg" type="image/svg+xml">
-8|  <link rel="stylesheet" href="css/nodus.css">
-9|  <style>
-10|    .n-table { width:100%; border-collapse: collapse; font-size:.85rem; }
-11|    .n-table th { text-align:left; padding:10px 12px; background:var(--n-bg); font-weight:500; color:var(--n-text-secondary); font-size:.8rem; text-transform:uppercase; letter-spacing:.3px; border-bottom:1px solid var(--n-border); }
-12|    .n-table td { padding:10px 12px; border-bottom:1px solid var(--n-border); }
-13|    .n-table tr:last-child td { border-bottom:none; }
-14|    .n-table tr:hover td { background:var(--n-bg); }
-15|  </style>
-16|</head>
-17|<body class="n-page">
-18|
-19|    <header class="n-header">
-20|      <div class="n-header-inner">
-21|        <a href="index.html" class="n-logo">
-22|          <div class="n-logo-icon">IE</div>
-23|          <span>Immo</span><span class="n-cyan">Express</span>
-24|        </a>
-25|        <button class="n-mobile-toggle" onclick="document.querySelector('.n-nav').classList.toggle('open')">☰</button>
-26|        <nav class="n-nav">
-27|          <a href="index.html">🏠 Accueil</a>
-28|          <a href="vente.html">💰 Acheter</a>
-29|          <a href="location.html">📍 Louer</a>
-30|          <a href="scoring.html">🔬 Scoring</a>
-31|          <a href="risques.html">🌍 Risques</a>
-32|          <a href="pro.html">🏢 Pro</a>
-33|          <a href="dashboard.html" class="active">📊 Dashboard</a>
-34|          <a href="profil.html">👤 Profil</a>
-35|          <a href="recherche.html">🔎 Recherche</a>
-36|          <a href="pro.html" class="n-btn-depot">+ Publier</a>
-37|          <button class="n-btn-user" onclick="openAuth()">👤 Connexion</button>
-38|        </nav>
-39|      </div>
-40|    </header>
-41|
-42|<section class="n-hero" style="background:linear-gradient(135deg,#1a1a2e 0%,#16213e 100%)">
-43|  <h1>📊 <span class="n-hero-accent">Dashboard</span> <span class="n-hero-cyan">Administrateur</span></h1>
-44|  <p>Vue d'ensemble de la plateforme Immo-Express</p>
-45|</section>
-46|
-47|<div class="n-layout n-reveal">
-48|  <aside class="n-sidebar" style="padding:12px;position:sticky;top:92px">
-49|    <h3 style="font-size:.85rem;font-weight:600;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--n-border)">📊 Administration</h3>
-50|    <button class="n-btn n-btn-ghost active" style="display:flex;align-items:center;gap:10px;width:100%;padding:12px 14px;border:none;border-radius:var(--n-radius);font-size:.85rem;font-weight:500;cursor:pointer;text-align:left;margin-bottom:4px;background:var(--n-cyan-dim);color:var(--n-cyan)" onclick="showDashSection('overview', this)">
+  <link rel="icon" href="assets/icons/icon-192.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/nodus.css">
+  <script src="js/components.js" defer></script>
+</head>
+<body class="n-page">
+<div id="header-placeholder"></div>
+
+<section class="n-hero" style="background:linear-gradient(135deg,#1a1a2e 0%,#16213e 100%)">
+  <h1>📊 <span class="n-hero-accent">Dashboard</span> <span class="n-hero-cyan">Administrateur</span></h1>
+  <p>Vue d'ensemble de la plateforme Immo-Express</p>
+</section>
+
+<div class="n-layout n-reveal">
+  <aside class="n-sidebar" style="padding:12px;position:sticky;top:92px">
+    <h3 style="font-size:.85rem;font-weight:600;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--n-border)">📊 Administration</h3>
+    <button class="n-btn n-btn-ghost active" style="display:flex;align-items:center;gap:10px;width:100%;padding:12px 14px;border:none;border-radius:var(--n-radius);font-size:.85rem;font-weight:500;cursor:pointer;text-align:left;margin-bottom:4px;background:var(--n-cyan-dim);color:var(--n-cyan)" onclick="showDashSection('overview', this)">
 51|      <span style="font-size:1.1rem;width:24px;text-align:center">📈</span> Aperçu
 52|    </button>
 53|    <button class="n-btn n-btn-ghost" style="display:flex;align-items:center;gap:10px;width:100%;padding:12px 14px;border:none;border-radius:var(--n-radius);font-size:.85rem;font-weight:500;cursor:pointer;text-align:left;margin-bottom:4px" onclick="showDashSection('users', this)">
@@ -163,7 +135,7 @@
       <div class="n-footer-inner">
         <div>
           <div class="n-logo" style="margin-bottom:10px;font-size:1.1rem">
-            <div class="n-logo-icon" style="width:30px;height:30px;font-size:0.8rem">IE</div>
+            <div class="n-logo-icon"><svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="32" height="32" rx="8" fill="url(#brandGradV)"/><path d="M16 6L7 13.5V25.5H13V18.5H19V25.5H25V13.5L16 6Z" fill="white" fill-opacity="0.95"/><path d="M16 11.5L11 15.5V22.5H14.5V17.5H17.5V22.5H21V15.5L16 11.5Z" fill="#FF385C"/><defs><linearGradient id="brandGradV" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse"><stop stop-color="#FF385C"/><stop offset="1" stop-color="#E00B41"/></linearGradient></defs></svg></div>
             <span>Immo</span><span class="n-cyan">Express</span>
           </div>
           <p>La plateforme immobilière intelligente. Annonces vérifiées, analyses IA, mise en relation directe.</p>

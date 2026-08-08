@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Profil — Immo-Express · NODUS</title>
+  <meta name="theme-color" content="#14141a">
+  <link rel="icon" href="assets/icons/icon-192.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/nodus.css">
+  <script src="js/components.js" defer></script>
+  <script src="js/auth.js" defer></script>
+</head>
+<body class="n-page">
+
+  <div id="header-placeholder"></div>
+
+  <section class="n-hero" style="background:linear-gradient(135deg,#1a1a2e 0%,#2d2d44 100%)">
+    <h1>👤 <span class="n-hero-accent">Mon</span> <span class="n-hero-cyan">Profil</span></h1>
+    <p>Gérez vos informations personnelles et vos préférences</p>
+  </section>
+
+  <div class="n-layout" style="grid-template-columns:220px 1fr" id="profileContainer">
+    <aside class="n-sidebar" style="padding:12px;position:sticky;top:92px">
+      <div style="text-align:center;padding:16px 0;border-bottom:1px solid var(--n-border);margin-bottom:12px">
+        <div id="profileAvatar" style="width:64px;height:64px;border-radius:50%;background:var(--n-gradient);display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin:0 auto 10px;color:white;font-weight:bold;">?</div>
+        <div id="profileNameDisplay" style="font-weight:600;font-size:.95rem">...</div>
+        <div id="profileEmailDisplay" style="font-size:.78rem;color:var(--n-text-secondary)">...</div>
+      </div>
+      <button class="n-btn n-btn-ghost active" style="display:flex;align-items:center;gap:10px;width:100%;padding:12px 14px;border:none;border-radius:var(--n-radius);font-size:.85rem;font-weight:500;cursor:pointer;text-align:left;margin-bottom:4px;background:var(--n-cyan-dim);color:var(--n-cyan)" onclick="showProfileSection('info', this)">
+        <span style="font-size:1.1rem;width:24px;text-align:center">✏️</span> Informations
+      </button>
+      <button class="n-btn n-btn-ghost" style="display:flex;align-items:center;gap:10px;width:100%;padding:12px 14px;border:none;border-radius:var(--n-radius);font-size:.85rem;font-weight:500;cursor:pointer;text-align:left;margin-bottom:4px" onclick="showProfileSection('listings', this)">
+        <span style="font-size:1.1rem;width:24px;text-align:center">🏠</span> Mes annonces
+      </button>
+      <div style="height:1px;background:var(--n-border);margin:8px 12px"></div>
+      <button class="n-btn n-btn-ghost" style="display:flex;align-items:center;gap:10px;width:100%;padding:12px 14px;border:none;border-radius:var(--n-radius);font-size:.85rem;font-weight:500;cursor:pointer;text-align:left;color:var(--n-error)" onclick="handleLogout()">
+        <span style="font-size:1.1rem;width:24px;text-align:center">🚪</span> Déconnexion
+      </button>
+    </aside>
+
+    <div class="n-results-area" style="min-height:500px">
+      <!-- Info Section -->
+      <div id="psec-info" class="pro-section active">
+        <h2 class="n-section-title">✏️ Informations personnelles</h2>
+        <form id="profileForm" class="n-form">
+          <div id="profileStatus" class="auth-status" style="display:none; margin-bottom: 15px; font-size: 0.9rem; text-align: center; padding: 10px; border-radius: 6px;"></div>
+          
+          <div class="n-form-grid">
+            <div class="n-form-group"><label>Prénom</label><input type="text" id="profPrenom"></div>
+            <div class="n-form-group"><label>Nom</label><input type="text" id="profNom"></div>
+            <div class="n-form-group" style="grid-column: 1 / -1"><label>Email</label><input type="email" id="profEmail" required></div>
+            <div class="n-form-group" style="grid-column: 1 / -1"><label>Téléphone</label><input type="tel" id="profPhone"></div>
+          </div>
+
+          <h3 class="n-section-title" style="margin-top:20px">🔑 Sécurité</h3>
+          <div class="n-form-grid">
+            <div class="n-form-group"><label>Nouveau mot de passe (optionnel)</label><input type="password" id="profPassword" placeholder="Laissez vide pour ne pas changer"></div>
+          </div>
+
+          <div class="n-form-actions" style="margin-top:25px">
+            <button type="submit" class="btn-primary" id="profileSubmitBtn">Sauvegarder les modifications</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Listings Section -->
+      <div id="psec-listings" class="pro-section" style="display:none">
+        <h2 class="n-section-title">🏠 Mes annonces publiées</h2>
+        <div id="myListingsContainer">
+          <p style="color:var(--n-text-tertiary)">Chargement de vos annonces...</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function showProfileSection(id, btn) {
+      document.querySelectorAll('.pro-section').forEach(el => el.style.display = 'none');
+      document.getElementById('psec-' + id).style.display = 'block';
+      document.querySelectorAll('.n-sidebar button').forEach(el => {
+        el.classList.remove('active');
+        el.style.background = 'transparent';
+        el.style.color = '';
+      });
+      btn.classList.add('active');
+      btn.style.background = 'var(--n-cyan-dim)';
+      btn.style.color = 'var(--n-cyan)';
+    }
+
+    function handleLogout() {
+      Auth.logout();
+      window.location.href = 'login.html';
+    }
+
+    function populateProfile(user) {
+      document.getElementById('profNom').value = user.nom || '';
+      document.getElementById('profPrenom').value = user.prenom || '';
+      document.getElementById('profEmail').value = user.email || '';
+      document.getElementById('profPhone').value = user.telephone || '';
+      
+      const displayName = user.prenom ? `${user.prenom} ${user.nom || ''}` : (user.nom || user.email);
+      document.getElementById('profileNameDisplay').textContent = displayName;
+      document.getElementById('profileEmailDisplay').textContent = user.email;
+      
+      const initial = (user.prenom || user.nom || user.email)[0].toUpperCase();
+      document.getElementById('profileAvatar').textContent = initial;
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (!Auth.isLoggedIn()) {
+        window.location.href = 'login.html';
+        return;
+      }
+
+      // Fetch fresh data from backend
+      const res = await Auth.fetchMe();
+      if (!res.ok) {
+        Auth.logout();
+        window.location.href = 'login.html';
+        return;
+      }
+
+      populateProfile(Auth.getUser());
+
+      const form = document.getElementById('profileForm');
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const nom = document.getElementById('profNom').value;
+        const prenom = document.getElementById('profPrenom').value;
+        const email = document.getElementById('profEmail').value;
+        const telephone = document.getElementById('profPhone').value;
+        const password = document.getElementById('profPassword').value;
+        
+        const statusDiv = document.getElementById('profileStatus');
+        const btn = document.getElementById('profileSubmitBtn');
+        
+        btn.textContent = 'Enregistrement...';
+        btn.disabled = true;
+
+        const updateRes = await Auth.updateProfile({ nom, prenom, email, telephone, password });
+        
+        statusDiv.style.display = 'block';
+        if (updateRes.ok) {
+          statusDiv.textContent = 'Profil mis à jour avec succès !';
+          statusDiv.style.color = 'var(--n-success)';
+          statusDiv.style.background = 'rgba(52, 199, 89, 0.1)';
+          document.getElementById('profPassword').value = '';
+          populateProfile(Auth.getUser());
+        } else {
+          statusDiv.textContent = updateRes.error || 'Erreur lors de la mise à jour';
+          statusDiv.style.color = 'var(--n-error)';
+          statusDiv.style.background = 'rgba(255, 59, 48, 0.1)';
+        }
+        
+        btn.textContent = 'Sauvegarder les modifications';
+        btn.disabled = false;
+        
+        setTimeout(() => { statusDiv.style.display = 'none'; }, 4000);
+      });
+      
+      // Fetch user listings from API
+      const apiHost = window.location.hostname === 'localhost' ? 'http://localhost:8000' : '';
+      try {
+        const listingsRes = await fetch(`${apiHost}/api/biens/me`, {
+          headers: { 'Authorization': `Bearer ${Auth.getToken()}` }
+        });
+        const listingsCont = document.getElementById('myListingsContainer');
+        
+        if (listingsRes.ok) {
+          const myProps = await listingsRes.json();
+          if (myProps.length === 0) {
+            listingsCont.innerHTML = `<p style="color:var(--n-text-tertiary)">Vous n'avez pas encore déposé d'annonce.</p>`;
+          } else {
+            listingsCont.innerHTML = myProps.map(p => `
+              <div style="padding:15px;background:var(--n-bg);border-radius:8px;border:1px solid var(--n-border);margin-bottom:10px;display:flex;justify-content:space-between;align-items:center">
+                <div><strong>${p.titre}</strong><br><span style="font-size:0.85rem;color:var(--n-text-tertiary)">${p.prix.toLocaleString('fr-FR')} € · ${p.ville}</span></div>
+                <span style="color:var(--n-success);font-size:0.85rem;font-weight:600">En ligne</span>
+              </div>`).join('');
+          }
+        } else {
+          listingsCont.innerHTML = `<p style="color:var(--n-error)">Erreur lors du chargement des annonces.</p>`;
+        }
+      } catch (err) {
+        document.getElementById('myListingsContainer').innerHTML = `<p style="color:var(--n-error)">Erreur de connexion au serveur.</p>`;
+      }
+    });
+  </script>
+</body>
+</html>

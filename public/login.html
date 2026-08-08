@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Connexion — Immo-Express · NODUS</title>
+  <meta name="theme-color" content="#14141a">
+  <link rel="icon" href="assets/icons/icon-192.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/nodus.css">
+  <script src="js/components.js" defer></script>
+  <script src="js/auth.js" defer></script>
+</head>
+<body class="n-page">
+
+  <div id="header-placeholder"></div>
+
+  <div style="min-height: calc(100vh - 80px); display: flex; align-items: center; justify-content: center; padding: 20px;">
+    <div style="background: var(--n-bg-card); padding: 40px; border-radius: var(--n-radius-lg); border: 1px solid var(--n-border); width: 100%; max-width: 400px; box-shadow: var(--n-shadow);">
+      <div style="text-align: center; margin-bottom: 30px;">
+        <h1 style="font-size: 1.8rem; font-weight: 800;">Bienvenue ! 👋</h1>
+        <p style="color: var(--n-text-secondary); margin-top: 8px;">Connectez-vous à votre espace Immo-Express</p>
+      </div>
+
+      <form id="loginForm" class="n-form">
+        <div id="loginError" class="auth-status" style="display:none; color: var(--n-error); margin-bottom: 15px; font-size: 0.9rem; text-align: center; padding: 10px; background: rgba(255,59,48,0.1); border-radius: 6px;"></div>
+        
+        <div class="n-form-group">
+          <label for="loginEmail">Adresse email</label>
+          <input type="email" id="loginEmail" placeholder="jean@email.com" required style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--n-border); background: var(--n-bg); color: var(--n-text);">
+        </div>
+        
+        <div class="n-form-group" style="margin-top: 15px;">
+          <label for="loginPassword">Mot de passe</label>
+          <input type="password" id="loginPassword" placeholder="••••••••" required style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--n-border); background: var(--n-bg); color: var(--n-text);">
+        </div>
+
+        <button type="submit" class="n-btn n-btn-primary" id="loginSubmitBtn" style="width: 100%; margin-top: 25px; padding: 12px; font-size: 1rem;">
+          Se connecter
+        </button>
+      </form>
+
+      <div style="text-align: center; margin-top: 25px; font-size: 0.9rem; color: var(--n-text-secondary);">
+        Pas encore de compte ? <a href="register.html" style="color: var(--n-cyan); font-weight: 600; text-decoration: none;">S'inscrire</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Redirect if already logged in
+      if (Auth.isLoggedIn()) {
+        window.location.href = 'profil.html';
+      }
+
+      const form = document.getElementById('loginForm');
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('loginEmail').value;
+        const password = document.getElementById('loginPassword').value;
+        const errorDiv = document.getElementById('loginError');
+        const btn = document.getElementById('loginSubmitBtn');
+        
+        btn.textContent = 'Connexion en cours...';
+        btn.disabled = true;
+        errorDiv.style.display = 'none';
+
+        const res = await Auth.login(email, password);
+        if (res.ok) {
+          window.location.href = 'profil.html';
+        } else {
+          errorDiv.textContent = res.error || 'Erreur lors de la connexion';
+          errorDiv.style.display = 'block';
+          btn.textContent = 'Se connecter';
+          btn.disabled = false;
+        }
+      });
+    });
+  </script>
+</body>
+</html>

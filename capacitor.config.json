@@ -1,7 +1,7 @@
 {
   "appId": "com.immoexpress.app",
   "appName": "ImmoExpress",
-  "webDir": "www",
+  "webDir": "public",
   "bundledWebRuntime": false,
   "server": {
     "androidScheme": "https",

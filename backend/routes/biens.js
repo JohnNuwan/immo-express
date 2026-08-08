@@ -24,6 +24,12 @@ router.get('/', (req, res) => {
   res.json(biens);
 });
 
+// GET /api/biens/me — list user's own properties (authenticated)
+router.get('/me', auth, (req, res) => {
+  const biens = db.prepare('SELECT * FROM biens WHERE user_id = ? ORDER BY created_at DESC').all(req.user.id);
+  res.json(biens);
+});
+
 // GET /api/biens/:id — get one (public)
 router.get('/:id', (req, res) => {
   const bien = db.prepare('SELECT * FROM biens WHERE id = ?').get(req.params.id);

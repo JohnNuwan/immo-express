@@ -5,9 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Espace Pro — Immo-Express · NODUS</title>
   <meta name="theme-color" content="#14141a">
-  <link rel="icon" href="assets/icon-192.svg" type="image/svg+xml">
+  <link rel="icon" href="assets/icons/icon-192.svg" type="image/svg+xml">
   <link rel="stylesheet" href="css/nodus.css">
+  <script src="js/components.js" defer></script>
   <style>
+    .pro-section { display: none; }
+    .pro-section.active { display: block; }
     .n-table { width:100%; border-collapse: collapse; font-size:.85rem; }
     .n-table th { text-align:left; padding:10px 12px; background:var(--n-bg); font-weight:500; color:var(--n-text-secondary); font-size:.8rem; text-transform:uppercase; letter-spacing:.3px; border-bottom:1px solid var(--n-border); }
     .n-table td { padding:10px 12px; border-bottom:1px solid var(--n-border); }
@@ -18,39 +21,18 @@
 </head>
 <body class="n-page">
 
-    <header class="n-header">
-      <div class="n-header-inner">
-        <a href="index.html" class="n-logo">
-          <div class="n-logo-icon">IE</div>
-          <span>Immo</span><span class="n-cyan">Express</span>
-        </a>
-        <button class="n-mobile-toggle" onclick="document.querySelector('.n-nav').classList.toggle('open')">☰</button>
-        <nav class="n-nav">
-          <a href="index.html">🏠 Accueil</a>
-          <a href="vente.html">💰 Acheter</a>
-          <a href="location.html">📍 Louer</a>
-          <a href="scoring.html">🔬 Scoring</a>
-          <a href="risques.html">🌍 Risques</a>
-          <a href="pro.html" class="active">🏢 Pro</a>
-          <a href="dashboard.html">📊 Dashboard</a>
-          <a href="profil.html">👤 Profil</a>
-          <a href="recherche.html">🔎 Recherche</a>
-          <a href="pro.html" class="n-btn-depot">+ Publier</a>
-          <button class="n-btn-user" onclick="openAuth()">👤 Connexion</button>
-        </nav>
-      </div>
-    </header>
+    <div id="header-placeholder"></div>
 
-<section class="n-hero" style="background:linear-gradient(135deg,#1e3a5f 0%,#2563eb 100%);text-align:left;padding:36px 24px">
+<section class="n-hero" style="background:var(--n-bg-secondary);text-align:left;padding:36px 24px">
   <div style="max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px">
     <div>
-      <h1 style="font-size:1.5rem;font-weight:700;display:flex;align-items:center;gap:10px">🏢 Espace Professionnel <span class="n-badge n-badge-verified" style="font-size:.65rem;position:static">AGENCE</span></h1>
-      <p style="color:rgba(255,255,255,0.8);font-size:.9rem;margin-top:4px">Gérez vos annonces, suivez vos leads et développez votre activité</p>
+      <h1 style="font-size:1.5rem;font-weight:700;display:flex;align-items:center;gap:10px;color:var(--n-text)">Espace Professionnel <span class="n-badge n-badge-verified" style="font-size:.65rem;position:static">AGENCE</span></h1>
+      <p style="color:var(--n-text-secondary);font-size:.9rem;margin-top:4px">Gérez vos annonces, suivez vos leads et développez votre activité</p>
     </div>
-    <div style="display:flex;gap:20px">
-      <div style="text-align:center"><div style="font-size:1.6rem;font-weight:700;font-family:var(--n-mono)">12</div><div style="font-size:.7rem;opacity:.7;text-transform:uppercase;letter-spacing:.5px">Biens</div></div>
-      <div style="text-align:center"><div style="font-size:1.6rem;font-weight:700;font-family:var(--n-mono)">8</div><div style="font-size:.7rem;opacity:.7;text-transform:uppercase;letter-spacing:.5px">Leads</div></div>
-      <div style="text-align:center"><div style="font-size:1.6rem;font-weight:700;font-family:var(--n-mono)">342</div><div style="font-size:.7rem;opacity:.7;text-transform:uppercase;letter-spacing:.5px">Vues</div></div>
+    <div style="display:flex;gap:20px;color:var(--n-text)">
+      <div style="text-align:center"><div style="font-size:1.6rem;font-weight:700;font-family:var(--n-mono)">12</div><div style="font-size:.7rem;color:var(--n-text-tertiary);text-transform:uppercase;letter-spacing:.5px">Biens</div></div>
+      <div style="text-align:center"><div style="font-size:1.6rem;font-weight:700;font-family:var(--n-mono)">8</div><div style="font-size:.7rem;color:var(--n-text-tertiary);text-transform:uppercase;letter-spacing:.5px">Leads</div></div>
+      <div style="text-align:center"><div style="font-size:1.6rem;font-weight:700;font-family:var(--n-mono)">342</div><div style="font-size:.7rem;color:var(--n-text-tertiary);text-transform:uppercase;letter-spacing:.5px">Vues</div></div>
     </div>
   </div>
 </section>
@@ -58,23 +40,23 @@
 <div class="n-layout" style="grid-template-columns:220px 1fr">
   <aside class="n-sidebar" style="padding:12px;position:sticky;top:92px">
     <button class="n-btn n-btn-ghost active" style="display:flex;align-items:center;gap:10px;width:100%;padding:12px 14px;border:none;border-radius:var(--n-radius);font-size:.85rem;font-weight:500;cursor:pointer;text-align:left;margin-bottom:4px;background:var(--n-cyan-dim);color:var(--n-cyan)" onclick="showSection('dashboard', this)">
-      <span style="font-size:1.1rem;width:24px;text-align:center">📊</span> Tableau de bord
+      Tableau de bord
     </button>
     <button class="n-btn n-btn-ghost" style="display:flex;align-items:center;gap:10px;width:100%;padding:12px 14px;border:none;border-radius:var(--n-radius);font-size:.85rem;font-weight:500;cursor:pointer;text-align:left;margin-bottom:4px" onclick="showSection('listings', this)">
-      <span style="font-size:1.1rem;width:24px;text-align:center">🏠</span> Mes annonces
+      Mes annonces
     </button>
     <button class="n-btn n-btn-ghost" style="display:flex;align-items:center;gap:10px;width:100%;padding:12px 14px;border:none;border-radius:var(--n-radius);font-size:.85rem;font-weight:500;cursor:pointer;text-align:left;margin-bottom:4px" onclick="showSection('leads', this)">
-      <span style="font-size:1.1rem;width:24px;text-align:center">👥</span> Leads / Contacts
+      Leads / Contacts
     </button>
     <button class="n-btn n-btn-ghost" style="display:flex;align-items:center;gap:10px;width:100%;padding:12px 14px;border:none;border-radius:var(--n-radius);font-size:.85rem;font-weight:500;cursor:pointer;text-align:left;margin-bottom:4px" onclick="showSection('plans', this)">
-      <span style="font-size:1.1rem;width:24px;text-align:center">💎</span> Abonnements
+      Abonnements
     </button>
     <button class="n-btn n-btn-ghost" style="display:flex;align-items:center;gap:10px;width:100%;padding:12px 14px;border:none;border-radius:var(--n-radius);font-size:.85rem;font-weight:500;cursor:pointer;text-align:left" onclick="showSection('profile', this)">
-      <span style="font-size:1.1rem;width:24px;text-align:center">🏢</span> Profil agence
+      Profil agence
     </button>
     <div style="height:1px;background:var(--n-border);margin:8px 12px"></div>
     <button class="n-btn n-btn-ghost" style="display:flex;align-items:center;gap:10px;width:100%;padding:12px 14px;border:none;border-radius:var(--n-radius);font-size:.85rem;font-weight:500;cursor:pointer;text-align:left;color:var(--n-error)" onclick="alert('Déconnexion...')">
-      <span style="font-size:1.1rem;width:24px;text-align:center">🚪</span> Déconnexion
+      Déconnexion
     </button>
   </aside>
 
@@ -83,26 +65,23 @@
     <!-- Dashboard Section -->
     <div id="sec-dashboard" class="pro-section active">
       <div class="n-dash-grid">
-        <div class="n-dash-card"><div class="n-dc-icon" style="background:var(--n-cyan-dim)">🏠</div><div class="n-dc-num">12</div><div class="n-dc-label">Mes annonces</div><div class="n-dc-change" style="color:var(--n-success)">+2 ce mois</div></div>
-        <div class="n-dash-card"><div class="n-dc-icon" style="background:rgba(0,230,118,0.15)">👥</div><div class="n-dc-num">8</div><div class="n-dc-label">Nouveaux leads</div><div class="n-dc-change" style="color:var(--n-success)">+3 cette semaine</div></div>
-        <div class="n-dash-card"><div class="n-dc-icon" style="background:rgba(255,193,7,0.15)">👁️</div><div class="n-dc-num">342</div><div class="n-dc-label">Vues totales</div><div class="n-dc-change" style="color:var(--n-warning)">+12% vs mois dernier</div></div>
-        <div class="n-dash-card"><div class="n-dc-icon" style="background:rgba(255,82,82,0.15)">⭐</div><div class="n-dc-num">4.8</div><div class="n-dc-label">Note moyenne</div><div class="n-dc-change" style="color:var(--n-success)">Excellent</div></div>
+        <div class="n-dash-card"><div class="n-dc-num">12</div><div class="n-dc-label">Mes annonces</div><div class="n-dc-change" style="color:var(--n-success)">+2 ce mois</div></div>
+        <div class="n-dash-card"><div class="n-dc-num">8</div><div class="n-dc-label">Nouveaux leads</div><div class="n-dc-change" style="color:var(--n-success)">+3 cette semaine</div></div>
+        <div class="n-dash-card"><div class="n-dc-num">342</div><div class="n-dc-label">Vues totales</div><div class="n-dc-change" style="color:var(--n-warning)">+12% vs mois dernier</div></div>
+        <div class="n-dash-card"><div class="n-dc-num">4.8</div><div class="n-dc-label">Note moyenne</div><div class="n-dc-change" style="color:var(--n-success)">Excellent</div></div>
       </div>
 
-      <h2 class="n-section-title">📈 Activité récente</h2>
+      <h2 class="n-section-title">Activité récente</h2>
       <div class="n-dash-card" style="padding:0">
         <div class="activity-item" style="display:flex;align-items:center;gap:14px;padding:14px 18px;border-bottom:1px solid var(--n-border);font-size:.85rem">
-          <div style="width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0;background:var(--n-cyan-dim)">👁️</div>
           <div style="flex:1"><strong>Visite</strong> pour Appartement Paris 11e</div>
           <div style="font-size:.75rem;color:var(--n-text-tertiary);white-space:nowrap">Il y a 2h</div>
         </div>
         <div class="activity-item" style="display:flex;align-items:center;gap:14px;padding:14px 18px;border-bottom:1px solid var(--n-border);font-size:.85rem">
-          <div style="width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0;background:rgba(0,230,118,0.15)">📩</div>
           <div style="flex:1"><strong>Nouveau message</strong> de Jean Dupont</div>
           <div style="font-size:.75rem;color:var(--n-text-tertiary);white-space:nowrap">Il y a 5h</div>
         </div>
         <div class="activity-item" style="display:flex;align-items:center;gap:14px;padding:14px 18px;font-size:.85rem">
-          <div style="width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0;background:rgba(255,193,7,0.15)">📋</div>
           <div style="flex:1"><strong>Annonce mise à jour</strong> Maison Lyon 3e</div>
           <div style="font-size:.75rem;color:var(--n-text-tertiary);white-space:nowrap">Il y a 1j</div>
         </div>
@@ -112,15 +91,12 @@
     <!-- Listings Section -->
     <div id="sec-listings" class="pro-section">
       <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap">
-        <button class="n-btn n-btn-primary">➕ Nouvelle annonce</button>
-        <button class="n-btn n-btn-secondary active" onclick="document.querySelectorAll('.pli-tag').forEach(t=>t.style.display='inline')">📋 Toutes</button>
-        <button class="n-btn n-btn-secondary" onclick="alert('Filtre : Publiées')">📤 Publiées</button>
-        <button class="n-btn n-btn-secondary" onclick="alert('Filtre : Brouillons')">📝 Brouillons</button>
+        <button class="n-btn n-btn-primary">Nouvelle annonce</button>
+        <button class="n-btn n-btn-secondary active" onclick="document.querySelectorAll('.pli-tag').forEach(t=>t.style.display='inline')">Toutes</button>
+        <button class="n-btn n-btn-secondary" onclick="alert('Filtre : Publiées')">Publiées</button>
+        <button class="n-btn n-btn-secondary" onclick="alert('Filtre : Brouillons')">Brouillons</button>
       </div>
 <div class="pro-listing-card" style="background:var(--n-bg-card);border:1px solid var(--n-border);border-radius:var(--n-radius-lg);display:grid;grid-template-columns:140px 1fr;overflow:hidden;margin-bottom:12px">
-        <div style="display:flex;align-items:center;justify-content:center;font-size:2.5rem;min-height:120px;background:var(--n-bg-hover)">🏠</div>
-        <div style="padding:14px 16px;display:flex;flex-direction:column">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">
             <div><div style="font-weight:600;font-size:.9rem">Appartement Paris 11e</div><div style="font-size:.77rem;color:var(--n-text-secondary);margin:4px 0">📍 Paris 11e · 65 m² · 3 pièces</div></div>
             <div style="text-align:right"><div style="font-size:1.1rem;font-weight:700;color:var(--n-cyan);font-family:var(--n-mono)">395 000 €</div><div style="font-size:.7rem;color:var(--n-text-tertiary)">Vente</div></div>
           <div style="display:flex;gap:8px;flex-wrap:wrap;margin:4px 0 8px">
@@ -166,15 +142,15 @@
 
     <!-- Leads Section -->
     <div id="sec-leads" class="pro-section">
-      <h2 class="n-section-title">👥 Leads / Contacts</h2>
+      <h2 class="n-section-title">Leads / Contacts</h2>
       <div class="n-dash-card" style="padding:0;overflow:hidden">
         <table class="n-table">
           <thead><tr><th>Nom</th><th>Email</th><th>Téléphone</th><th>Bien</th><th>Date</th><th>Statut</th></tr></thead>
           <tbody>
-            <tr><td>Jean Dupont</td><td>jean@email.com</td><td>06 12 34 56 78</td><td>Appartement Paris 11e</td><td>02/08/2025</td><td><span class="n-badge n-badge-verified" style="position:static;font-size:.65rem">📩 Contacté</span></td></tr>
-            <tr><td>Marie Martin</td><td>marie@email.com</td><td>06 98 76 54 32</td><td>Maison Lyon 3e</td><td>01/08/2025</td><td><span class="n-badge n-badge-verified" style="position:static;font-size:.65rem;background:var(--n-warning);color:var(--n-bg)">⏳ En attente</span></td></tr>
-            <tr><td>Pierre Durand</td><td>pierre@email.com</td><td>07 54 32 10 98</td><td>Studio Bordeaux</td><td>30/07/2025</td><td><span class="n-badge n-badge-sale" style="position:static;font-size:.65rem">✅ Visite faite</span></td></tr>
-            <tr><td>Sophie Petit</td><td>sophie@email.com</td><td>06 45 67 89 01</td><td>Villa Nice</td><td>28/07/2025</td><td><span class="n-badge n-badge-verified" style="position:static;font-size:.65rem">📩 Contacté</span></td></tr>
+            <tr><td>Jean Dupont</td><td>jean@email.com</td><td>06 12 34 56 78</td><td>Appartement Paris 11e</td><td>02/08/2025</td><td><span class="n-badge n-badge-verified" style="position:static;font-size:.65rem">Contacté</span></td></tr>
+            <tr><td>Marie Martin</td><td>marie@email.com</td><td>06 98 76 54 32</td><td>Maison Lyon 3e</td><td>01/08/2025</td><td><span class="n-badge n-badge-verified" style="position:static;font-size:.65rem;background:var(--n-warning);color:var(--n-bg)">En attente</span></td></tr>
+            <tr><td>Pierre Durand</td><td>pierre@email.com</td><td>07 54 32 10 98</td><td>Studio Bordeaux</td><td>30/07/2025</td><td><span class="n-badge n-badge-sale" style="position:static;font-size:.65rem">Visite faite</span></td></tr>
+            <tr><td>Sophie Petit</td><td>sophie@email.com</td><td>06 45 67 89 01</td><td>Villa Nice</td><td>28/07/2025</td><td><span class="n-badge n-badge-verified" style="position:static;font-size:.65rem">Contacté</span></td></tr>
           </tbody>
         </table>
       </div>
@@ -182,46 +158,52 @@
 
     <!-- Plans Section -->
     <div id="sec-plans" class="pro-section">
-      <h2 class="n-section-title">💎 Nos abonnements</h2>
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px">
-        <div class="n-dash-card" style="text-align:center;padding:32px 24px">
-          <div style="font-size:2rem;margin-bottom:8px">🚀</div>
+      <h2 class="n-section-title">Nos abonnements</h2>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;align-items:stretch">
+        <div class="n-dash-card" style="display:flex;flex-direction:column;align-items:center;text-align:center;padding:32px 24px;height:100%">
+          <div style="display:flex;align-items:center;justify-content:center;width:48px;height:48px;border-radius:12px;background:rgba(255,56,92,0.1);color:var(--n-accent);margin-bottom:12px">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-3.05 11a22.35 22.35 0 0 1-3.95 2z"/></svg>
+          </div>
           <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:4px">Starter</h3>
           <p style="font-size:.82rem;color:var(--n-text-secondary);margin-bottom:16px">Pour les agents indépendants</p>
           <div style="font-size:2.2rem;font-weight:700;color:var(--n-cyan);font-family:var(--n-mono);margin-bottom:16px">9<span style="font-size:1rem;font-weight:400;color:var(--n-text-tertiary)">€/mois</span></div>
-          <ul style="list-style:none;padding:0;text-align:left;margin-bottom:20px">
-            <li style="padding:6px 0;font-size:.85rem;color:var(--n-text-secondary)">✅ Jusqu'à 5 annonces</li>
-            <li style="padding:6px 0;font-size:.85rem;color:var(--n-text-secondary)">✅ Statistiques de base</li>
-            <li style="padding:6px 0;font-size:.85rem;color:var(--n-text-secondary)">✅ Support email</li>
+          <ul style="list-style:none;padding:0;text-align:left;margin-bottom:24px;width:100%;flex:1">
+            <li style="padding:6px 0;font-size:.85rem;color:var(--n-text-secondary);display:flex;align-items:center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--n-success)" stroke-width="3" style="vertical-align:-1px;margin-right:8px;flex-shrink:0"><polyline points="20 6 9 17 4 12"/></svg> Jusqu'à 5 annonces</li>
+            <li style="padding:6px 0;font-size:.85rem;color:var(--n-text-secondary);display:flex;align-items:center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--n-success)" stroke-width="3" style="vertical-align:-1px;margin-right:8px;flex-shrink:0"><polyline points="20 6 9 17 4 12"/></svg> Statistiques de base</li>
+            <li style="padding:6px 0;font-size:.85rem;color:var(--n-text-secondary);display:flex;align-items:center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--n-success)" stroke-width="3" style="vertical-align:-1px;margin-right:8px;flex-shrink:0"><polyline points="20 6 9 17 4 12"/></svg> Support email</li>
           </ul>
-          <button class="n-btn n-btn-primary" style="width:100%">Choisir Starter</button>
+          <button class="n-btn n-btn-primary" style="width:100%;margin-top:auto">Choisir Starter</button>
         </div>
-        <div class="n-dash-card" style="text-align:center;padding:32px 24px;border-color:var(--n-cyan);position:relative">
+        <div class="n-dash-card" style="display:flex;flex-direction:column;align-items:center;text-align:center;padding:32px 24px;border-color:var(--n-accent);position:relative;height:100%">
           <span class="n-badge n-badge-verified" style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);font-size:.65rem">POPULAIRE</span>
-          <div style="font-size:2rem;margin-bottom:8px">💼</div>
+          <div style="display:flex;align-items:center;justify-content:center;width:48px;height:48px;border-radius:12px;background:rgba(56,189,248,0.1);color:var(--n-cyan);margin-bottom:12px">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+          </div>
           <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:4px">Pro</h3>
           <p style="font-size:.82rem;color:var(--n-text-secondary);margin-bottom:16px">Pour les agences en croissance</p>
           <div style="font-size:2.2rem;font-weight:700;color:var(--n-cyan);font-family:var(--n-mono);margin-bottom:16px">29<span style="font-size:1rem;font-weight:400;color:var(--n-text-tertiary)">€/mois</span></div>
-          <ul style="list-style:none;padding:0;text-align:left;margin-bottom:20px">
-            <li style="padding:6px 0;font-size:.85rem;color:var(--n-text-secondary)">✅ Annonces illimitées</li>
-            <li style="padding:6px 0;font-size:.85rem;color:var(--n-text-secondary)">✅ Statistiques avancées</li>
-            <li style="padding:6px 0;font-size:.85rem;color:var(--n-text-secondary)">✅ Scoring IA illimité</li>
-            <li style="padding:6px 0;font-size:.85rem;color:var(--n-text-secondary)">✅ Support prioritaire</li>
+          <ul style="list-style:none;padding:0;text-align:left;margin-bottom:24px;width:100%;flex:1">
+            <li style="padding:6px 0;font-size:.85rem;color:var(--n-text-secondary);display:flex;align-items:center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--n-success)" stroke-width="3" style="vertical-align:-1px;margin-right:8px;flex-shrink:0"><polyline points="20 6 9 17 4 12"/></svg> Annonces illimitées</li>
+            <li style="padding:6px 0;font-size:.85rem;color:var(--n-text-secondary);display:flex;align-items:center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--n-success)" stroke-width="3" style="vertical-align:-1px;margin-right:8px;flex-shrink:0"><polyline points="20 6 9 17 4 12"/></svg> Statistiques avancées</li>
+            <li style="padding:6px 0;font-size:.85rem;color:var(--n-text-secondary);display:flex;align-items:center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--n-success)" stroke-width="3" style="vertical-align:-1px;margin-right:8px;flex-shrink:0"><polyline points="20 6 9 17 4 12"/></svg> Scoring IA illimité</li>
+            <li style="padding:6px 0;font-size:.85rem;color:var(--n-text-secondary);display:flex;align-items:center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--n-success)" stroke-width="3" style="vertical-align:-1px;margin-right:8px;flex-shrink:0"><polyline points="20 6 9 17 4 12"/></svg> Support prioritaire</li>
           </ul>
-          <button class="n-btn n-btn-primary" style="width:100%">Choisir Pro</button>
+          <button class="n-btn n-btn-primary" style="width:100%;margin-top:auto">Choisir Pro</button>
         </div>
-        <div class="n-dash-card" style="text-align:center;padding:32px 24px">
-          <div style="font-size:2rem;margin-bottom:8px">🏆</div>
+        <div class="n-dash-card" style="display:flex;flex-direction:column;align-items:center;text-align:center;padding:32px 24px;height:100%">
+          <div style="display:flex;align-items:center;justify-content:center;width:48px;height:48px;border-radius:12px;background:rgba(245,158,11,0.1);color:var(--n-warning);margin-bottom:12px">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2z"/></svg>
+          </div>
           <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:4px">Premium</h3>
           <p style="font-size:.82rem;color:var(--n-text-secondary);margin-bottom:16px">Pour les grandes agences</p>
           <div style="font-size:2.2rem;font-weight:700;color:var(--n-cyan);font-family:var(--n-mono);margin-bottom:16px">79<span style="font-size:1rem;font-weight:400;color:var(--n-text-tertiary)">€/mois</span></div>
-          <ul style="list-style:none;padding:0;text-align:left;margin-bottom:20px">
-            <li style="padding:6px 0;font-size:.85rem;color:var(--n-text-secondary)">✅ Tout le plan Pro</li>
-            <li style="padding:6px 0;font-size:.85rem;color:var(--n-text-secondary)">✅ API dédiée</li>
-            <li style="padding:6px 0;font-size:.85rem;color:var(--n-text-secondary)">✅ Analyse des risques illimitée</li>
-            <li style="padding:6px 0;font-size:.85rem;color:var(--n-text-secondary)">✅ Accompagnement dédié</li>
+          <ul style="list-style:none;padding:0;text-align:left;margin-bottom:24px;width:100%;flex:1">
+            <li style="padding:6px 0;font-size:.85rem;color:var(--n-text-secondary);display:flex;align-items:center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--n-success)" stroke-width="3" style="vertical-align:-1px;margin-right:8px;flex-shrink:0"><polyline points="20 6 9 17 4 12"/></svg> Tout le plan Pro</li>
+            <li style="padding:6px 0;font-size:.85rem;color:var(--n-text-secondary);display:flex;align-items:center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--n-success)" stroke-width="3" style="vertical-align:-1px;margin-right:8px;flex-shrink:0"><polyline points="20 6 9 17 4 12"/></svg> API dédiée</li>
+            <li style="padding:6px 0;font-size:.85rem;color:var(--n-text-secondary);display:flex;align-items:center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--n-success)" stroke-width="3" style="vertical-align:-1px;margin-right:8px;flex-shrink:0"><polyline points="20 6 9 17 4 12"/></svg> Analyse des risques illimitée</li>
+            <li style="padding:6px 0;font-size:.85rem;color:var(--n-text-secondary);display:flex;align-items:center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--n-success)" stroke-width="3" style="vertical-align:-1px;margin-right:8px;flex-shrink:0"><polyline points="20 6 9 17 4 12"/></svg> Accompagnement dédié</li>
           </ul>
-          <button class="n-btn n-btn-primary" style="width:100%">Choisir Premium</button>
+          <button class="n-btn n-btn-primary" style="width:100%;margin-top:auto">Choisir Premium</button>
         </div>
       </div>
     </div>
@@ -252,7 +234,7 @@
       <div class="n-footer-inner">
         <div>
           <div class="n-logo" style="margin-bottom:10px;font-size:1.1rem">
-            <div class="n-logo-icon" style="width:30px;height:30px;font-size:0.8rem">IE</div>
+            <div class="n-logo-icon"><svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="32" height="32" rx="8" fill="url(#brandGradV)"/><path d="M16 6L7 13.5V25.5H13V18.5H19V25.5H25V13.5L16 6Z" fill="white" fill-opacity="0.95"/><path d="M16 11.5L11 15.5V22.5H14.5V17.5H17.5V22.5H21V15.5L16 11.5Z" fill="#FF385C"/><defs><linearGradient id="brandGradV" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse"><stop stop-color="#FF385C"/><stop offset="1" stop-color="#E00B41"/></linearGradient></defs></svg></div>
             <span>Immo</span><span class="n-cyan">Express</span>
           </div>
           <p>La plateforme immobilière intelligente. Annonces vérifiées, analyses IA, mise en relation directe.</p>

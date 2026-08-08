@@ -71,3 +71,26 @@
 - [x] **Capacitor** — wrapper Android natif
 - [x] **APK Debug** — build réussi, 4.0 MB
 - [x] **Installation directe** — pas besoin de store
+
+---
+
+## [2.0.0] — 2026-08-08
+
+### 🏗️ Restructuration & Architecture
+- [x] **Dossier `public/`** — Racine web dédiée hébergeant l'ensemble des pages HTML, CSS, JS et assets statiques.
+- [x] **Dossier `config/`** — Centralisation des configurations infrastructure (Nginx).
+- [x] **Nettoyage du dossier `assets/`** — Sous-dossiers thématiques `data/` (`france.db`), `icons/` (`icon-192`, `icon-512`, etc.) et `templates/` (`flyer.html`).
+
+### ⚙️ Backend API & Base de données
+- [x] **API REST Express** — Endpoints `/api/health`, `/api/biens`, `/api/auth`, `/api/scoring`, `/api/contact`.
+- [x] **Base SQLite avec migrations** — Support et seeding automatique des annonces initiales (`backend/database.js`).
+- [x] **Authentification JWT** — Inscription et connexion sécurisées par token.
+
+### 🎨 Frontend & Composants
+- [x] **Composants JS Modulaires (`public/js/components.js`)** — Auto-injection du Header, Footer et Mobile Bottom Nav sur toutes les pages.
+- [x] **Skeleton Loaders** — Cartes d'attente animées pendant la récupération des annonces API.
+- [x] **Barre de navigation Mobile PWA** — Menu fixe glassmorphic pour smartphones (`< 768px`).
+
+### ⚡ Outillage & Build
+- [x] **Vite.js** — Intégration de `vite.config.js` avec proxy API et scripts npm (`npm run dev`, `npm run build`, `npm run server`).
+- [x] **Documentation complète** — `README.md`, `docs/architecture.md` et `docs/api.md` remis à jour.

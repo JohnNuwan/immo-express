@@ -5,8 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Recherche Avancée — Immo-Express · NODUS</title>
   <meta name="theme-color" content="#14141a">
-  <link rel="icon" href="assets/icon-192.svg" type="image/svg+xml">
+  <link rel="icon" href="assets/icons/icon-192.svg" type="image/svg+xml">
   <link rel="stylesheet" href="css/nodus.css">
+  <script src="js/components.js" defer></script>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <style>
     .search-map { height:400px; border-radius:var(--n-radius); overflow:hidden; border:1px solid var(--n-border); }
@@ -19,28 +20,7 @@
 </head>
 <body class="n-page">
 
-    <header class="n-header">
-      <div class="n-header-inner">
-        <a href="index.html" class="n-logo">
-          <div class="n-logo-icon">IE</div>
-          <span>Immo</span><span class="n-cyan">Express</span>
-        </a>
-        <button class="n-mobile-toggle" onclick="document.querySelector('.n-nav').classList.toggle('open')">☰</button>
-        <nav class="n-nav">
-          <a href="index.html">🏠 Accueil</a>
-          <a href="vente.html">💰 Acheter</a>
-          <a href="location.html">📍 Louer</a>
-          <a href="scoring.html">🔬 Scoring</a>
-          <a href="risques.html">🌍 Risques</a>
-          <a href="pro.html">🏢 Pro</a>
-          <a href="dashboard.html">📊 Dashboard</a>
-          <a href="profil.html">👤 Profil</a>
-          <a href="recherche.html" class="active">🔎 Recherche</a>
-          <a href="pro.html" class="n-btn-depot">+ Publier</a>
-          <button class="n-btn-user" onclick="openAuth()">👤 Connexion</button>
-        </nav>
-      </div>
-    </header>
+    <div id="header-placeholder"></div>
 
 <section class="n-hero">
   <h1>🔎 <span class="n-hero-accent">Recherche</span> <span class="n-hero-cyan">Avancée</span></h1>
@@ -185,7 +165,7 @@
       <div class="n-footer-inner">
         <div>
           <div class="n-logo" style="margin-bottom:10px;font-size:1.1rem">
-            <div class="n-logo-icon" style="width:30px;height:30px;font-size:0.8rem">IE</div>
+            <div class="n-logo-icon"><svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="32" height="32" rx="8" fill="url(#brandGradV)"/><path d="M16 6L7 13.5V25.5H13V18.5H19V25.5H25V13.5L16 6Z" fill="white" fill-opacity="0.95"/><path d="M16 11.5L11 15.5V22.5H14.5V17.5H17.5V22.5H21V15.5L16 11.5Z" fill="#FF385C"/><defs><linearGradient id="brandGradV" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse"><stop stop-color="#FF385C"/><stop offset="1" stop-color="#E00B41"/></linearGradient></defs></svg></div>
             <span>Immo</span><span class="n-cyan">Express</span>
           </div>
           <p>La plateforme immobilière intelligente. Annonces vérifiées, analyses IA, mise en relation directe.</p>

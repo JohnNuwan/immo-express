@@ -1,11 +1,14 @@
 const jwt = require('jsonwebtoken');
 const config = require('../config');
 
-function authMiddleware(req, res, next) {
+// ========== JWT AUTH MIDDLEWARE ==========
+// EVA · NODUS SYSTEMS — Authenticated route guard
+
+module.exports = function auth(req, res, next) {
   const header = req.headers.authorization;
 
   if (!header || !header.startsWith('Bearer ')) {
-    return res.status(401).json({ error: 'Token manquant' });
+    return res.status(401).json({ error: 'Token d\'authentification requis' });
   }
 
   const token = header.split(' ')[1];
@@ -17,6 +20,12 @@ function authMiddleware(req, res, next) {
   } catch (err) {
     return res.status(401).json({ error: 'Token invalide ou expiré' });
   }
-}
+};
 
-module.exports = authMiddleware;
+// ========== ADMIN MIDDLEWARE ==========
+module.exports.requireAdmin = function requireAdmin(req, res, next) {
+  if (req.user && req.user.role === 'admin') {
+    return next();
+  }
+  return res.status(403).json({ error: 'Accès administrateur requis' });
+};

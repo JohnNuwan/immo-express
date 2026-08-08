@@ -138,9 +138,8 @@ Footer
 
 ### Roadmap technique
 
-1. **Découpage** : séparer CSS/JS en fichiers distincts
-2. **Build** : ajouter un bundler (Vite) pour minification
-3. **Backend** : API REST (Node.js + Express ou Python + FastAPI)
-4. **Base de données** : PostgreSQL pour les annonces, utilisateurs
-5. **Auth** : JWT pour les comptes utilisateur
-6. **Mobile** : PWA ou React Native
+1. ✅ **Découpage & Rangement** : Dossier [public/](file:///c:/Users/aza/immo-express/public) hébergeant toutes les pages HTML, les scripts et assets.
+2. ✅ **Composants Modulaires** : Injection dynamique du Header, Footer et Mobile Bottom Nav via [public/js/components.js](file:///c:/Users/aza/immo-express/public/js/components.js).
+3. ✅ **Backend & Base de données** : API REST Node.js + Express + SQLite JWT dans [backend/](file:///c:/Users/aza/immo-express/backend) (voir documentation [docs/api.md](file:///c:/Users/aza/immo-express/docs/api.md)).
+4. ✅ **Mobile & PWA** : Service Worker (`sw.js`), `manifest.json`, Mobile Bottom Bar et wrapper Capacitor Android (`capacitor.config.json`).
+5. ✅ **Outillage de Build** : Configuration Vite.js dans [vite.config.js](file:///c:/Users/aza/immo-express/vite.config.js).

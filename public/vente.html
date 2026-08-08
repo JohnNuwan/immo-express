@@ -5,35 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Acheter — Immo-Express · NODUS</title>
   <meta name="theme-color" content="#14141a">
-  <link rel="icon" href="assets/icon-192.svg" type="image/svg+xml">
+  <link rel="icon" href="assets/icons/icon-192.svg" type="image/svg+xml">
   <link rel="stylesheet" href="css/nodus.css">
+  <script src="js/components.js" defer></script>
 </head>
 <body class="n-page">
 
-    <header class="n-header">
-      <div class="n-header-inner">
-        <a href="index.html" class="n-logo">
-          <div class="n-logo-icon">IE</div>
-          <span>Immo</span><span class="n-cyan">Express</span>
-        </a>
-        <button class="n-mobile-toggle" onclick="document.querySelector('.n-nav').classList.toggle('open')">☰</button>
-        <nav class="n-nav">
-          <a href="index.html">🏠 Accueil</a>
-          <a href="vente.html" class="active">💰 Acheter</a>
-          <a href="location.html">📍 Louer</a>
-          <a href="scoring.html">🔬 Scoring</a>
-          <a href="risques.html">🌍 Risques</a>
-          <a href="pro.html">🏢 Pro</a>
-          <a href="dashboard.html">📊 Dashboard</a>
-          <a href="profil.html">👤 Profil</a>
-          <a href="recherche.html">🔎 Recherche</a>
-          <a href="pro.html" class="n-btn-depot">+ Publier</a>
-          <button class="n-btn-user" onclick="openAuth()">👤 Connexion</button>
-        </nav>
-      </div>
-    </header>
+    <div id="header-placeholder"></div>
 <section class="n-hero">
-  <h1>💰 Acheter <span class="n-hero-accent">un bien</span> <span class="n-hero-cyan">immobilier</span></h1>
+  <h1>Acheter <span class="n-hero-accent">un bien</span> <span class="n-hero-cyan">immobilier</span></h1>
   <p>Appartements, maisons, villas — trouvez le bien de vos rêves au meilleur prix</p>
   <div class="n-search-bar">
     <input type="text" id="vSearch" placeholder="Ville, quartier…" oninput="filter()">
@@ -44,30 +24,31 @@
       <option value="villa">Villa</option>
       <option value="studio">Studio</option>
     </select>
-    <button onclick="filter()">🔍 Rechercher</button>
+    <button onclick="filter()">Rechercher</button>
   </div>
 </section>
 
 <div class="n-stats n-reveal">
   <div class="n-stats-inner">
-    <span class="n-stat-item">🏠 <strong id="statCount">0</strong> biens à vendre</span>
-    <span class="n-stat-item">🛡️ <strong>—</strong> annonces vérifiées</span>
-    <span class="n-stat-item">📊 <strong>0</strong> analyses IA réalisées</span>
-    <span class="n-stat-item">💰 Prix moyen <strong id="statAvg">— €</strong></span>
+    <span class="n-stat-item"><strong id="statCount">0</strong> biens à vendre</span>
+    <span class="n-stat-item"><strong>—</strong> annonces vérifiées</span>
+    <span class="n-stat-item"><strong>0</strong> analyses IA réalisées</span>
+    <span class="n-stat-item">Prix moyen <strong id="statAvg">— €</strong></span>
   </div>
 </div>
 
 <div class="n-layout n-reveal">
   <aside class="n-sidebar" id="sidebar">
-    <h3>🔍 Filtrer</h3>
+    <h3>Filtrer</h3>
     <div class="n-filter-group">
       <label>Type</label>
-      <div class="n-filter-btns" id="typeBtns">
+      <div class="n-filter-btns" id="typeFilters">
         <button class="active" data-v="all">Tous</button>
         <button data-v="appartement">Appartement</button>
         <button data-v="maison">Maison</button>
         <button data-v="villa">Villa</button>
         <button data-v="studio">Studio</button>
+        <button data-v="terrain">Terrain</button>
       </div>
     </div>
     <div class="n-filter-group">
@@ -79,11 +60,15 @@
       </div>
     </div>
     <div class="n-filter-group">
-      <label>Surface min</label>
+      <label>Surface habitable min (m²)</label>
       <input type="number" id="vSurf" placeholder="m² min" oninput="filter()">
     </div>
     <div class="n-filter-group">
-      <label>Pièces</label>
+      <label>Surface terrain min (m²)</label>
+      <input type="number" id="vTerrainSurf" placeholder="Terrain m² min" oninput="filter()">
+    </div>
+    <div class="n-filter-group">
+      <label>Pièces & Chambres</label>
       <div class="n-filter-btns" id="pieceBtns">
         <button class="active" data-p="all">Tous</button>
         <button data-p="1">1</button>
@@ -93,13 +78,49 @@
       </div>
     </div>
     <div class="n-filter-group">
-      <label>DPE min</label>
+      <label>Ascenseur</label>
+      <select id="vAscenseur" onchange="filter()">
+        <option value="">Tous</option>
+        <option value="oui">Oui</option>
+        <option value="non">Non</option>
+      </select>
+    </div>
+    <div class="n-filter-group">
+      <label>Exposition</label>
+      <select id="vExpo" onchange="filter()">
+        <option value="">Toutes</option>
+        <option value="sud">Sud</option>
+        <option value="est">Est</option>
+        <option value="ouest">Ouest</option>
+        <option value="nord">Nord</option>
+      </select>
+    </div>
+    <div class="n-filter-group">
+      <label>État du bien</label>
+      <select id="vEtat" onchange="filter()">
+        <option value="">Tous</option>
+        <option value="neuf">Neuf</option>
+        <option value="bon">Bon état</option>
+        <option value="renover">À rénover</option>
+      </select>
+    </div>
+    <div class="n-filter-group">
+      <label>Classe énergie (DPE)</label>
       <select id="vDpe" onchange="filter()">
         <option value="">Tous</option>
         <option value="A">A</option><option value="B">B</option>
         <option value="C">C</option><option value="D">D</option>
-        <option value="E">E</option>
+        <option value="E">E</option><option value="F">F</option><option value="G">G</option>
       </select>
+    </div>
+    <div class="n-filter-group">
+      <label>Caractéristiques</label>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:0.8rem;color:var(--n-text-secondary)">
+        <label><input type="checkbox" id="fPiscine" onchange="filter()"> Piscine</label>
+        <label><input type="checkbox" id="fTerrasse" onchange="filter()"> Terrasse</label>
+        <label><input type="checkbox" id="fGarage" onchange="filter()"> Garage</label>
+        <label><input type="checkbox" id="fJardin" onchange="filter()"> Jardin</label>
+      </div>
     </div>
     <div class="n-filter-group">
       <label>Publié par</label>
@@ -109,7 +130,7 @@
         <option value="particulier">Particuliers</option>
       </select>
     </div>
-    <button class="n-btn-reset" onclick="resetFilters()">🔄 Réinitialiser</button>
+    <button class="n-btn-reset" onclick="resetFilters()">Réinitialiser</button>
   </aside>
 
   <div class="n-results-area">
@@ -130,15 +151,15 @@
 <div class="n-layout n-reveal" style="padding-top:0">
   <div style="grid-column:1/-1">
     <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:16px">
-      <h2 class="n-section-title">🛠️ Outils achat</h2>
+      <h2 class="n-section-title">Outils achat</h2>
       <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <button class="n-btn n-btn-primary" onclick="toggleTool('mortgage')">🏦 Simuler un prêt</button>
-        <button class="n-btn n-btn-secondary" onclick="toggleTool('notaire')">📜 Frais de notaire</button>
+        <button class="n-btn n-btn-primary" onclick="toggleTool('mortgage')">Simuler un prêt</button>
+        <button class="n-btn n-btn-secondary" onclick="toggleTool('notaire')">Frais de notaire</button>
       </div>
     </div>
 
     <div id="tp-mortgage" class="n-form" style="display:none;margin-bottom:16px">
-      <h3 class="n-section-title">🏦 Simulateur de prêt immobilier</h3>
+      <h3 class="n-section-title">Simulateur de prêt immobilier</h3>
       <div class="n-form-grid" style="grid-template-columns:repeat(auto-fill,minmax(180px,1fr))">
         <div class="n-form-group"><label>Prix du bien *</label><input type="number" id="mPrice" value="250000"></div>
         <div class="n-form-group"><label>Apport</label><input type="number" id="mDown" value="50000"></div>
@@ -151,13 +172,13 @@
         <div><div class="n-card-price" id="mInterest" style="font-size:1.2rem">—</div><div style="font-size:0.75rem;color:var(--n-text-tertiary)">Intérêts</div></div>
       </div>
       <div class="n-form-actions">
-        <button class="n-btn n-btn-primary" onclick="calcMortgage()">🏦 Calculer</button>
+        <button class="n-btn n-btn-primary" onclick="calcMortgage()">Calculer</button>
         <button class="n-btn n-btn-secondary" onclick="toggleTool('mortgage')">Fermer</button>
       </div>
     </div>
 
     <div id="tp-notaire" class="n-form" style="display:none;margin-bottom:16px">
-      <h3 class="n-section-title">📜 Estimateur des frais de notaire</h3>
+      <h3 class="n-section-title">Estimateur des frais de notaire</h3>
       <div class="n-form-grid" style="grid-template-columns:repeat(auto-fill,minmax(180px,1fr))">
         <div class="n-form-group"><label>Prix du bien *</label><input type="number" id="nPrice" value="250000"></div>
         <div class="n-form-group"><label>Type</label><select id="nType"><option value="ancien">Ancien</option><option value="neuf">Neuf</option></select></div>
@@ -169,27 +190,29 @@
         <div><div class="n-card-price" id="nPct" style="font-size:1.2rem">—</div><div style="font-size:0.75rem;color:var(--n-text-tertiary)">% du prix</div></div>
       </div>
       <div class="n-form-actions">
-        <button class="n-btn n-btn-primary" onclick="calcNotaire()">📜 Calculer</button>
+        <button class="n-btn n-btn-primary" onclick="calcNotaire()">Calculer</button>
         <button class="n-btn n-btn-secondary" onclick="toggleTool('notaire')">Fermer</button>
       </div>
     </div>
 
-    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px">
-      <div class="n-dash-card">
-        <div class="n-dc-icon" style="background:var(--n-cyan-dim)">📐</div>
-        <h3 style="font-size:.95rem;font-weight:600;margin-bottom:4px">Calculateur de surface</h3>
-        <p style="font-size:.82rem;color:var(--n-text-secondary)">Convertissez et calculez les surfaces : m², pieds carrés, surfaces habitables.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-top:24px">
+      <div class="n-dash-card" style="cursor:pointer" onclick="location.href='scoring.html'">
+        <div class="n-dc-icon" style="background:rgba(255,56,92,0.1);color:var(--n-accent)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
+        <h3 style="font-size:.95rem;font-weight:600;margin-bottom:4px">Notation & Score IA</h3>
+        <p style="font-size:.82rem;color:var(--n-text-secondary)">Évaluez un bien sur 8 critères avec analyse géorisques et prix du marché.</p>
+        <button class="n-btn n-btn-primary" style="margin-top:10px;width:100%">Accéder à Notation →</button>
       </div>
-      <div class="n-dash-card">
-        <div class="n-dc-icon" style="background:rgba(0,230,118,0.15)">🔬</div>
-        <h3 style="font-size:.95rem;font-weight:600;margin-bottom:4px">Analyse IA du prix</h3>
-        <p style="font-size:.82rem;color:var(--n-text-secondary)">Comparez le prix d'un bien au marché local grâce à notre moteur de notation 8 critères.</p>
-        <button class="n-btn n-btn-primary" style="margin-top:10px" onclick="location.href='scoring.html'">🔬 Analyser un bien</button>
+      <div class="n-dash-card" style="cursor:pointer" onclick="location.href='location.html'">
+        <div class="n-dc-icon" style="background:rgba(56,189,248,0.1);color:var(--n-cyan)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+        <h3 style="font-size:.95rem;font-weight:600;margin-bottom:4px">Rechercher en Location</h3>
+        <p style="font-size:.82rem;color:var(--n-text-secondary)">Découvrez les biens en location longue durée et saisonnière.</p>
+        <button class="n-btn n-btn-secondary" style="margin-top:10px;width:100%">Voir les locations →</button>
       </div>
-      <div class="n-dash-card">
-        <div class="n-dc-icon" style="background:rgba(255,193,7,0.15)">📋</div>
-        <h3 style="font-size:.95rem;font-weight:600;margin-bottom:4px">Checklist achat</h3>
-        <p style="font-size:.82rem;color:var(--n-text-secondary)">Documents nécessaires, étapes clés, délais et diagnostics obligatoires.</p>
+      <div class="n-dash-card" style="cursor:pointer" onclick="location.href='pro.html'">
+        <div class="n-dc-icon" style="background:rgba(245,158,11,0.1);color:var(--n-warning)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></div>
+        <h3 style="font-size:.95rem;font-weight:600;margin-bottom:4px">Espace Pro & Agences</h3>
+        <p style="font-size:.82rem;color:var(--n-text-secondary)">Solutions agences, statistiques et diffusion d'annonces.</p>
+        <button class="n-btn n-btn-secondary" style="margin-top:10px;width:100%">Espace Pro →</button>
       </div>
     </div>
   </div>
@@ -210,7 +233,7 @@
       <div class="n-footer-inner">
         <div>
           <div class="n-logo" style="margin-bottom:10px;font-size:1.1rem">
-            <div class="n-logo-icon" style="width:30px;height:30px;font-size:0.8rem">IE</div>
+            <div class="n-logo-icon"><svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="32" height="32" rx="8" fill="url(#brandGradV)"/><path d="M16 6L7 13.5V25.5H13V18.5H19V25.5H25V13.5L16 6Z" fill="white" fill-opacity="0.95"/><path d="M16 11.5L11 15.5V22.5H14.5V17.5H17.5V22.5H21V15.5L16 11.5Z" fill="#FF385C"/><defs><linearGradient id="brandGradV" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse"><stop stop-color="#FF385C"/><stop offset="1" stop-color="#E00B41"/></linearGradient></defs></svg></div>
             <span>Immo</span><span class="n-cyan">Express</span>
           </div>
           <p>La plateforme immobilière intelligente. Annonces vérifiées, analyses IA, mise en relation directe.</p>
@@ -442,7 +465,7 @@ render();
   <div class="n-footer-inner">
     <div>
       <div class="n-logo" style="margin-bottom:10px;font-size:1.1rem">
-        <div class="n-logo-icon" style="width:30px;height:30px;font-size:0.8rem">IE</div>
+        <div class="n-logo-icon"><svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="32" height="32" rx="8" fill="url(#brandGradV)"/><path d="M16 6L7 13.5V25.5H13V18.5H19V25.5H25V13.5L16 6Z" fill="white" fill-opacity="0.95"/><path d="M16 11.5L11 15.5V22.5H14.5V17.5H17.5V22.5H21V15.5L16 11.5Z" fill="#FF385C"/><defs><linearGradient id="brandGradV" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse"><stop stop-color="#FF385C"/><stop offset="1" stop-color="#E00B41"/></linearGradient></defs></svg></div>
         <span>Immo</span><span class="n-cyan">Express</span>
       </div>
       <p>La plateforme immobilière intelligente. Annonces vérifiées, analyses IA, mise en relation directe.</p>
