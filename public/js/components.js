@@ -157,7 +157,7 @@
     </div>
 
     <div class="airbnb-footer-bottom">
-      <p>© 2026 ImmoExpress, Inc. · Confidentialité · Conditions · Plan du site</p>
+      <p>© 2026 ImmoExpress, Inc. · <a href="cgu.html" style="color:inherit;text-decoration:none">Confidentialité & CGU</a> · Plan du site</p>
       <div class="footer-lang">
         <span style="margin-right:20px;">Français (FR) · € EUR</span>
         <span class="n-footer-eva">⚡ Architecturé par <a href="http://192.168.1.5:8999/" target="_blank" style="color:var(--n-cyan);text-decoration:none;font-weight:600;">NODUS_SYSTEMS</a> (DeepTech Souveraine) · Propulsé par l'IA Agentique E.V.A</span>
