@@ -1,0 +1,259 @@
+/* =====================================================
+   IMMO-EXPRESS — FEUILLE RESPONSIVE DÉDIÉE
+   Couvre tous les cas : header, grilles inline, modales,
+   formulaires, cartes, footer, sidebar.
+   ===================================================== */
+
+/* --- RESET DE BASE ANTI-DÉBORDEMENT --- */
+*, *::before, *::after { box-sizing: border-box; }
+html, body {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+img, video, svg, iframe {
+  max-width: 100%;
+  height: auto;
+}
+
+/* =============================================
+   MOBILE : < 768px (Téléphones)
+   ============================================= */
+@media (max-width: 768px) {
+
+  /* --- HEADER --- */
+  .airbnb-header { position: sticky; top: 0; z-index: 1000; }
+  .airbnb-header-container {
+    padding: 10px 14px !important;
+    gap: 8px !important;
+    flex-wrap: nowrap;
+  }
+  /* Cacher le texte du logo sur très petit écran */
+  .airbnb-logo-text { font-size: 0.95rem !important; }
+
+  /* Cacher nav desktop */
+  .airbnb-nav { display: none !important; }
+  .airbnb-nav.open {
+    display: flex !important;
+    flex-direction: column !important;
+    position: absolute !important;
+    top: 100% !important;
+    left: 0 !important;
+    right: 0 !important;
+    background: var(--n-bg-secondary) !important;
+    border-bottom: 1px solid var(--n-border) !important;
+    padding: 8px !important;
+    gap: 2px !important;
+    z-index: 2000 !important;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3) !important;
+  }
+  .airbnb-nav.open a {
+    padding: 12px 16px !important;
+    font-size: 0.95rem !important;
+    border-radius: 8px !important;
+    display: block !important;
+  }
+
+  /* Cacher éléments secondaires du header */
+  .airbnb-host-btn { display: none !important; }
+  .search-pill-segment:not(:first-child),
+  .search-pill-divider { display: none !important; }
+
+  /* Afficher le bouton burger */
+  .mobile-burger-btn { display: flex !important; }
+
+  /* Réduire les boutons d'action header */
+  .airbnb-user-actions { gap: 4px !important; }
+  .airbnb-fav-btn { padding: 6px 10px !important; font-size: 0.8rem !important; }
+  .airbnb-user-menu-btn { padding: 6px 10px !important; }
+  .theme-toggle-btn { width: 34px !important; height: 34px !important; }
+
+  /* --- CATÉGORIES BAR --- */
+  .airbnb-categories-bar { padding: 4px 10px !important; }
+  .categories-scroll { gap: 16px !important; }
+  .category-label { font-size: 0.68rem !important; }
+
+  /* --- HERO SECTION --- */
+  .n-hero { padding: 28px 14px !important; }
+  .n-hero h1 { font-size: 1.4rem !important; line-height: 1.25 !important; }
+  .n-hero p { font-size: 0.88rem !important; margin-bottom: 20px !important; }
+
+  /* --- SEARCH BAR --- */
+  .n-search-bar {
+    flex-direction: column !important;
+    padding: 10px !important;
+    gap: 8px !important;
+    border-radius: 16px !important;
+  }
+  .n-search-bar input { width: 100% !important; }
+  .n-search-bar select { width: 100% !important; min-width: unset !important; }
+  .n-search-bar button { width: 100% !important; }
+
+  /* --- LAYOUT GRILLE PRINCIPALE --- */
+  .n-layout {
+    grid-template-columns: 1fr !important;
+    padding: 14px 12px !important;
+    gap: 14px !important;
+  }
+
+  /* --- SIDEBAR : masquée sur mobile --- */
+  .n-sidebar { display: none !important; }
+  .n-sidebar.show { display: block !important; }
+
+  /* --- TOUTES LES GRILLES : 1 colonne sur mobile --- */
+  /* Grilles CSS classes */
+  .n-card-grid,
+  .n-dash-grid,
+  .n-form-grid,
+  .n-footer-inner,
+  .airbnb-footer-container {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Grilles inline HTML (ciblées par attribut) */
+  [style*="grid-template-columns"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* --- CARTES ANNONCES --- */
+  .listing-card { margin-bottom: 0 !important; }
+  .listing-img { aspect-ratio: 16/9 !important; }
+  .n-card { grid-template-columns: 1fr !important; }
+  .n-card-img { min-height: 180px !important; height: 180px !important; }
+  .pro-listing-card { grid-template-columns: 1fr !important; }
+
+  /* --- MODAL : bottom-sheet sur mobile --- */
+  .n-modal-overlay {
+    padding: 0 !important;
+    align-items: flex-end !important;
+    z-index: 5000 !important;
+  }
+  .n-modal {
+    border-radius: 20px 20px 0 0 !important;
+    max-height: 90vh !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  .n-modal-header { padding: 16px 18px !important; }
+  .n-modal-body { padding: 14px !important; }
+
+  /* --- FORMULAIRES --- */
+  .n-form-group input,
+  .n-form-group select,
+  .n-form-group textarea { font-size: 16px !important; } /* évite zoom iOS */
+
+  /* --- FOOTER --- */
+  .airbnb-footer { padding: 28px 14px 80px !important; }
+  .airbnb-footer-container {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 20px !important;
+  }
+  .airbnb-footer-bottom {
+    flex-direction: column !important;
+    text-align: center !important;
+    gap: 8px !important;
+    font-size: 0.75rem !important;
+  }
+  .n-footer-eva { display: block !important; text-align: center !important; }
+  .n-footer { padding: 28px 14px 80px !important; }
+
+  /* --- STATS BAR --- */
+  .n-stats-inner { gap: 10px !important; flex-wrap: wrap !important; }
+  .n-stat-item { font-size: 0.78rem !important; }
+
+  /* --- RESULTS HEADER --- */
+  .n-results-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 8px !important;
+  }
+  .n-results-tabs { overflow-x: auto !important; width: 100% !important; }
+  .n-results-tabs button { white-space: nowrap !important; padding: 8px 14px !important; }
+
+  /* --- CHAT EVA --- */
+  .n-chat-panel { right: 8px !important; left: 8px !important; width: auto !important; max-height: 60vh !important; bottom: 76px !important; }
+  .n-chat-toggle { right: 14px !important; bottom: 76px !important; }
+
+  /* --- PRO PAGE layout --- */
+  .pro-sub-nav { flex-wrap: wrap !important; gap: 6px !important; }
+
+  /* --- PROFIL PAGE : sidebar → tabs horizontaux --- */
+  #profileContainer { display: block !important; }
+  #profileContainer .n-sidebar {
+    display: block !important;
+    position: static !important;
+    margin-bottom: 14px;
+    border-radius: 12px;
+  }
+  #profileContainer .n-sidebar aside { position: static !important; }
+}
+
+/* =============================================
+   TRÈS PETITS TÉLÉPHONES : < 480px
+   ============================================= */
+@media (max-width: 480px) {
+  .n-hero h1 { font-size: 1.2rem !important; }
+  .airbnb-logo-text { font-size: 0.85rem !important; }
+  .airbnb-footer-container { grid-template-columns: 1fr !important; }
+  .n-modal { max-height: 95vh !important; }
+  /* Masquer certains items de catégorie pour ne pas surcharger */
+  .category-item:nth-child(n+6) { display: none !important; }
+}
+
+/* =============================================
+   TABLETTE : 769px — 1024px
+   ============================================= */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .n-layout { grid-template-columns: 1fr !important; }
+  .n-sidebar { display: none !important; }
+  .airbnb-footer-container { grid-template-columns: 1fr 1fr !important; }
+  .n-card { grid-template-columns: 1fr !important; }
+  [style*="grid-template-columns: 280px"],
+  [style*="grid-template-columns:280px"],
+  [style*="grid-template-columns: 220px"],
+  [style*="grid-template-columns:220px"] {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* =============================================
+   BURGER BUTTON — toujours caché sur desktop
+   ============================================= */
+.mobile-burger-btn {
+  display: none;
+  background: var(--n-bg-card);
+  border: 1px solid var(--n-border);
+  border-radius: 8px;
+  width: 38px;
+  height: 38px;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--n-text);
+  font-size: 1.1rem;
+  flex-shrink: 0;
+  transition: background 0.2s;
+  margin-left: 6px;
+}
+.mobile-burger-btn:hover { background: var(--n-bg-hover); }
+
+/* =============================================
+   BOTTOM NAV — affichée sur mobile uniquement
+   ============================================= */
+@media (max-width: 768px) {
+  .n-mobile-bottom-nav { display: flex !important; }
+  body { padding-bottom: 66px; }
+}
+@media (min-width: 769px) {
+  .n-mobile-bottom-nav { display: none !important; }
+  body { padding-bottom: 0; }
+}
+
+/* =============================================
+   RISQUES / SCORING pages : fix inline grids
+   ============================================= */
+@media (max-width: 768px) {
+  #riskCards { grid-template-columns: 1fr !important; }
+  #scoreGrid  { grid-template-columns: 1fr !important; }
+  .score-hero-card { grid-template-columns: 1fr !important; text-align: center; }
+  .risk-hero-inner { grid-template-columns: 1fr !important; text-align: center; }
+}

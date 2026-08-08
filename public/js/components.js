@@ -78,6 +78,9 @@
         </button>
       </div>
 
+      <!-- MOBILE BURGER BUTTON (visible only on mobile) -->
+      <button class="mobile-burger-btn" id="mobileBurger" onclick="toggleMobileNav()" aria-label="Menu">☰</button>
+
     </div>
 
     <!-- CATEGORIES BAR WITH VECTOR SVG ICONS -->
@@ -228,4 +231,25 @@
       if (window.render) window.render();
     }
   };
+
+  // Global Mobile Nav Toggle
+  window.toggleMobileNav = function() {
+    const nav = document.querySelector('.airbnb-nav');
+    const burger = document.getElementById('mobileBurger');
+    if (!nav) return;
+    const isOpen = nav.classList.toggle('open');
+    if (burger) burger.textContent = isOpen ? '✕' : '☰';
+  };
+
+  // Close mobile nav on outside click
+  document.addEventListener('click', function(e) {
+    const nav = document.querySelector('.airbnb-nav');
+    const burger = document.getElementById('mobileBurger');
+    if (!nav || !nav.classList.contains('open')) return;
+    if (!nav.contains(e.target) && e.target !== burger && !burger.contains(e.target)) {
+      nav.classList.remove('open');
+      if (burger) burger.textContent = '☰';
+    }
+  });
+
 })();
