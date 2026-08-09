@@ -35,7 +35,7 @@ const Auth = {
       btn.onclick = () => window.location.href = 'profil.html';
       if (depositBtn) depositBtn.style.display = '';
     } else {
-      btn.innerHTML = '👤 <span>Connexion</span>';
+      btn.innerHTML = `<span class="user-avatar-circle"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span> <span class="user-name" style="margin-left:6px;font-weight:500;">Mon compte</span>`;
       btn.onclick = () => window.location.href = 'login.html';
       if (depositBtn) depositBtn.style.display = '';
     }
