@@ -195,7 +195,7 @@
   </nav>
   `;
 
-  document.addEventListener('DOMContentLoaded', () => {
+  function initComponents() {
     // Inject Header
     const headerPlaceholder = document.getElementById('header-placeholder');
     if (headerPlaceholder) {
@@ -216,7 +216,13 @@
     if (!document.querySelector('.n-mobile-bottom-nav')) {
       document.body.insertAdjacentHTML('beforeend', bottomNavHTML);
     }
-  });
+  }
+
+  if (document.readyState !== 'loading') {
+    initComponents();
+  } else {
+    document.addEventListener('DOMContentLoaded', initComponents);
+  }
 
   // Global Category filter handler
   window.filterByCategory = function (cat, btnEl) {

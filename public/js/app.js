@@ -528,7 +528,11 @@ async function syncFavoritesWithBackend() {
     }
   }
 }
-document.addEventListener('DOMContentLoaded', () => syncFavoritesWithBackend());
+if (document.readyState !== 'loading') {
+  syncFavoritesWithBackend();
+} else {
+  document.addEventListener('DOMContentLoaded', () => syncFavoritesWithBackend());
+}
 function isFavorite(id){return getStats().favorites.includes(id);}
 function updateFavUI(){
   const el=document.getElementById('favCount');
