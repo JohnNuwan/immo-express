@@ -263,6 +263,8 @@
       nav.classList.remove('open');
       if (burger) burger.textContent = '☰';
     }
+  });
+
   // --- INTERACTIVE MORTGAGE CALCULATOR COMPONENT ---
   window.renderMortgageCalculator = function(containerId) {
     const container = document.getElementById(containerId);
