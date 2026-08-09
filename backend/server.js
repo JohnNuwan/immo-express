@@ -10,12 +10,28 @@ const scoringRoutes = require('./routes/scoring');
 const contactRoutes = require('./routes/contact');
 const adminRoutes = require('./routes/admin');
 const opendataRoutes = require('./routes/opendata');
+const favoritesRoutes = require('./routes/favorites');
+
+const fs = require('fs');
+const path = require('path');
+
+const uploadsDir = path.join(__dirname, '../public/uploads');
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+}
+
+const corsOptions = {
+  origin: process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+};
 
 const app = express();
 
 // Middleware
-app.use(cors());
-app.use(express.json());
+app.use(cors(corsOptions));
+app.use(express.json({ limit: '10mb' }));
+app.use('/uploads', express.static(uploadsDir));
 
 // Health check
 app.get('/api/health', (req, res) => {
@@ -29,6 +45,7 @@ app.use('/api/scoring', scoringRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/opendata', opendataRoutes);
+app.use('/api/favorites', favoritesRoutes);
 
 // 404 handler
 app.use((req, res) => {
@@ -41,8 +58,10 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Erreur interne du serveur' });
 });
 
-app.listen(config.PORT, () => {
-  console.log(`🚀 Serveur ImmoExpress démarré sur http://localhost:${config.PORT}`);
-});
+if (require.main === module) {
+  app.listen(config.PORT, () => {
+    console.log(`🚀 Serveur ImmoExpress démarré sur http://localhost:${config.PORT}`);
+  });
+}
 
 module.exports = app;

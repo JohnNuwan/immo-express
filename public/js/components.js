@@ -223,13 +223,20 @@
     document.querySelectorAll('.category-item').forEach(el => el.classList.remove('active'));
     if (btnEl) btnEl.classList.add('active');
     
-    if (window.state) {
-      if (cat === 'all') { window.state.type = 'all'; window.state.scoreFilter = 0; }
-      else if (cat === 'score') { window.state.scoreFilter = 90; }
-      else if (cat === 'baisses') { window.state.sort = 'price-asc'; }
-      else { window.state.type = cat; }
-      if (window.render) window.render();
-    }
+    try {
+      let st = window.pageState;
+      if (!st && typeof state !== 'undefined') st = state;
+      
+      if (st) {
+        if (cat === 'all') { st.type = 'all'; st.scoreFilter = 0; }
+        else if (cat === 'score') { st.scoreFilter = 90; }
+        else if (cat === 'baisses') { st.sort = 'price-asc'; }
+        else { st.type = cat; }
+        
+        if (typeof window.renderPage === 'function') window.renderPage();
+        else if (typeof render === 'function') render();
+      }
+    } catch (e) { console.error('Filter error:', e); }
   };
 
   // Global Mobile Nav Toggle
@@ -250,6 +257,96 @@
       nav.classList.remove('open');
       if (burger) burger.textContent = '☰';
     }
-  });
+  // --- INTERACTIVE MORTGAGE CALCULATOR COMPONENT ---
+  window.renderMortgageCalculator = function(containerId) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    container.innerHTML = `
+      <div class="n-card mortgage-calculator-card" style="padding:28px;background:var(--n-bg-card);border:1px solid var(--n-border);border-radius:16px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+          <div>
+            <h3 style="font-size:1.25rem;font-weight:700;margin:0 0 4px 0;color:var(--n-text)">🧮 Simuler votre Prêt Immobilier</h3>
+            <p style="font-size:0.85rem;color:var(--n-text-secondary);margin:0">Estimez vos mensualités instantanément avec taux personnalisé</p>
+          </div>
+          <span style="font-size:0.75rem;padding:4px 10px;background:var(--n-cyan-dim);color:var(--n-cyan);border-radius:20px;font-weight:600;">Temps Réel</span>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));gap:20px;margin-bottom:24px;">
+          <div>
+            <label style="display:block;font-size:0.85rem;font-weight:600;color:var(--n-text-secondary);margin-bottom:6px">Montant du bien (€)</label>
+            <input type="number" id="calcPrice" value="350000" step="5000" style="width:100%;padding:10px 14px;background:var(--n-bg-secondary);border:1px solid var(--n-border);color:var(--n-text);border-radius:8px;font-size:1rem;font-weight:600;">
+          </div>
+          <div>
+            <label style="display:block;font-size:0.85rem;font-weight:600;color:var(--n-text-secondary);margin-bottom:6px">Apport personnel (€)</label>
+            <input type="number" id="calcDown" value="50000" step="5000" style="width:100%;padding:10px 14px;background:var(--n-bg-secondary);border:1px solid var(--n-border);color:var(--n-text);border-radius:8px;font-size:1rem;font-weight:600;">
+          </div>
+          <div>
+            <label style="display:block;font-size:0.85rem;font-weight:600;color:var(--n-text-secondary);margin-bottom:6px">Durée du prêt (Années)</label>
+            <input type="range" id="calcYears" min="5" max="30" value="20" style="width:100%;accent-color:var(--n-accent);">
+            <div style="display:flex;justify-content:space-between;font-size:0.8rem;color:var(--n-text-tertiary);margin-top:4px"><span id="yearsVal">20 ans</span><span>30 ans</span></div>
+          </div>
+          <div>
+            <label style="display:block;font-size:0.85rem;font-weight:600;color:var(--n-text-secondary);margin-bottom:6px">Taux d'intérêt annuel (%)</label>
+            <input type="number" id="calcRate" value="3.5" step="0.1" style="width:100%;padding:10px 14px;background:var(--n-bg-secondary);border:1px solid var(--n-border);color:var(--n-text);border-radius:8px;font-size:1rem;font-weight:600;">
+          </div>
+        </div>
+
+        <div style="background:var(--n-bg-secondary);padding:20px;border-radius:12px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;">
+          <div>
+            <span style="font-size:0.85rem;color:var(--n-text-secondary);display:block;">Mensualité estimée (hors assurance)</span>
+            <span id="monthlyResult" style="font-size:2rem;font-weight:800;color:var(--n-accent);">1 814 € / mois</span>
+          </div>
+          <div style="display:flex;gap:24px;font-size:0.85rem;color:var(--n-text-secondary);">
+            <div>
+              <span>Capital emprunté :</span>
+              <strong id="borrowedResult" style="display:block;color:var(--n-text);font-size:1rem;">300 000 €</strong>
+            </div>
+            <div>
+              <span>Coût total des intérêts :</span>
+              <strong id="interestResult" style="display:block;color:var(--n-text);font-size:1rem;">135 360 €</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    function updateCalc() {
+      const price = parseFloat(document.getElementById('calcPrice').value) || 0;
+      const down = parseFloat(document.getElementById('calcDown').value) || 0;
+      const years = parseInt(document.getElementById('calcYears').value, 10) || 20;
+      const annualRate = parseFloat(document.getElementById('calcRate').value) || 0;
+
+      document.getElementById('yearsVal').textContent = `${years} ans`;
+
+      const P = Math.max(0, price - down);
+      const r = (annualRate / 100) / 12;
+      const n = years * 12;
+
+      let monthly = 0;
+      if (P > 0 && r > 0 && n > 0) {
+        monthly = P * (r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+      } else if (P > 0 && n > 0) {
+        monthly = P / n;
+      }
+
+      const totalPaid = monthly * n;
+      const totalInterest = Math.max(0, totalPaid - P);
+
+      document.getElementById('monthlyResult').textContent = `${Math.round(monthly).toLocaleString('fr-FR')} € / mois`;
+      document.getElementById('borrowedResult').textContent = `${Math.round(P).toLocaleString('fr-FR')} €`;
+      document.getElementById('interestResult').textContent = `${Math.round(totalInterest).toLocaleString('fr-FR')} €`;
+    }
+
+    ['calcPrice', 'calcDown', 'calcYears', 'calcRate'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.addEventListener('input', updateCalc);
+        el.addEventListener('change', updateCalc);
+      }
+    });
+
+    updateCalc();
+  };
 
 })();

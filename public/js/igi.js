@@ -23,6 +23,28 @@ const IGI = {
     const key = 'geo_' + address.trim().toLowerCase();
     if (this._cache[key]) return this._cache[key];
 
+    try {
+      const banUrl = `https://api-adresse.data.gouv.fr/search/?q=${encodeURIComponent(address)}&limit=1`;
+      const rBan = await fetch(banUrl);
+      if (rBan.ok) {
+        const dBan = await rBan.json();
+        if (dBan.features && dBan.features.length > 0) {
+          const feat = dBan.features[0];
+          const result = {
+            lat: feat.geometry.coordinates[1],
+            lng: feat.geometry.coordinates[0],
+            name: feat.properties.label,
+            city: feat.properties.city || '',
+            postcode: feat.properties.postcode || '',
+            insee: feat.properties.citycode || '',
+            departement: feat.properties.context || ''
+          };
+          this._cache[key] = result;
+          return result;
+        }
+      }
+    } catch(e) {}
+
     const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(address + ', France')}&format=json&limit=1&countrycodes=fr&addressdetails=1`;
     const r = await fetch(url, { headers: { 'User-Agent': 'ImmoExpress/1.0' } });
     if (!r.ok) throw new Error('Géocoding échoué');
@@ -49,7 +71,8 @@ const IGI = {
     if (this._cache[key]) return this._cache[key];
 
     try {
-      const proxy = 'http://127.0.0.1:8000/api/opendata/proxy?url=';
+      const apiHost = window.location.hostname === 'localhost' ? 'http://localhost:8000' : '';
+      const proxy = `${apiHost}/api/opendata/proxy?url=`;
       const [risques, radon, seisme, argiles, icpe] = await Promise.all([
         fetch(proxy + encodeURIComponent(`https://georisques.gouv.fr/api/v1/risques?code_insee=${codeInsee}`)).then(r => r.ok ? r.json() : null),
         fetch(proxy + encodeURIComponent(`https://georisques.gouv.fr/api/v1/radon?code_insee=${codeInsee}`)).then(r => r.ok ? r.json() : null),

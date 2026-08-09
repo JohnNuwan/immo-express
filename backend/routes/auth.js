@@ -4,11 +4,18 @@ const jwt = require('jsonwebtoken');
 const db = require('../database');
 const config = require('../config');
 const authMiddleware = require('../middleware/auth');
+const createRateLimiter = require('../middleware/rateLimiter');
+
+const authLimiter = createRateLimiter({
+  windowMs: 15 * 60 * 1000,
+  max: 15,
+  message: 'Trop de tentatives de connexion/inscription. Veuillez réessayer dans 15 minutes.'
+});
 
 const router = express.Router();
 
 // POST /api/auth/register
-router.post('/register', (req, res) => {
+router.post('/register', authLimiter, (req, res) => {
   const { email, password, nom, prenom, telephone } = req.body;
 
   if (!email || !password) {
@@ -44,7 +51,7 @@ router.post('/register', (req, res) => {
 });
 
 // POST /api/auth/login
-router.post('/login', (req, res) => {
+router.post('/login', authLimiter, (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {

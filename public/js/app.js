@@ -148,6 +148,10 @@ function renderCard(p) {
 
 function render() {
   const grid = document.getElementById('listingsGrid');
+  if (!grid) {
+    if (typeof window.renderPage === 'function') window.renderPage();
+    return;
+  }
   const count = document.getElementById('resultsCount');
   const filtered = getFiltered();
   count.innerHTML = `<strong>${filtered.length}</strong> annonce${filtered.length>1?'s':''} trouvée${filtered.length>1?'s':''}`;
@@ -492,12 +496,39 @@ function trackView(id){
 function toggleFavorite(id){
   const s=getStats();
   const idx=s.favorites.indexOf(id);
-  if(idx>-1) s.favorites.splice(idx,1);
-  else s.favorites.push(id);
+  const isAdding = idx === -1;
+
+  if (isAdding) s.favorites.push(id);
+  else s.favorites.splice(idx,1);
+
   s.favCount=s.favorites.length;
   saveStats(s);
   updateFavUI();
+
+  // Sync with API backend if logged in
+  if (window.ApiClient && window.ApiClient.getToken()) {
+    if (isAdding) {
+      window.ApiClient.post(`/api/favorites/${id}`);
+    } else {
+      window.ApiClient.delete(`/api/favorites/${id}`);
+    }
+  }
 }
+
+// Fetch user favorites from backend on load if logged in
+async function syncFavoritesWithBackend() {
+  if (window.ApiClient && window.ApiClient.getToken()) {
+    const res = await window.ApiClient.get('/api/favorites');
+    if (res.ok && Array.isArray(res.data)) {
+      const s = getStats();
+      s.favorites = res.data.map(b => b.id);
+      s.favCount = s.favorites.length;
+      saveStats(s);
+      updateFavUI();
+    }
+  }
+}
+document.addEventListener('DOMContentLoaded', () => syncFavoritesWithBackend());
 function isFavorite(id){return getStats().favorites.includes(id);}
 function updateFavUI(){
   const el=document.getElementById('favCount');
@@ -568,6 +599,62 @@ if('Notification'in window&&Notification.permission==='default')Notification.req
     last=String(n);localStorage.setItem('immo-last-alert',last);
   },60000);
 })();
+
+// ========== LIVE DEPOSIT FORM HANDLER ==========
+async function submitPropertyForm(event) {
+  event.preventDefault();
+  const form = event.target;
+  const submitBtn = form.querySelector('button[type="submit"]');
+  if (submitBtn) submitBtn.disabled = true;
+
+  try {
+    const formData = new FormData(form);
+    const photoFile = form.querySelector('input[type="file"]')?.files[0];
+    let photoUrl = null;
+
+    if (photoFile) {
+      const base64 = await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = e => resolve(e.target.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(photoFile);
+      });
+
+      const uploadRes = await window.ApiClient.post('/api/biens/upload', { image: base64 });
+      if (uploadRes.ok && uploadRes.data.url) {
+        photoUrl = uploadRes.data.url;
+      }
+    }
+
+    const payload = {
+      titre: formData.get('titre') || formData.get('title'),
+      description: formData.get('description') || formData.get('desc'),
+      prix: parseFloat(formData.get('prix') || formData.get('price')),
+      surface: parseFloat(formData.get('surface')),
+      type: formData.get('type'),
+      cat: formData.get('cat') || 'vente',
+      ville: formData.get('ville') || formData.get('city'),
+      code_postal: formData.get('code_postal') || formData.get('zipcode'),
+      adresse: formData.get('adresse') || formData.get('location'),
+      pieces: parseInt(formData.get('pieces'), 10) || 1,
+      etage: parseInt(formData.get('etage'), 10) || 0,
+      photo: photoUrl
+    };
+
+    const res = await window.ApiClient.post('/api/biens', payload);
+    if (res.ok) {
+      alert('✅ Votre annonce a été publiée avec succès !');
+      window.location.href = 'dashboard.html';
+    } else {
+      alert('❌ Erreur : ' + (res.data.error || 'Impossible de créer l\'annonce'));
+    }
+  } catch (err) {
+    alert('❌ Erreur lors de la publication : ' + err.message);
+  } finally {
+    if (submitBtn) submitBtn.disabled = false;
+  }
+}
+window.submitPropertyForm = submitPropertyForm;
 
 // ========== INIT ==========
 loadListingsFromAPI();

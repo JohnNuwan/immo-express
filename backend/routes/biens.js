@@ -39,6 +39,47 @@ router.get('/:id', (req, res) => {
   res.json(bien);
 });
 
+// POST /api/biens/upload — upload property photo (authenticated)
+const fs = require('fs');
+const path = require('path');
+
+router.post('/upload', auth, (req, res) => {
+  const { image, filename } = req.body;
+
+  if (!image) {
+    return res.status(400).json({ error: 'Données d\'image manquantes' });
+  }
+
+  try {
+    const matches = image.match(/^data:image\/([a-zA-Z0-9]+);base64,(.+)$/);
+    let ext = 'png';
+    let base64Data = image;
+
+    if (matches) {
+      ext = matches[1] === 'jpeg' ? 'jpg' : matches[1];
+      base64Data = matches[2];
+    }
+
+    const safeFilename = `${Date.now()}_${Math.random().toString(36).substring(2, 8)}.${ext}`;
+    const uploadsDir = path.join(__dirname, '../../public/uploads');
+
+    if (!fs.existsSync(uploadsDir)) {
+      fs.mkdirSync(uploadsDir, { recursive: true });
+    }
+
+    const filePath = path.join(uploadsDir, safeFilename);
+    fs.writeFileSync(filePath, Buffer.from(base64Data, 'base64'));
+
+    res.status(201).json({
+      message: 'Photo téléversée avec succès',
+      url: `/uploads/${safeFilename}`
+    });
+  } catch (err) {
+    console.error('Erreur lors de l\'upload:', err);
+    res.status(500).json({ error: 'Erreur lors du traitement de la photo' });
+  }
+});
+
 // POST /api/biens — create (authenticated)
 router.post('/', auth, (req, res) => {
   const { titre, description, prix, surface, type, ville, code_postal, adresse, pieces, etage, statut } = req.body;
@@ -61,11 +102,15 @@ router.post('/', auth, (req, res) => {
   res.status(201).json(bien);
 });
 
-// PUT /api/biens/:id — update (authenticated)
+// PUT /api/biens/:id — update (authenticated: owner or admin)
 router.put('/:id', auth, (req, res) => {
   const bien = db.prepare('SELECT * FROM biens WHERE id = ?').get(req.params.id);
   if (!bien) {
     return res.status(404).json({ error: 'Bien non trouvé' });
+  }
+
+  if (bien.user_id !== req.user.id && req.user.role !== 'admin') {
+    return res.status(403).json({ error: 'Accès non autorisé à cette annonce' });
   }
 
   const { titre, description, prix, surface, type, ville, code_postal, adresse, pieces, etage, statut } = req.body;
@@ -95,15 +140,20 @@ router.put('/:id', auth, (req, res) => {
   res.json(updated);
 });
 
-// DELETE /api/biens/:id — delete (authenticated)
+// DELETE /api/biens/:id — delete (authenticated: owner or admin)
 router.delete('/:id', auth, (req, res) => {
   const bien = db.prepare('SELECT * FROM biens WHERE id = ?').get(req.params.id);
   if (!bien) {
     return res.status(404).json({ error: 'Bien non trouvé' });
   }
 
+  if (bien.user_id !== req.user.id && req.user.role !== 'admin') {
+    return res.status(403).json({ error: 'Accès non autorisé à cette annonce' });
+  }
+
   const del = db.transaction(() => {
     db.prepare('DELETE FROM contacts WHERE bien_id = ?').run(req.params.id);
+    db.prepare('DELETE FROM favorites WHERE bien_id = ?').run(req.params.id);
     db.prepare('DELETE FROM biens WHERE id = ?').run(req.params.id);
   });
   del();

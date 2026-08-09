@@ -7,7 +7,9 @@
   <meta name="theme-color" content="#14141a">
   <link rel="icon" href="assets/icons/icon-192.svg" type="image/svg+xml">
   <link rel="stylesheet" href="css/nodus.css">
+  <link rel="stylesheet" href="css/responsive.css">
   <script src="js/components.js" defer></script>
+  <script src="js/app.js" defer></script>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <style>
     .search-map { height:400px; border-radius:var(--n-radius); overflow:hidden; border:1px solid var(--n-border); }
@@ -17,6 +19,8 @@
     .n-table tr:last-child td { border-bottom:none; }
     .n-table tr:hover td { background:var(--n-bg); }
   </style>
+  <script src="js/api.js" defer></script>
+  <script src="js/auth.js" defer></script>
 </head>
 <body class="n-page">
 
@@ -201,7 +205,7 @@
       </div>
     </footer>
 <script>
-const listings = [];
+
 let advMap = null;
 let advMarkers = [];
 let currentView = 'grid';
@@ -216,38 +220,39 @@ document.querySelectorAll('#advPieceBtns button').forEach(b => b.addEventListene
 }));
 
 function doSearch() {
-  const state = {
-    search: document.getElementById('advSearch').value,
-    type: document.getElementById('advType').value,
+  if (!window.pageState) window.pageState = {};
+  Object.assign(window.pageState, {
+    search: document.getElementById('advSearch')?.value || '',
+    type: document.getElementById('advType')?.value || 'all',
     category: document.querySelector('#advTypeBtns .active')?.dataset?.v || 'all',
-    minPrice: document.getElementById('advMin').value,
-    maxPrice: document.getElementById('advMax').value,
-    minSurface: document.getElementById('advSurfMin').value,
-    maxSurface: document.getElementById('advSurfMax').value,
+    minPrice: document.getElementById('advMin')?.value || '',
+    maxPrice: document.getElementById('advMax')?.value || '',
+    minSurface: document.getElementById('advSurfMin')?.value || '',
+    maxSurface: document.getElementById('advSurfMax')?.value || '',
     pieces: document.querySelector('#advPieceBtns .active')?.dataset?.p || 'all',
-    dpe: document.getElementById('advDpe').value,
-    publisher: document.getElementById('advPub').value,
-    furnished: document.getElementById('advFurnished').value,
-    date: document.getElementById('advDate').value
-  };
+    dpe: document.getElementById('advDpe')?.value || '',
+    publisher: document.getElementById('advPub')?.value || 'all',
+    furnished: document.getElementById('advFurnished')?.value || 'all',
+    date: document.getElementById('advDate')?.value || ''
+  });
 
   const grid = document.getElementById('advGrid');
   const count = document.getElementById('advCount');
-  let f = listings.filter(p => {
-    if (state.type !== 'all') {
-      if (state.type === 'vente' && p.type === 'location') return false;
-      if (state.type === 'location' && p.type !== 'location') return false;
+  let f = (typeof listings !== 'undefined' ? listings : []).filter(p => {
+    if (window.pageState.type !== 'all') {
+      if (window.pageState.type === 'vente' && p.type === 'location') return false;
+      if (window.pageState.type === 'location' && p.type !== 'location') return false;
     }
-    if (state.category !== 'all' && p.type !== state.category) return false;
-    if (state.pieces !== 'all') { const n = parseInt(state.pieces); if (state.pieces === '4' ? p.pieces < 4 : p.pieces !== n) return false; }
-    if (state.dpe && (p.dpe || ' ') > state.dpe) return false;
-    if (state.minPrice && p.price < Number(state.minPrice)) return false;
-    if (state.maxPrice && p.price > Number(state.maxPrice)) return false;
-    if (state.minSurface && p.surface < Number(state.minSurface)) return false;
-    if (state.maxSurface && p.surface > Number(state.maxSurface)) return false;
-    if (state.publisher !== 'all' && p.publisher !== state.publisher) return false;
-    if (state.furnished !== 'all' && p.furnished !== state.furnished) return false;
-    if (state.search) { const q = state.search.toLowerCase(); if (!p.title.toLowerCase().includes(q) && !p.location.toLowerCase().includes(q)) return false; }
+    if (window.pageState.category !== 'all' && p.type !== window.pageState.category) return false;
+    if (window.pageState.pieces !== 'all') { const n = parseInt(window.pageState.pieces); if (window.pageState.pieces === '4' ? p.pieces < 4 : p.pieces !== n) return false; }
+    if (window.pageState.dpe && (p.dpe || ' ') > window.pageState.dpe) return false;
+    if (window.pageState.minPrice && p.price < Number(window.pageState.minPrice)) return false;
+    if (window.pageState.maxPrice && p.price > Number(window.pageState.maxPrice)) return false;
+    if (window.pageState.minSurface && p.surface < Number(window.pageState.minSurface)) return false;
+    if (window.pageState.maxSurface && p.surface > Number(window.pageState.maxSurface)) return false;
+    if (window.pageState.publisher !== 'all' && p.publisher !== window.pageState.publisher) return false;
+    if (window.pageState.furnished !== 'all' && p.furnished !== window.pageState.furnished) return false;
+    if (window.pageState.search) { const q = window.pageState.search.toLowerCase(); if (!p.title.toLowerCase().includes(q) && !p.location.toLowerCase().includes(q)) return false; }
     return true;
   });
 
@@ -266,7 +271,7 @@ function doSearch() {
           p.emoji +
         '</div>' +
         '<div class="n-card-info">' +
-          '<div class="n-card-price">' + p.pl + '</div>' +
+          '<div class="n-card-price">' + p.priceLabel + '</div>' +
           '<div class="n-card-price-sub">' + Math.round(p.price / p.surface).toLocaleString('fr') + ' \u20ac/m\u00b2</div>' +
           '<div class="n-card-title">' + p.title + '</div>' +
           '<div class="n-card-location">\ud83d\udccd ' + p.location + '</div>' +
@@ -290,7 +295,7 @@ function doSearch() {
     f.forEach(p => {
       if (p.lat && p.lng) {
         const m = L.marker([p.lat, p.lng]).addTo(advMap)
-          .bindPopup('<b>' + p.title + '</b><br>' + p.pl);
+          .bindPopup('<b>' + p.title + '</b><br>' + p.priceLabel);
         advMarkers.push(m);
       }
     });

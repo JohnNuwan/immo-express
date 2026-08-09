@@ -1,11 +1,13 @@
-// Immo-Express — Service Worker v2.0
-const CACHE = 'immo-express-v2';
+// Immo-Express — Service Worker v2.1
+const CACHE = 'immo-express-v2.1';
 const ASSETS = [
   '/',
   '/index.html',
   '/css/nodus.css',
   '/css/responsive.css',
   '/css/style.css',
+  '/js/api.js',
+  '/js/auth.js',
   '/js/app.js',
   '/js/components.js',
   '/manifest.json',

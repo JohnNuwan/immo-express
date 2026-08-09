@@ -7,6 +7,7 @@
   <meta name="theme-color" content="#14141a">
   <link rel="icon" href="assets/icons/icon-192.svg" type="image/svg+xml">
   <link rel="stylesheet" href="css/nodus.css">
+  <link rel="stylesheet" href="css/responsive.css">
   <script src="js/components.js" defer></script>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <style>
@@ -21,6 +22,9 @@
     .score-circle .rs-value { font-size:2.6rem; font-weight:800; }
     .score-circle .rs-label { font-size:.7rem; color:var(--n-text-secondary); }
   </style>
+  <script src="js/app.js" defer></script>
+  <script src="js/api.js" defer></script>
+  <script src="js/auth.js" defer></script>
 </head>
 <body class="n-page">
 
@@ -144,7 +148,7 @@
 let riskMap = null;
 let riskMarker = null;
 
-function analyzeRisks() {
+async function analyzeRisks() {
   const addr = document.getElementById('riskAddress').value.trim();
   if (!addr) { alert('Veuillez entrer une adresse'); return; }
   
@@ -153,8 +157,23 @@ function analyzeRisks() {
   document.getElementById('riskError').style.display = 'none';
   document.getElementById('riskBtn').disabled = true;
 
-  // Simulate analysis with realistic demo data
-  setTimeout(() => {
+  try {
+    // Perform BAN Geocoding
+    let lat = 48.8566, lng = 2.3522, label = addr;
+    try {
+      const banUrl = `https://api-adresse.data.gouv.fr/search/?q=${encodeURIComponent(addr)}&limit=1`;
+      const res = await fetch(banUrl);
+      if (res.ok) {
+        const data = await res.json();
+        if (data.features && data.features.length > 0) {
+          const feat = data.features[0];
+          lng = feat.geometry.coordinates[0];
+          lat = feat.geometry.coordinates[1];
+          label = feat.properties.label;
+        }
+      }
+    } catch(e) { console.warn('Geocoding error:', e); }
+
     const risks = {
       "Inondation": { score: Math.floor(Math.random() * 40 + 10), icon: "🌊", desc: "Risque de crue et de remontée de nappe phréatique" },
       "Feu de forêt": { score: Math.floor(Math.random() * 30 + 5), icon: "🔥", desc: "Proximité de zones boisées et risque d'incendie" },
@@ -168,7 +187,7 @@ function analyzeRisks() {
     document.getElementById('riskResults').style.display = 'block';
     document.getElementById('riskBtn').disabled = false;
 
-    document.getElementById('riskAddressDisplay').textContent = addr;
+    document.getElementById('riskAddressDisplay').textContent = label;
 
     const total = Object.values(risks).reduce((s, r) => s + r.score, 0);
     const avg = Math.round(total / Object.keys(risks).length);
@@ -233,19 +252,29 @@ function analyzeRisks() {
       summaryText.textContent = "Aucun risque majeur identifié. Cette zone présente un bon profil de sécurité pour un investissement immobilier.";
     }
 
-    // Map
+    // Map - Update position to real GPS coordinates!
     if (!riskMap) {
-      riskMap = L.map('riskMap').setView([48.8566, 2.3522], 13);
+      riskMap = L.map('riskMap').setView([lat, lng], 15);
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; OpenStreetMap contributors',
         maxZoom: 18
       }).addTo(riskMap);
+    } else {
+      riskMap.setView([lat, lng], 15);
     }
     if (riskMarker) riskMarker.remove();
-    riskMarker = L.marker([48.8566, 2.3522]).addTo(riskMap)
-      .bindPopup("<b>" + addr + "</b><br>Score de risque: " + finalScore + "/100")
+    riskMarker = L.marker([lat, lng]).addTo(riskMap)
+      .bindPopup("<b>" + label + "</b><br>Score de risque: " + finalScore + "/100")
       .openPopup();
-  }, 1500);
+    
+    // Invalidate Leaflet size to render properly
+    setTimeout(() => riskMap.invalidateSize(), 300);
+
+  } catch(err) {
+    document.getElementById('riskLoading').style.display = 'none';
+    document.getElementById('riskBtn').disabled = false;
+    alert('Erreur d\'analyse : ' + err.message);
+  }
 }
 
 document.getElementById('riskAddress').addEventListener('keypress', function(e) {

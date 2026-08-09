@@ -30,7 +30,23 @@
   --n-error: #FF385C;
   --n-gradient: linear-gradient(135deg, #FF385C 0%, #E00B41 100%);
   --n-gradient-glow: none;
+}
 
+[data-theme="light"] {
+  --n-bg: #F8FAFC;
+  --n-bg-secondary: #FFFFFF;
+  --n-bg-card: #FFFFFF;
+  --n-bg-glass: rgba(255, 255, 255, 0.85);
+  --n-bg-hover: #F1F5F9;
+  --n-text: #0F172A;
+  --n-text-secondary: #475569;
+  --n-text-tertiary: #94A3B8;
+  --n-border: rgba(0, 0, 0, 0.08);
+  --n-border-hover: rgba(0, 0, 0, 0.18);
+  --n-glass-border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+:root {
   /* Typography */
   --n-font: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
   --n-font-display: 'Plus Jakarta Sans', sans-serif;
@@ -1778,6 +1794,8 @@ body {
   color: var(--n-accent);
   background: rgba(255, 56, 92, 0.1);
 }
+
+.airbnb-search-pill {
   display: flex;
   align-items: center;
   background: var(--n-bg-secondary);

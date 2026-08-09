@@ -15,3 +15,6 @@ __pycache__/
 .env
 backups/
 .DS_Store
+dist/
+public/uploads/*
+!public/uploads/.gitkeep

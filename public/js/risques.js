@@ -14,6 +14,28 @@ async function geocodeAddress(query) {
   const cacheKey = 'geo_' + query.toLowerCase().trim();
   if (geoCache[cacheKey]) return geoCache[cacheKey];
 
+  try {
+    const banUrl = `https://api-adresse.data.gouv.fr/search/?q=${encodeURIComponent(query)}&limit=1`;
+    const respBan = await fetch(banUrl);
+    if (respBan.ok) {
+      const dBan = await respBan.json();
+      if (dBan.features && dBan.features.length > 0) {
+        const feat = dBan.features[0];
+        const result = {
+          lat: feat.geometry.coordinates[1],
+          lng: feat.geometry.coordinates[0],
+          displayName: feat.properties.label,
+          city: feat.properties.city || '',
+          postcode: feat.properties.postcode || '',
+          insee: feat.properties.citycode || '',
+          department: feat.properties.context || ''
+        };
+        geoCache[cacheKey] = result;
+        return result;
+      }
+    }
+  } catch(e) {}
+
   const url = `${NOMINATIM_BASE}/search?q=${encodeURIComponent(query)}&format=json&limit=1&countrycodes=fr&addressdetails=1`;
   const resp = await fetch(url, { headers: { 'User-Agent': 'ImmoExpress/1.0' } });
   if (!resp.ok) throw new Error('Géocoding échoué');

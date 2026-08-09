@@ -133,7 +133,7 @@ L'API REST d'Immo-Express est développée avec **Node.js, Express et SQLite**. 
 ### 5. Demande de contact & Visites
 
 #### **`POST /api/contact`**
-- **Description** : Envoie une demande de contact ou réservation de visite à un propriétaire/pro.
+- **Description** : Envoie une demande de contact ou réservation de visite à un propriétaire/pro (soumis au Rate Limiter anti-spam).
 - **Body (`JSON`)** :
   ```json
   {
@@ -144,3 +144,47 @@ L'API REST d'Immo-Express est développée avec **Node.js, Express et SQLite**. 
     "message": "Bonjour, je souhaite réserver une visite."
   }
   ```
+
+---
+
+### 6. Upload de Photos & Favoris (Authentifié)
+
+#### **`POST /api/biens/upload`**
+- **Description** : Téléverse une photo de bien immobilier au format base64.
+- **En-têtes** : `Authorization: Bearer <token>`
+- **Body (`JSON`)** :
+  ```json
+  {
+    "image": "data:image/png;base64,iVBORw0KGgoAAAAN..."
+  }
+  ```
+- **Réponse (`201 Created`)** :
+  ```json
+  {
+    "message": "Photo téléversée avec succès",
+    "url": "/uploads/1723180000_a1b2c3.png"
+  }
+  ```
+
+#### **`GET /api/favorites`**
+- **Description** : Récupère la liste des biens mis en favoris par l'utilisateur connecté.
+- **En-têtes** : `Authorization: Bearer <token>`
+- **Réponse (`200 OK`)** : Tableau des biens favoris.
+
+#### **`POST /api/favorites/:bienId`**
+- **Description** : Ajoute un bien aux favoris de l'utilisateur connecté.
+- **En-têtes** : `Authorization: Bearer <token>`
+
+#### **`DELETE /api/favorites/:bienId`**
+- **Description** : Retire un bien des favoris de l'utilisateur connecté.
+- **En-têtes** : `Authorization: Bearer <token>`
+
+---
+
+### 7. Sécurité & En-têtes Rate Limiting
+
+Les routes sensibles (`/api/auth/login`, `/api/auth/register`, `/api/contact`) retournent les en-têtes suivants :
+- `X-RateLimit-Limit` : Nombre maximal de requêtes par fenêtre (ex: `15`)
+- `X-RateLimit-Remaining` : Requêtes restantes dans la fenêtre
+- `X-RateLimit-Reset` : Timestamp Unix de réinitialisation
+- **Code `429 Too Many Requests`** en cas de dépassement de la limite.

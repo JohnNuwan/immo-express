@@ -42,32 +42,25 @@ const Auth = {
   },
 
   _getApiHost() {
-    return window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? 'http://127.0.0.1:8000' : '';
+    return window.ApiClient ? window.ApiClient.getBaseUrl() : (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? 'http://127.0.0.1:8000' : '');
   },
 
   async login(email, password) {
-    try {
-      const res = await fetch(`${this._getApiHost()}/api/auth/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
-      });
-      const data = await res.json();
-      if (res.ok && data.token) {
-        this.user = data.user;
+    if (window.ApiClient) {
+      const res = await window.ApiClient.post('/api/auth/login', { email, password });
+      if (res.ok && res.data.token) {
+        this.user = res.data.user;
         localStorage.setItem('immo_user', JSON.stringify(this.user));
-        localStorage.setItem('immo_token', data.token);
+        localStorage.setItem('immo_token', res.data.token);
         this._notify();
         return { ok: true };
       }
-      return { ok: false, error: data.error || 'Erreur de connexion' };
-    } catch(err) {
-      return { ok: false, error: 'Impossible de contacter le serveur' };
+      return { ok: false, error: res.data.error || 'Erreur de connexion' };
     }
+    return { ok: false, error: 'Client API non chargé' };
   },
 
   async register(email, password, name) {
-    // Split name into nom/prenom naively for the backend
     let prenom = name;
     let nom = '';
     if (name && name.includes(' ')) {
@@ -76,71 +69,52 @@ const Auth = {
       nom = parts.slice(1).join(' ');
     }
 
-    try {
-      const res = await fetch(`${this._getApiHost()}/api/auth/register`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password, nom, prenom })
-      });
-      const data = await res.json();
-      if (res.ok && data.token) {
-        this.user = data.user;
+    if (window.ApiClient) {
+      const res = await window.ApiClient.post('/api/auth/register', { email, password, nom, prenom });
+      if (res.ok && res.data.token) {
+        this.user = res.data.user;
         localStorage.setItem('immo_user', JSON.stringify(this.user));
-        localStorage.setItem('immo_token', data.token);
+        localStorage.setItem('immo_token', res.data.token);
         this._notify();
         return { ok: true };
       }
-      return { ok: false, error: data.error || 'Erreur lors de l\\'inscription' };
-    } catch(err) {
-      return { ok: false, error: 'Impossible de contacter le serveur' };
+      return { ok: false, error: res.data.error || "Erreur lors de l'inscription" };
     }
+    return { ok: false, error: 'Client API non chargé' };
   },
 
   async fetchMe() {
     const token = this.getToken();
     if (!token) return { ok: false };
     
-    try {
-      const res = await fetch(`${this._getApiHost()}/api/auth/me`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      const data = await res.json();
-      if (res.ok) {
-        this.user = data.user;
+    if (window.ApiClient) {
+      const res = await window.ApiClient.get('/api/auth/me');
+      if (res.ok && res.data.user) {
+        this.user = res.data.user;
         localStorage.setItem('immo_user', JSON.stringify(this.user));
         this._notify();
         return { ok: true, user: this.user };
       }
       return { ok: false };
-    } catch (e) {
-      return { ok: false };
     }
+    return { ok: false };
   },
 
   async updateProfile(updates) {
     const token = this.getToken();
     if (!token) return { ok: false, error: 'Non connecté' };
 
-    try {
-      const res = await fetch(`${this._getApiHost()}/api/auth/profile`, {
-        method: 'PUT',
-        headers: { 
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify(updates)
-      });
-      const data = await res.json();
-      if (res.ok) {
-        this.user = data.user;
+    if (window.ApiClient) {
+      const res = await window.ApiClient.put('/api/auth/profile', updates);
+      if (res.ok && res.data.user) {
+        this.user = res.data.user;
         localStorage.setItem('immo_user', JSON.stringify(this.user));
         this._notify();
         return { ok: true };
       }
-      return { ok: false, error: data.error || 'Erreur lors de la mise à jour' };
-    } catch (e) {
-      return { ok: false, error: 'Impossible de contacter le serveur' };
+      return { ok: false, error: res.data.error || 'Erreur lors de la mise à jour' };
     }
+    return { ok: false, error: 'Client API non chargé' };
   },
 
   logout() {

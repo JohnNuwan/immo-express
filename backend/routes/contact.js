@@ -1,14 +1,26 @@
 const express = require('express');
 const db = require('../database');
+const createRateLimiter = require('../middleware/rateLimiter');
+
+const contactLimiter = createRateLimiter({
+  windowMs: 15 * 60 * 1000,
+  max: 10,
+  message: 'Trop de messages envoyés. Veuillez réessayer ultérieurement.'
+});
 
 const router = express.Router();
 
 // POST /api/contact — submit a contact request (public)
-router.post('/', (req, res) => {
+router.post('/', contactLimiter, (req, res) => {
   const { bien_id, nom, email, telephone, message } = req.body;
 
   if (!nom || !email) {
     return res.status(400).json({ error: 'Nom et email requis' });
+  }
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    return res.status(400).json({ error: 'Format d\'email invalide' });
   }
 
   if (bien_id) {

@@ -72,6 +72,20 @@ db.exec(`
     created_at TEXT DEFAULT (datetime('now')),
     updated_at TEXT DEFAULT (datetime('now'))
   );
+
+  CREATE TABLE IF NOT EXISTS favorites (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    bien_id INTEGER NOT NULL REFERENCES biens(id) ON DELETE CASCADE,
+    created_at TEXT DEFAULT (datetime('now')),
+    UNIQUE(user_id, bien_id)
+  );
+
+  CREATE INDEX IF NOT EXISTS idx_biens_user ON biens(user_id);
+  CREATE INDEX IF NOT EXISTS idx_biens_cat_type ON biens(cat, type);
+  CREATE INDEX IF NOT EXISTS idx_biens_ville ON biens(ville);
+  CREATE INDEX IF NOT EXISTS idx_biens_prix ON biens(prix);
+  CREATE INDEX IF NOT EXISTS idx_favorites_user ON favorites(user_id);
 `);
 
 // Safe migrations helper
