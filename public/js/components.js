@@ -196,20 +196,30 @@
   `;
 
   function initComponents() {
-    // Inject Header
+    // Inject Header (replace placeholder or existing header)
     const headerPlaceholder = document.getElementById('header-placeholder');
     if (headerPlaceholder) {
       headerPlaceholder.outerHTML = headerHTML;
-    } else if (!document.getElementById('appHeader')) {
-      document.body.insertAdjacentHTML('afterbegin', headerHTML);
+    } else {
+      const existingHeader = document.querySelector('header');
+      if (existingHeader) {
+        existingHeader.outerHTML = headerHTML;
+      } else if (!document.getElementById('appHeader')) {
+        document.body.insertAdjacentHTML('afterbegin', headerHTML);
+      }
     }
 
-    // Inject Footer
+    // Inject Footer (replace placeholder or existing footer to prevent duplication)
     const footerPlaceholder = document.getElementById('footer-placeholder');
     if (footerPlaceholder) {
       footerPlaceholder.outerHTML = footerHTML;
-    } else if (!document.querySelector('footer.airbnb-footer')) {
-      document.body.insertAdjacentHTML('beforeend', footerHTML);
+    } else {
+      const existingFooter = document.querySelector('footer');
+      if (existingFooter) {
+        existingFooter.outerHTML = footerHTML;
+      } else {
+        document.body.insertAdjacentHTML('beforeend', footerHTML);
+      }
     }
 
     // Inject Mobile Bottom Nav
