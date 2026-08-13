@@ -1,96 +1,51 @@
-# CHANGELOG — Immo-Express
+# Changelog
 
-## [1.0.0] — 2025-07-22
+## [2.1.0] — 2026-08-13
 
-### 🎉 Première version
+### Added
+- Footer "⚡ Powered by EVA · NODUS SYSTEMS" sur TOUTES les pages (login, register, profil inclus)
+- Signature NODUS complète avec logo SVG sur les pages auth
 
-**Application complète** de plateforme immobilière intelligente.
+### Changed
+- Thème NODUS : palette exacte `#14141a` / `#e64749` / `#00f0ff`
+- Typographie : **Space Grotesk** (remplace Plus Jakarta Sans) + JetBrains Mono
+- Gradients et icônes SVG mis à jour avec la nouvelle palette
 
-#### Fonctionnalités principales
-- [x] Moteur de recherche avec filtres (type, catégorie, budget, score, éditeur)
-- [x] Liste d'annonces avec cartes détaillées
-- [x] Tri : récents, prix ↑↓, score de confiance
-- [x] Dépôt d'annonce complet (8 sections, 30+ champs)
+## [2.0.0] — 2025-08-10
 
-#### Innovations IA
-- [x] **Score de confiance** /100 sur chaque annonce (visuel, couleur, label)
-- [x] **Analyse IA du prix** vs marché local (barre + écart en %)
-- [x] **Historique des prix** (baisses, durée en ligne)
-- [x] **Smart Match** — % de compatibilité acheteur/bien
-- [x] **Calendrier de visites** — créneaux réservables en 1 clic
-- [x] **IA Décoration** — 4 styles de visualisation
-- [x] **Assistant chatbot** — 8 sujets, reconnaissance de mots-clés, réponses rapides
+### Added
+- MIT License file
+- CONTRIBUTING.md with contribution guidelines
+- Comprehensive English README with API documentation
+- Backend `.gitignore` for node_modules, .env, db files
+- `package.json` scripts: `seed`, `docker:up`, `docker:down`
+- Keywords and author metadata in package.json
 
-#### Outils utilisateur
-- [x] **Favoris** ❤️ — sauvegarde locale, compteur dans le header
-- [x] **Récemment consultés** — historique dans la sidebar
-- [x] **Comparateur** — sélectionner 2-3 biens côte à côte
-- [x] **Calculateur de prêt** — simulation mensualités dans la modale
-- [x] **Partage** — WhatsApp, email, copie de lien
-- [x] **Badges de statut** — NEW, PRICE DROP, HOT
+### Fixed
+- Backend package.json with proper `cors` dependency (already installed)
+- `.env.example` with clear JWT_SECRET warning
+- All 12 API tests passing
 
-#### Interface
-- [x] Design system complet (couleurs, espacements, typographie)
-- [x] Layout responsive (desktop, tablette, mobile)
-- [x] Animations fluides (modale, cartes, hover)
-- [x] Barre de recherche avec autocomplétion
-- [x] Sidebar de filtres sticky
-- [x] Pied de page complet
+### Documentation
+- Full API reference in README
+- Business model description
+- Security features documented
+- Docker deployment guide
 
-#### Technique
-- [x] 100% HTML/CSS/JS vanilla — aucun framework
-- [x] localStorage pour les données utilisateur (favoris, historique)
-- [x] Architecture modulaire prête pour découpage
-- [x] Pas de dépendances externes
-- [x] Compatible navigateurs modernes
+## [1.0.0] — 2025-08-09
 
----
-
-## Prochaines versions
-
-### [1.1.0] — Planifiée
-- [ ] Authentification utilisateur (compte + connexion)
-- [ ] API REST pour les professionnels
-- [ ] Upload de photos avec drag & drop amélioré
-- [ ] Dark mode
-
-### [1.2.0] — Planifiée
-- [ ] Carte interactive (Leaflet/Mapbox)
-- [ ] Visite virtuelle 360° (concept)
-- [ ] Notifications push (alertes nouveaux biens)
-- [ ] Mode hors-ligne (service worker)
-
-### [2.0.0] — Vision
-- [ ] Application mobile (React Native / Flutter)
-- [ ] IA générative pour descriptions d'annonces
-- [ ] Estimation automatique par photo
-- [ ] Marketplace post-achat (artisans, services)
-## [1.1.0] — 2025-07-23
-
-### 📱 Mobile
-- [x] **Capacitor** — wrapper Android natif
-- [x] **APK Debug** — build réussi, 4.0 MB
-- [x] **Installation directe** — pas besoin de store
-
----
-
-## [2.0.0] — 2026-08-08
-
-### 🏗️ Restructuration & Architecture
-- [x] **Dossier `public/`** — Racine web dédiée hébergeant l'ensemble des pages HTML, CSS, JS et assets statiques.
-- [x] **Dossier `config/`** — Centralisation des configurations infrastructure (Nginx).
-- [x] **Nettoyage du dossier `assets/`** — Sous-dossiers thématiques `data/` (`france.db`), `icons/` (`icon-192`, `icon-512`, etc.) et `templates/` (`flyer.html`).
-
-### ⚙️ Backend API & Base de données
-- [x] **API REST Express** — Endpoints `/api/health`, `/api/biens`, `/api/auth`, `/api/scoring`, `/api/contact`.
-- [x] **Base SQLite avec migrations** — Support et seeding automatique des annonces initiales (`backend/database.js`).
-- [x] **Authentification JWT** — Inscription et connexion sécurisées par token.
-
-### 🎨 Frontend & Composants
-- [x] **Composants JS Modulaires (`public/js/components.js`)** — Auto-injection du Header, Footer et Mobile Bottom Nav sur toutes les pages.
-- [x] **Skeleton Loaders** — Cartes d'attente animées pendant la récupération des annonces API.
-- [x] **Barre de navigation Mobile PWA** — Menu fixe glassmorphic pour smartphones (`< 768px`).
-
-### ⚡ Outillage & Build
-- [x] **Vite.js** — Intégration de `vite.config.js` avec proxy API et scripts npm (`npm run dev`, `npm run build`, `npm run server`).
-- [x] **Documentation complète** — `README.md`, `docs/architecture.md` et `docs/api.md` remis à jour.
+### Initial Release
+- Full-stack real estate platform with Node.js/Express backend
+- SQLite database with auto-seeding (5 sample properties)
+- JWT authentication with bcrypt password hashing
+- Rate limiting on auth and contact endpoints
+- REST API: auth, biens, scoring, contact, admin, favorites, opendata
+- Frontend: index, scoring, risks, vente, location, dashboard, profil, pro, recherche
+- Dark theme design system (NODUS CSS)
+- AI Trust Score, Smart Match, Price History features
+- PWA support with manifest.json and service worker
+- Docker Compose deployment (frontend + backend)
+- Vite build tooling
+- Capacitor mobile support
+- Nginx configuration with security headers
+- Jest + Supertest test suite (12 tests)

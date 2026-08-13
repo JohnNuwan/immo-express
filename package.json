@@ -1,7 +1,7 @@
 {
   "name": "immo-express",
-  "version": "1.0.0",
-  "description": "**Plateforme immobilière intelligente** — Vente & Location",
+  "version": "2.0.0",
+  "description": "🏠 AI-Powered Real Estate Platform — Buy, Sell & Rent with Confidence",
   "main": "index.js",
   "directories": {
     "doc": "docs"
@@ -11,15 +11,28 @@
     "server": "node backend/server.js",
     "build": "npx vite build",
     "start": "node backend/server.js",
-    "test": "npm --prefix backend test"
+    "test": "npm --prefix backend test",
+    "seed": "node backend/seed.js",
+    "docker:up": "docker compose up -d --build",
+    "docker:down": "docker compose down"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/Robrs-superbot/immo-express.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "real-estate",
+    "immobilier",
+    "ai",
+    "property",
+    "marketplace",
+    "nodejs",
+    "express",
+    "sqlite",
+    "pwa"
+  ],
+  "author": "NODUS SYSTEMS",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/Robrs-superbot/immo-express/issues"
   },

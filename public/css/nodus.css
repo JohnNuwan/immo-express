@@ -4,22 +4,22 @@
    Refined Obsidian & Coral Architecture
    ========================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
 
 :root {
-  /* Minimal Obsidian Luxury Palette (Zero Neon) */
-  --n-bg: #0F1015;
-  --n-bg-secondary: #161720;
-  --n-bg-card: #1A1C26;
-  --n-bg-glass: rgba(22, 24, 34, 0.8);
-  --n-bg-hover: #222533;
+  /* NODUS Systems Palette — DeepTech Souveraine */
+  --n-bg: #14141a;
+  --n-bg-secondary: #1a1a22;
+  --n-bg-card: #1e1e28;
+  --n-bg-glass: rgba(20, 20, 26, 0.8);
+  --n-bg-hover: #262632;
   --n-text: #FFFFFF;
   --n-text-secondary: #9DA3B4;
   --n-text-tertiary: #656B7C;
-  --n-accent: #FF385C;
-  --n-accent-hover: #E00B41;
-  --n-cyan: #38BDF8;
-  --n-cyan-dim: rgba(56, 189, 248, 0.1);
+  --n-accent: #e64749;
+  --n-accent-hover: #c93537;
+  --n-cyan: #00f0ff;
+  --n-cyan-dim: rgba(0, 240, 255, 0.1);
   --n-cyan-glow: none;
   --n-accent-glow: none;
   --n-border: rgba(255, 255, 255, 0.07);
@@ -27,8 +27,8 @@
   --n-glass-border: 1px solid rgba(255, 255, 255, 0.1);
   --n-success: #10B981;
   --n-warning: #F59E0B;
-  --n-error: #FF385C;
-  --n-gradient: linear-gradient(135deg, #FF385C 0%, #E00B41 100%);
+  --n-error: #e64749;
+  --n-gradient: linear-gradient(135deg, #e64749 0%, #c93537 100%);
   --n-gradient-glow: none;
 }
 
@@ -48,8 +48,8 @@
 
 :root {
   /* Typography */
-  --n-font: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-  --n-font-display: 'Plus Jakarta Sans', sans-serif;
+  --n-font: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+    --n-font-display: 'Space Grotesk', sans-serif;
   --n-mono: 'JetBrains Mono', monospace;
 
   /* Layout & Glass */
