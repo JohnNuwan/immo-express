@@ -2,40 +2,84 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Immo-Express — Plateforme Immobilière Intelligente</title>
-    <meta name="theme-color" content="#2563eb">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="ImmoExpress">
-    <link rel="manifest" href="manifest.json">
-    <link rel="icon" href="assets/icon-192.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="assets/icon-192.svg">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Immo-Express — NODUS SYSTEMS</title>
+  <meta name="description" content="Plateforme immobilière intelligente propulsée par l'IA NODUS. Achat, vente, location, scoring.">
+  <meta name="theme-color" content="#14141a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="ImmoExpress">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="assets/icon-192.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="assets/icon-192.svg">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+    .nodus-loader {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: #14141a; z-index: 9999;
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column; gap: 20px;
+    }
+    .nodus-loader .spinner {
+      width: 48px; height: 48px;
+      border: 3px solid #2a2a3e;
+      border-top-color: #00f0ff;
+      border-radius: 50%;
+      animation: nodus-spin 0.8s linear infinite;
+    }
+    .nodus-loader p {
+      font-family: 'JetBrains Mono', monospace;
+      color: #7878a0; font-size: 0.85rem;
+      letter-spacing: 2px;
+    }
+    .nodus-loader.loaded {
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.5s ease;
+    }
+  </style>
 </head>
 <body>
 
+<!-- Loader -->
+<div class="nodus-loader" id="nodusLoader">
+  <div class="spinner"></div>
+  <p>INITIALISATION NODUS</p>
+</div>
 
-<header class="header">
+<!-- Toast container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- ==================== HEADER ==================== -->
+<header class="header" id="siteHeader">
   <div class="header-inner">
-    <div class="logo" onclick="location.href='index.html'"><img src="assets/icon-192.svg" alt="Immo-Express" style="height:36px;width:36px;border-radius:6px"><span style="font-size:1.2rem;font-weight:800">Immo</span><span style="color:var(--blue);font-size:1.2rem;font-weight:800">Express</span></div>
-    <button class="mobile-toggle" id="menuToggle">☰</button>
+    <div class="logo" onclick="location.href='index.html'">
+      <div class="logo-icon">⬡</div>
+      <span>Immo</span><span class="logo-express">Express</span><span class="logo-dot">.</span>
+    </div>
+    <button class="mobile-toggle" id="menuToggle" onclick="toggleMobileMenu()">☰</button>
     <div class="header-links" id="headerLinks">
-                            <a href="vente.html">💰 Acheter</a>
-                                                        <a href="scoring.html">🔬 Notation</a>
-                                                        <a href="risques.html">🌍 Risques</a>
-                                                        <a href="location.html">📍 Location</a>
-                                                        <a href="pro.html">🏢 Espace Pro</a>
-          <a href="#" class="btn-depot" onclick="openDepositModal();return false;">+ Déposer une annonce</a>
-          <button class="btn-user" id="userBtn" onclick="openAuthModal();return false;">👤 <span>Connexion</span></button>
-        </div>
+      <a href="vente.html">💰 Acheter</a>
+      <a href="scoring.html">🔬 Scoring</a>
+      <a href="risques.html">🌍 Risques</a>
+      <a href="location.html">📍 Location</a>
+      <a href="pro.html">🏢 Pro</a>
+      <a href="#" class="btn-depot" onclick="openDepositModal();return false;">+ Déposer</a>
+      <button class="btn-user" id="userBtn" onclick="openAuthModal();return false;">
+        👤 <span id="userBtnText">Connexion</span>
+      </button>
+    </div>
   </div>
 </header>
 
+<!-- ==================== HERO ==================== -->
 <section class="hero-search">
-  <h1>🏠 La plateforme immobilière intelligente</h1>
-  <p>Vente · Location · Annonces vérifiées · Score de confiance IA</p>
+  <div class="hero-badge">
+    ⬡ PROPULSÉ PAR EVA · NODUS SYSTEMS
+  </div>
+  <h1>La <span class="highlight">plateforme immobilière</span><br>intelligente</h1>
+  <p>Achat · Vente · Location — Annonces vérifiées · Score de confiance IA · Mise en relation directe</p>
+
   <div class="search-bar">
     <input type="text" id="mainSearch" placeholder="Ville, quartier, code postal…" autocomplete="off">
     <select id="mainType">
@@ -49,30 +93,49 @@
       <option value="terrain">Terrain</option>
     </select>
     <select id="mainCategory">
+      <option value="all">Tout</option>
       <option value="vente">Acheter</option>
       <option value="location">Louer</option>
     </select>
     <button onclick="handleSearch()">Rechercher</button>
   </div>
+
+  <div class="hero-trust">
+    <div class="hero-trust-item">
+      <span class="icon">🛡️</span>
+      <strong id="statListings">0</strong> annonces vérifiées
+    </div>
+    <div class="hero-trust-item">
+      <span class="icon">🤖</span>
+      <strong id="statAnalyses">0</strong> analyses IA
+    </div>
+    <div class="hero-trust-item">
+      <span class="icon">🏢</span>
+      <strong id="statPros">0</strong> pros partenaires
+    </div>
+  </div>
 </section>
 
+<!-- ==================== QUICK STATS ==================== -->
 <div class="quick-stats">
   <div class="quick-stats-inner">
-    <div class="qs-item">📦 <strong>0</strong> annonces en ligne</div>
-    <div class="qs-item">🛡️ <strong>—</strong> des annonces vérifiées</div>
-    <div class="qs-item">📊 <strong>0</strong> analyses IA réalisées</div>
-    <div class="qs-item">👤 <strong>0</strong> professionnels partenaires</div>
+    <div class="qs-item">📦 <strong id="qsListings">0</strong> annonces en ligne</div>
+    <div class="qs-item">🛡️ <strong id="qsVerified">—</strong> vérifiées IA</div>
+    <div class="qs-item">📊 <strong id="qsScorings">0</strong> analyses réalisées</div>
+    <div class="qs-item">👤 <strong id="qsUsers">0</strong> professionnels</div>
   </div>
 </div>
 
+<!-- ==================== MAIN LAYOUT ==================== -->
 <div class="main-layout">
+  <!-- Sidebar -->
   <aside class="sidebar" id="sidebar">
     <h3>🔍 Filtrer</h3>
     <div class="filter-group">
       <label>Type</label>
       <div class="filter-btn-group" id="typeFilters">
         <button class="active" data-type="all">Tous</button>
-        <button data-type="appartement">Appartement</button>
+        <button data-type="appartement">Appart.</button>
         <button data-type="maison">Maison</button>
         <button data-type="villa">Villa</button>
         <button data-type="studio">Studio</button>
@@ -95,7 +158,7 @@
       </div>
     </div>
     <div class="filter-group">
-      <label>Score de confiance min.</label>
+      <label>Score minimum</label>
       <select id="scoreFilter">
         <option value="0">Tous les scores</option>
         <option value="80">⭐⭐⭐⭐ Supérieur à 80</option>
@@ -111,25 +174,72 @@
         <option value="particulier">Particuliers</option>
       </select>
     </div>
-    <button class="btn-reset-filters" onclick="resetFilters()">Réinitialiser</button>
+    <button class="btn-reset-filters" onclick="resetFilters()">↺ Réinitialiser</button>
   </aside>
 
+  <!-- Results -->
   <main class="results-area">
     <div class="results-header">
-      <div class="results-count" id="resultsCount"><strong>12</strong> annonces trouvées</div>
+      <div class="results-count" id="resultsCount">
+        ⬡ <strong id="resultsCountNum">0</strong> annonces trouvées
+      </div>
       <div class="results-tabs">
         <button class="active" data-sort="recent">Récents</button>
         <button data-sort="price-asc">Prix ↑</button>
         <button data-sort="price-desc">Prix ↓</button>
-        <button data-sort="score">Score confiance</button>
+        <button data-sort="score">Score</button>
       </div>
     </div>
-    <div class="listing-grid" id="listingsGrid"></div>
+    <div class="listing-grid" id="listingsGrid">
+      <div class="loading-spinner">
+        <div class="spinner"></div>
+        <span>Chargement des annonces…</span>
+      </div>
+    </div>
+    <div class="pagination" id="pagination"></div>
   </main>
 </div>
 
-<!-- MODAL DÉTAIL -->
-<div class="modal-overlay" id="modalOverlay">
+<!-- ==================== FEATURES ==================== -->
+<h2 class="section-title section-title" style="max-width:1300px;margin:0 auto;padding:40px 24px 0;">
+  ⬡ L'écosystème <span class="subtitle">NODUS</span>
+</h2>
+
+<div class="features-grid">
+  <div class="feature-card">
+    <span class="icon">🤖</span>
+    <h3>Scoring IA Intelligent</h3>
+    <p>Notre algorithme NODUS évalue chaque bien sur 7 critères : surface, emplacement, DPE, année, équipements…</p>
+  </div>
+  <div class="feature-card">
+    <span class="icon">🛡️</span>
+    <h3>Annonces Vérifiées</h3>
+    <p>Chaque annonce passe par notre filtre de confiance. Score de transparence visible sur chaque bien.</p>
+  </div>
+  <div class="feature-card">
+    <span class="icon">📊</span>
+    <h3>Estimation Précise</h3>
+    <p>Basée sur les données réelles du marché français. Mise à jour en temps réel selon les tendances.</p>
+  </div>
+  <div class="feature-card">
+    <span class="icon">🔗</span>
+    <h3>Mise en Relation Directe</h3>
+    <p>Propriétaires et acheteurs se connectent sans intermédiaire. Transaction plus rapide et économique.</p>
+  </div>
+  <div class="feature-card">
+    <span class="icon">📱</span>
+    <h3>Application Mobile</h3>
+    <p>Version PWA et application mobile. Vos recherches et alertes partout avec vous.</p>
+  </div>
+  <div class="feature-card">
+    <span class="icon">⬡</span>
+    <h3>Propulsé par NODUS</h3>
+    <p>Architecture IA EVA · NODUS SYSTEMS. Apprentissage continu pour de meilleures recommandations.</p>
+  </div>
+</div>
+
+<!-- ==================== DETAIL MODAL ==================== -->
+<div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this)closeModal()">
   <div class="modal">
     <div class="modal-header">
       <h2 id="modalTitle">Détail du bien</h2>
@@ -139,41 +249,96 @@
   </div>
 </div>
 
-<!-- MODALE DÉPÔT -->
-<div class="modal-overlay" id="depositOverlay">
+<!-- ==================== DEPOSIT MODAL ==================== -->
+<div class="modal-overlay" id="depositOverlay" onclick="if(event.target===this)closeDepositModal()">
   <div class="modal deposit-modal">
     <div class="deposit-header">
-      <div><h2>🏠 Déposer une annonce</h2><p style="color:var(--text-secondary);font-size:0.85rem;margin-top:2px;">Champs obligatoires *</p></div>
+      <div>
+        <h2>🏠 Déposer une annonce</h2>
+        <p style="color:var(--nodus-text-3);font-size:0.82rem;margin-top:4px;">⬡ Propulsé par EVA · NODUS SYSTEMS</p>
+      </div>
       <button class="modal-close" onclick="closeDepositModal()">✕</button>
     </div>
     <div class="deposit-body" id="depositBody">
       <form id="depositForm" onsubmit="submitDepositForm(event)">
         <div class="form-section">
-          <h3>Type d'annonce</h3>
+          <h3>📋 Type d'annonce</h3>
           <div class="form-row">
-            <div class="form-group"><label>Catégorie *</label><select name="cat" required onchange="toggleCategoryLabels()"><option value="vente">Vente</option><option value="location">Location</option></select></div>
-            <div class="form-group"><label>Type de bien *</label><select name="type" required><option value="appartement">Appartement</option><option value="maison">Maison</option><option value="villa">Villa</option><option value="studio">Studio</option><option value="penthouse">Penthouse/Loft</option><option value="local">Local commercial</option><option value="terrain">Terrain</option><option value="immeuble">Immeuble</option></select></div>
+            <div class="form-group">
+              <label>Catégorie *</label>
+              <select name="cat" required onchange="toggleCategoryLabels()">
+                <option value="vente">Vente</option>
+                <option value="location">Location</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Type de bien *</label>
+              <select name="type" required>
+                <option value="appartement">Appartement</option>
+                <option value="maison">Maison</option>
+                <option value="villa">Villa</option>
+                <option value="studio">Studio</option>
+                <option value="penthouse">Penthouse/Loft</option>
+                <option value="local">Local commercial</option>
+                <option value="terrain">Terrain</option>
+                <option value="immeuble">Immeuble</option>
+              </select>
+            </div>
           </div>
         </div>
         <div class="form-section">
-          <h3>Titre et description</h3>
-          <div class="form-row"><div class="form-group" style="grid-column:1/-1;"><label>Titre *</label><input type="text" name="title" required placeholder="Ex : Appartement 3 pièces lumineux centre-ville" maxlength="80"><span class="helper">80 car. max</span></div></div>
-          <div class="form-row"><div class="form-group" style="grid-column:1/-1;"><label>Description *</label><textarea name="desc" required rows="5" placeholder="Décrivez votre bien : état, quartier, prestations, transports…"></textarea><span class="helper">Plus la description est complète, plus l'annonce attire</span></div></div>
+          <h3>📝 Titre et description</h3>
+          <div class="form-row" style="grid-template-columns:1fr">
+            <div class="form-group">
+              <label>Titre *</label>
+              <input type="text" name="title" required placeholder="Ex : Appartement 3 pièces lumineux centre-ville" maxlength="80">
+              <span class="helper">80 car. max</span>
+            </div>
+          </div>
+          <div class="form-row" style="grid-template-columns:1fr">
+            <div class="form-group">
+              <label>Description *</label>
+              <textarea name="desc" required rows="4" placeholder="Décrivez votre bien : état, quartier, prestations, transports…"></textarea>
+            </div>
+          </div>
         </div>
         <div class="form-section">
-          <h3>Localisation</h3>
-          <div class="form-row"><div class="form-group"><label>Adresse (fac.)</label><input type="text" name="address" placeholder="Numéro et rue"></div><div class="form-group"><label>Ville *</label><input type="text" name="city" required placeholder="Paris, Lyon, Marseille…"></div></div>
-          <div class="form-row three-col"><div class="form-group"><label>Code postal *</label><input type="text" name="zipcode" required placeholder="75011" pattern="[0-9]{5}"></div><div class="form-group"><label>Région</label><select name="region"><option value="">Sélectionnez</option><option value="auvergne-rhone-alpes">Auvergne-Rhône-Alpes</option><option value="ile-de-france">Île-de-France</option><option value="occitanie">Occitanie</option><option value="provence-alpes-cote-dazur">PACA</option><option value="nouvelle-aquitaine">Nouvelle-Aquitaine</option></select></div><div class="form-group"><label>Proche de</label><input type="text" name="near" placeholder="Métro, écoles, commerces…"></div></div>
+          <h3>📍 Localisation</h3>
+          <div class="form-row">
+            <div class="form-group"><label>Adresse (fac.)</label><input type="text" name="address" placeholder="Numéro et rue"></div>
+            <div class="form-group"><label>Ville *</label><input type="text" name="city" required placeholder="Paris, Lyon, Marseille…"></div>
+          </div>
+          <div class="form-row three-col">
+            <div class="form-group"><label>Code postal *</label><input type="text" name="zipcode" required placeholder="75011" pattern="[0-9]{5}"></div>
+            <div class="form-group"><label>Région</label>
+              <select name="region"><option value="">Sélectionnez</option><option value="ile-de-france">Île-de-France</option><option value="auvergne-rhone-alpes">Auvergne-Rhône-Alpes</option><option value="occitanie">Occitanie</option><option value="paca">PACA</option><option value="nouvelle-aquitaine">Nouvelle-Aquitaine</option></select>
+            </div>
+            <div class="form-group"><label>Proche de</label><input type="text" name="near" placeholder="Métro, écoles…"></div>
+          </div>
         </div>
         <div class="form-section">
-          <h3>Caractéristiques</h3>
-          <div class="form-row three-col"><div class="form-group"><label>Surface (m²) *</label><input type="number" name="surface" required min="1" placeholder="75"></div><div class="form-group"><label>Surface terrain</label><input type="number" name="land" min="0" placeholder="400"></div><div class="form-group"><label>Pièces *</label><select name="pieces" required><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5+</option></select></div></div>
-          <div class="form-row three-col"><div class="form-group"><label>Chambres</label><select name="chambres"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4+</option></select></div><div class="form-group"><label>Salles de bain</label><select name="sdb"><option value="1">1</option><option value="2">2</option><option value="3">3+</option></select></div><div class="form-group"><label>Étage</label><input type="number" name="etage" min="0" placeholder="0"></div></div>
-          <div class="form-row"><div class="form-group"><label>Année construction</label><input type="number" name="year" min="1800" max="2025" placeholder="1995"></div><div class="form-group"><label>État</label><select name="condition"><option value="neuf">Neuf</option><option value="bon-etat">Bon état</option><option value="travaux">À rafraîchir</option><option value="renover">À rénover</option></select></div></div>
-          <div class="form-row"><div class="form-group"><label>Chauffage</label><select name="chauffage"><option value="">Non spécifié</option><option value="gaz">Gaz</option><option value="electrique">Électrique</option><option value="pompe-a-chaleur">Pompe à chaleur</option></select></div><div class="form-group"><label>DPE</label><select name="dpe"><option value="">Non diagnostiqué</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option></select></div></div>
+          <h3>📐 Caractéristiques</h3>
+          <div class="form-row three-col">
+            <div class="form-group"><label>Surface (m²) *</label><input type="number" name="surface" required min="1" placeholder="75"></div>
+            <div class="form-group"><label>Terrain</label><input type="number" name="land" min="0" placeholder="400"></div>
+            <div class="form-group"><label>Pièces *</label><select name="pieces" required><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5+</option></select></div>
+          </div>
+          <div class="form-row three-col">
+            <div class="form-group"><label>Chambres</label><select name="chambres"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4+</option></select></div>
+            <div class="form-group"><label>Salles de bain</label><select name="sdb"><option value="1">1</option><option value="2">2</option><option value="3">3+</option></select></div>
+            <div class="form-group"><label>Étage</label><input type="number" name="etage" min="0" placeholder="0"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Année constr.</label><input type="number" name="year" min="1800" max="2026" placeholder="2000"></div>
+            <div class="form-group"><label>État</label><select name="condition"><option value="neuf">Neuf</option><option value="bon-etat">Bon état</option><option value="travaux">À rafraîchir</option><option value="renover">À rénover</option></select></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Chauffage</label><select name="chauffage"><option value="">Non spécifié</option><option value="gaz">Gaz</option><option value="electrique">Électrique</option><option value="pompe-a-chaleur">Pompe à chaleur</option></select></div>
+            <div class="form-group"><label>DPE</label><select name="dpe"><option value="">Non diagnostiqué</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option></select></div>
+          </div>
         </div>
         <div class="form-section">
-          <h3>Équipements</h3>
+          <h3>🔧 Équipements</h3>
           <div class="equip-grid">
             <label><input type="checkbox" name="equip" value="parking"> Parking</label>
             <label><input type="checkbox" name="equip" value="cave"> Cave</label>
@@ -185,43 +350,57 @@
             <label><input type="checkbox" name="equip" value="cheminee"> Cheminée</label>
             <label><input type="checkbox" name="equip" value="cuisine-equipee"> Cuisine équipée</label>
             <label><input type="checkbox" name="equip" value="meuble"> Meublé</label>
-            <label><input type="checkbox" name="equip" value="fibre"> Fibre optique</label>
+            <label><input type="checkbox" name="equip" value="fibre"> Fibre</label>
             <label><input type="checkbox" name="equip" value="alarme"> Alarme</label>
           </div>
         </div>
         <div class="form-section">
-          <h3 id="priceSectionTitle">Prix</h3>
+          <h3>💰 Prix</h3>
           <div class="form-row three-col">
             <div class="form-group"><label id="priceLabel">Prix de vente *</label><input type="number" name="price" required min="1" placeholder="250000"></div>
-            <div class="form-group"><label id="priceSubLabel">Charges</label><select name="price_sub"><option value="">—</option><option value="CC">CC</option><option value="HC">HC</option></select></div>
+            <div class="form-group"><label>Charges</label><select name="price_sub"><option value="">—</option><option value="CC">CC</option><option value="HC">HC</option></select></div>
             <div class="form-group"><label>Honoraires</label><select name="fees"><option value="charge-vendeur">Charge vendeur</option><option value="charge-acquereur">Charge acquéreur</option><option value="inclus">Inclus</option></select></div>
           </div>
         </div>
         <div class="form-section">
-          <h3>Photos</h3>
-          <div class="photo-upload" onclick="document.getElementById('photoInput').click()"><div class="photo-placeholder">📸</div><div class="photo-text"><strong>Ajouter des photos</strong><span>JPG, PNG — 10 max</span></div></div>
+          <h3>📸 Photos</h3>
+          <div class="photo-upload" onclick="document.getElementById('photoInput').click()">
+            <div class="photo-placeholder">📸</div>
+            <div class="photo-text"><strong>Ajouter des photos</strong><span>JPG, PNG — 10 max</span></div>
+          </div>
           <input type="file" id="photoInput" accept="image/*" multiple style="display:none" onchange="handlePhotoUpload(event)">
           <div class="photo-preview" id="photoPreview"></div>
         </div>
         <div class="form-section">
-          <h3>Contact</h3>
-          <div class="form-row"><div class="form-group"><label>Vous êtes *</label><select name="publisher" required onchange="togglePublisherInfo()"><option value="particulier">Particulier</option><option value="pro">Professionnel</option></select></div></div>
-          <div class="form-row"><div class="form-group"><label>Nom *</label><input type="text" name="pubName" required placeholder="Votre nom"></div><div class="form-group"><label>Email *</label><input type="email" name="email" required placeholder="email@exemple.fr"></div></div>
-          <div class="form-row"><div class="form-group"><label>Téléphone *</label><input type="tel" name="phone" required placeholder="06 12 34 56 78"></div><div class="form-group" id="proCompanyGroup" style="display:none;"><label>Agence / société</label><input type="text" name="company" placeholder="Nom de l'agence"></div></div>
-          <div class="form-group"><label class="checkbox-row"><input type="checkbox" name="cgu" required> J'accepte les <a href="#" onclick="alert('CGU : vous certifiez être propriétaire ou mandaté.')">conditions d'utilisation</a> *</label></div>
+          <h3>👤 Contact</h3>
+          <div class="form-row">
+            <div class="form-group"><label>Vous êtes *</label><select name="publisher" required onchange="togglePublisherInfo()"><option value="particulier">Particulier</option><option value="pro">Professionnel</option></select></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Nom *</label><input type="text" name="pubName" required placeholder="Votre nom"></div>
+            <div class="form-group"><label>Email *</label><input type="email" name="email" required placeholder="email@exemple.fr"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Téléphone *</label><input type="tel" name="phone" required placeholder="06 12 34 56 78"></div>
+            <div class="form-group" id="proCompanyGroup" style="display:none;"><label>Agence</label><input type="text" name="company" placeholder="Nom de l'agence"></div>
+          </div>
+          <div class="form-group"><label class="checkbox-row"><input type="checkbox" name="cgu" required> J'accepte les <a href="#" onclick="alert('CGU NODUS : vous certifiez être propriétaire ou mandaté.')">conditions</a> *</label></div>
         </div>
-        <div class="form-actions"><button type="button" class="btn-cancel" onclick="closeDepositModal()">Annuler</button><button type="submit" class="btn-submit" id="submitBtn">✅ Publier l'annonce</button></div>
+        <div class="form-actions">
+          <button type="button" class="btn-cancel" onclick="closeDepositModal()">Annuler</button>
+          <button type="submit" class="btn-submit" id="submitBtn">⬡ Publier l'annonce</button>
+        </div>
       </form>
     </div>
   </div>
 </div>
 
-<!-- ============ AUTH MODAL ============ -->
+<!-- ==================== AUTH MODAL ==================== -->
 <div class="modal-overlay" id="authModal" onclick="if(event.target===this)closeAuthModal()">
   <div class="modal auth-modal">
     <button class="modal-close" onclick="closeAuthModal()">✕</button>
     <div class="auth-header">
-      <h2>Bienvenue</h2>
+      <h2>⬡ NODUS</h2>
       <p>Connectez-vous pour gérer vos annonces</p>
     </div>
     <div class="auth-tabs">
@@ -232,48 +411,124 @@
     <form class="auth-form active" id="authLogin" onsubmit="handleLogin(event)">
       <input type="email" id="loginEmail" placeholder="Votre email" required>
       <input type="password" id="loginPassword" placeholder="Mot de passe" required>
-      <button type="submit" class="auth-submit">Se connecter</button>
+      <button type="submit" class="auth-submit">⬡ Se connecter</button>
     </form>
     <form class="auth-form" id="authRegister" onsubmit="handleRegister(event)">
       <input type="text" id="regName" placeholder="Votre nom" required>
       <input type="email" id="regEmail" placeholder="Votre email" required>
       <input type="password" id="regPassword" placeholder="Mot de passe (6+ car.)" required minlength="6">
-      <button type="submit" class="auth-submit">Créer mon compte</button>
+      <button type="submit" class="auth-submit">⬡ Créer mon compte</button>
     </form>
-    <div class="auth-footer" id="authFooter" style="display:none;">
-      <button class="btn-logout" onclick="handleLogout()">Se déconnecter</button>
-    </div>
+    <div class="auth-footer" id="authFooter" style="display:none;"></div>
   </div>
 </div>
 
-<!-- CHATBOT -->
-<button class="chat-toggle" id="chatToggle" onclick="toggleChat()">💬<span class="badge-dot"></span></button>
+<!-- ==================== CHATBOT ==================== -->
+<button class="chat-toggle" id="chatToggle" onclick="toggleChat()">
+  💬<span class="badge-dot"></span>
+</button>
 <div class="chat-panel" id="chatPanel">
-  <div class="chat-header"><div class="chat-header-avatar">🤖</div><div class="chat-header-info"><h4>Immo-IA · Assistant</h4><span>● En ligne · Réponse instantanée</span></div></div>
+  <div class="chat-header">
+    <div class="chat-header-avatar">🤖</div>
+    <div class="chat-header-info">
+      <h4>NODUS · Assistant IA</h4>
+      <span>● En ligne · Réponse instantanée</span>
+    </div>
+  </div>
   <div class="chat-messages" id="chatMessages"></div>
   <div class="chat-quick-replies" id="quickReplies"></div>
-  <div class="chat-input-area"><input type="text" id="chatInput" placeholder="Posez votre question…" onkeydown="if(event.key==='Enter')sendMessage()" autocomplete="off"><button id="chatSendBtn" onclick="sendMessage()">➤</button></div>
+  <div class="chat-input-area">
+    <input type="text" id="chatInput" placeholder="Posez votre question…" onkeydown="if(event.key==='Enter')sendMessage()" autocomplete="off">
+    <button id="chatSendBtn" onclick="sendMessage()">➤</button>
+  </div>
 </div>
 
+<!-- ==================== SCROLL TOP ==================== -->
+<button class="scroll-top" id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})">⬆</button>
+
+<!-- ==================== FOOTER ==================== -->
 <footer class="page-footer">
   <div class="footer-inner">
-      <div><div class="logo" style="margin-bottom:8px;"><img src="assets/icon-192.svg" alt="" style="height:28px;width:28px;border-radius:5px;vertical-align:middle;margin-right:6px"><span style="font-weight:800">Immo</span><span style="color:var(--blue);font-weight:800">Express</span></div><p>La plateforme immobilière intelligente. Annonces vérifiées, analyses IA, mise en relation directe.</p></div>
-      <div><h4>Notation</h4><ul><li><a href="scoring.html">🔬 Analyser un bien</a></li><li><a href="scoring.html">Score de confiance</a></li><li><a href="scoring.html">Rendement locatif</a></li></ul></div>
-      <div><h4>Location</h4><ul><li><a href="location.html">📍 Trouver une location</a></li><li><a href="location.html">📊 Estimer un loyer</a></li><li><a href="location.html">📈 Calcul rendement</a></li></ul></div>
-      <div><h4>Pro</h4><ul><li><a href="pro.html">🏢 Espace professionnel</a></li><li><a href="pro.html">Dashboard</a></li><li><a href="pro.html">Abonnements</a></li></ul></div>
+    <div>
+      <div class="logo" style="font-size:1.2rem;margin-bottom:10px;">
+        <div class="logo-icon">⬡</div>
+        <span>Immo</span><span class="logo-express">Express</span><span class="logo-dot">.</span>
+      </div>
+      <p>La plateforme immobilière intelligente propulsée par l'IA NODUS. Annonces vérifiées, analyses prédictives, mise en relation directe.</p>
+      <div class="footer-nodus-brand" style="margin-top:16px;">
+        ⬡ EVA &middot; NODUS SYSTEMS &mdash; v2.0
+      </div>
     </div>
-  <div class="footer-bottom"><span>© 2025 Immo-Express — Plateforme immobilière intelligente</span><span>CGU · Confidentialité · Cookies</span></div>
+    <div>
+      <h4>Notation</h4>
+      <ul>
+        <li><a href="scoring.html">🔬 Analyser un bien</a></li>
+        <li><a href="scoring.html">Score de confiance</a></li>
+        <li><a href="scoring.html">Rendement locatif</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Location</h4>
+      <ul>
+        <li><a href="location.html">📍 Trouver une location</a></li>
+        <li><a href="location.html">📊 Estimer un loyer</a></li>
+        <li><a href="location.html">📈 Calcul rendement</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Pro</h4>
+      <ul>
+        <li><a href="pro.html">🏢 Espace professionnel</a></li>
+        <li><a href="dashboard.html">📊 Dashboard</a></li>
+        <li><a href="pro.html">Abonnements</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>NODUS</h4>
+      <ul>
+        <li><a href="https://github.com/Robrs-superbot/immo-express" target="_blank">⬡ GitHub</a></li>
+        <li><a href="CHANGELOG.md">📋 Changelog</a></li>
+        <li><a href="docs/">📚 Documentation</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2025 Immo-Express — Plateforme immobilière intelligente</span>
+    <span class="nodus-signature">⬡ Powered by EVA · NODUS SYSTEMS</span>
+  </div>
 </footer>
 
-
+<!-- ==================== SCRIPTS ==================== -->
 <script src="js/auth.js"></script>
 <script src="js/app.js"></script>
 <script>
+  // Service Worker
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('sw.js')
       .then(() => console.log('📱 PWA ready'))
       .catch(() => console.log('SW not supported'));
   }
+
+  // Remove loader
+  setTimeout(() => {
+    const loader = document.getElementById('nodusLoader');
+    if (loader) {
+      loader.classList.add('loaded');
+      setTimeout(() => loader.remove(), 600);
+    }
+  }, 600);
+
+  // Scroll header
+  window.addEventListener('scroll', () => {
+    const h = document.getElementById('siteHeader');
+    if (h) {
+      h.classList.toggle('scrolled', window.scrollY > 40);
+    }
+    const s = document.getElementById('scrollTopBtn');
+    if (s) {
+      s.classList.toggle('visible', window.scrollY > 400);
+    }
+  });
 </script>
 </body>
 </html>
