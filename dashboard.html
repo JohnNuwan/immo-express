@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — Immo-Express NODUS</title>
+  <meta name="theme-color" content="#14141a">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="header" id="siteHeader">
+  <div class="header-inner">
+    <div class="logo" onclick="location.href='index.html'">
+      <div class="logo-icon">⬡</div>
+      <span>Immo</span><span class="logo-express">Express</span>
+    </div>
+    <div class="header-links">
+      <a href="index.html">🏠 Accueil</a>
+      <a href="vente.html">💰 Acheter</a>
+      <a href="scoring.html">🔬 Scoring</a>
+      <button class="btn-user" onclick="handleLogout();location.href='index.html'">🚪 Déconnexion</button>
+    </div>
+  </div>
+</header>
+
+<div style="padding:100px 24px 24px;max-width:1300px;margin:0 auto;">
+  <div class="profile-header">
+    <div class="profile-avatar">👤</div>
+    <div class="profile-info">
+      <h2>Dashboard <span id="dashUserName" style="color:var(--nodus-cyan)">—</span></h2>
+      <p>⬡ Gérez vos annonces, suivez vos performances</p>
+    </div>
+  </div>
+
+  <div class="dashboard-grid" id="dashCards">
+    <div class="dash-card">
+      <div class="dash-icon">📦</div>
+      <div class="dash-value" id="dashMyListings">0</div>
+      <div class="dash-label">Mes annonces</div>
+    </div>
+    <div class="dash-card">
+      <div class="dash-icon">🟢</div>
+      <div class="dash-value" id="dashActiveListings">0</div>
+      <div class="dash-label">Annonces actives</div>
+    </div>
+    <div class="dash-card">
+      <div class="dash-icon">📨</div>
+      <div class="dash-value" id="dashLeads">0</div>
+      <div class="dash-label">Contacts reçus</div>
+    </div>
+    <div class="dash-card">
+      <div class="dash-icon">👁️</div>
+      <div class="dash-value" id="dashViews">0</div>
+      <div class="dash-label">Vues totales</div>
+    </div>
+  </div>
+
+  <h2 class="section-title" style="margin-top:24px;">📋 Mes annonces</h2>
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Titre</th>
+        <th>Type</th>
+        <th>Prix</th>
+        <th>Ville</th>
+        <th>Score</th>
+        <th>Statut</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody id="dashTableBody">
+      <tr><td colspan="7" style="text-align:center;color:var(--nodus-text-3)">Chargement…</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<footer class="page-footer">
+  <div class="footer-bottom" style="max-width:1300px;margin:0 auto;border-top:none;">
+    <span>&copy; 2025 Immo-Express NODUS</span>
+    <span class="nodus-signature">⬡ Powered by EVA · NODUS SYSTEMS</span>
+  </div>
+</footer>
+
+<script src="js/auth.js"></script>
+<script>
+(async function() {
+  const token = localStorage.getItem('nodus_token');
+  if (!token) {
+    location.href = 'index.html';
+    return;
+  }
+
+  try {
+    // Load user
+    const me = await apiGet('/api/auth/me', true);
+    document.getElementById('dashUserName').textContent = me.name || me.email;
+
+    // Load dashboard stats
+    const stats = await apiGet(`/api/biens?user_id=${me.id}&limit=100`, true);
+    const listings = stats.listings || [];
+
+    document.getElementById('dashMyListings').textContent = listings.length;
+    document.getElementById('dashActiveListings').textContent = listings.filter(l => l.status === 'active').length;
+    document.getElementById('dashViews').textContent = listings.reduce((s, l) => s + (l.views || 0), 0);
+
+    // Count contacts
+    const contacts = await apiGet('/api/contact', true);
+    document.getElementById('dashLeads').textContent = Array.isArray(contacts) ? contacts.length : 0;
+
+    // Table
+    const tbody = document.getElementById('dashTableBody');
+    if (listings.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--nodus-text-3)">Aucune annonce pour le moment.</td></tr>';
+    } else {
+      tbody.innerHTML = listings.map(l => `
+        <tr>
+          <td>${escapeHtml(l.title || 'Sans titre')}</td>
+          <td>${l.type || '—'}</td>
+          <td style="font-family:var(--font-mono);color:var(--nodus-cyan)">${formatPrice(l.price || 0)}</td>
+          <td>${l.city || '—'}</td>
+          <td><span class="listing-score ${scoreClass(l.trust_score || 50)}">${Math.round(l.trust_score || 50)}</span></td>
+          <td><span class="status-badge ${l.status === 'active' ? 'active' : 'inactive'}">${l.status || 'inactive'}</span></td>
+          <td><button onclick="alert('Édition via API: PUT /api/biens/' + '${l.id}')" style="padding:4px 10px;border:1px solid var(--nodus-border);border-radius:4px;background:transparent;color:var(--nodus-text-2);cursor:pointer;">✏️</button></td>
+        </tr>
+      `).join('');
+    }
+  } catch (e) {
+    document.getElementById('dashTableBody').innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--nodus-danger)">Erreur de chargement. Veuillez vous reconnecter.</td></tr>';
+  }
+})();
+</script>
+</body>
+</html>
