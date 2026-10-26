@@ -2,6 +2,9 @@ const Database = require('better-sqlite3');
 const path = require('path');
 const config = require('./config');
 
+// Initialize tables (side effect of loading database.js)
+require('./database');
+
 const dbPath = path.resolve(__dirname, config.DB_PATH);
 const db = new Database(dbPath);
 
